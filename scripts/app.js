@@ -1,11 +1,13 @@
 
 
 // Detection de l'environnement
-const path = window.location.pathname; // exemple: "/mss/index.html"
-const baseFolder = path.split('/')[1]; // "mss"
+const envPath = window.location.pathname; // exemple: "/mss/index.html"
+const envBaseFolder = envPath.split('/')[1]; // "mss"
 
 
-if (baseFolder === "mss-dev") {
+console.log(envBaseFolder);
+
+if (envBaseFolder != "mss-dev") {
     document.getElementById("divHeader").classList.add("header-dev");
     console.log("configuration style dev");
 }
