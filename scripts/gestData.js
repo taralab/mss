@@ -335,16 +335,6 @@ async function importBdD(dataToImport) {
                 return doc;
             });
 
-        // SESSION
-        // Session ne fonctionne pas comme les autres.(pas de génération d'id lors de l'import)     
-        // on import la session et les compteurs avec leur ID, puis on import également le countID pour les compteurs
-        } else if (e.type === sessionStoreName){
-            await updateDocumentInDB(sessionStoreName, (doc) => {
-                doc.counterList = e.counterList;
-                doc.startTime = e.startTime;
-                return doc;
-            });
-
         // TEMPLATE SESSION
         } else if (e.type === templateSessionStoreName){
             let newtemplateSession = {
@@ -434,6 +424,8 @@ async function onDeleteBDD() {
     if (devMode === true) {console.log("Lancement de la suppression");};
     // Les cookies 
     localStorage.removeItem('MSS_notifyPermission');
+    localStorage.removeItem(sessionStorageName);
+    localStorage.removeItem(sessionStartTimeStorageName);
     // La base de donnée
     await deleteBase();
 

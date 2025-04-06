@@ -81,7 +81,6 @@ let dbName = `${envBaseFolder}_db`,
     settingStoreName = "Setting",
     templateStoreName = "Template",
     favorisStoreName = "Favoris",
-    sessionStoreName = "Sessions",
     templateSessionStoreName = "TemplateSession";
     
 
@@ -234,7 +233,6 @@ async function onCreateDBStore() {
         }  
     });
     await createStore(rewardsStoreName, { type: rewardsStoreName, rewards: [] });
-    await createStore(sessionStoreName, { type: sessionStoreName, counterList: {}, startTime: "00:00:00"});
 
 }
 

@@ -1,7 +1,7 @@
 
 let userCounterList = {
         "Counter_1": { 
-            type: "Counter", name: "Compteur 1", 
+            type: "Counter", name: "Exemple de compteur", 
             currentSerie: 0, serieTarget :0, repIncrement:0, totalCount:0,
             displayOrder : 0,
             color : "white"
@@ -12,8 +12,9 @@ let userCounterList = {
     counterEditorMode, //creation ou modification
     currentCounterEditorID,//L'id du compteur en cours de modification
     popupSessionMode,//set le mode d'utilisation du popup (removeCounter,resetAllCounter,clearSession,deleteModel)
-    sessionStartTime = "00:00:00";//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
-
+    sessionStartTime = "00:00:00",//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
+    sessionStorageName = "MSS_sessionCounterList",
+    sessionStartTimeStorageName = "MSS_sessionStartTime";
 
 let counterColor = {
     white: "#fff",
@@ -89,12 +90,42 @@ class Counter {
 
 
 
+// --------------------------------------- LOCAL STORAGE -----------------------------------------
 
+function onUpdateCounterSessionInStorage() {
+    localStorage.setItem(sessionStorageName, JSON.stringify(userCounterList));
+}
+
+function onUpdateSessionTimeInStorage() {
+    localStorage.setItem(sessionStartTimeStorageName, sessionStartTime);
+}
+
+
+
+function getCounterListFromLocalStorage() {
+    userCounterList = {};
+
+    userCounterList = JSON.parse(localStorage.getItem(sessionStorageName)) || {};
+
+}
+
+
+function getSessionStartTimeFromLocalStorage() {
+    sessionStartTime = localStorage.getItem(sessionStartTimeStorageName) || "00:00:00";
+}
+
+
+
+
+// ------------------------------------------------ FIN LOCAL STORAGE -----------------------------------------
 
 
 async function onOpenMenuSession(){
 
-    await onLoadSessionFromDB();
+    getCounterListFromLocalStorage();
+    getSessionStartTimeFromLocalStorage();
+
+    console.log(userCounterList);
 
     if (devMode === true){console.log(userCounterList)};
 
@@ -112,26 +143,6 @@ async function onOpenMenuSession(){
 }
    
    
-   
-   
-   
-async function onLoadSessionFromDB() {
-    userCounterList = {}; // Initialisation en objet
-
-    try {
-        const sessions = await db.get(sessionStoreName).catch(() => null);
-        if (sessions) {
-            userCounterList = sessions.counterList;
-            sessionStartTime = sessions.startTime || "00:00:00";
-        }
-
-        if (devMode === true){console.log("[DATABASE] Données chargées :", userCounterList, sessionStartTime);};
-    } catch (err) {
-        console.error("[DATABASE] Erreur lors du chargement des stores :", err);
-    }
-}
-
- 
    
 
 
@@ -205,11 +216,8 @@ async function onChangeCounterRepIncrement(idRef) {
     userCounterList[idRef].repIncrement = parseInt(document.getElementById(`inputRepIncrement_${idRef}`).value) || 0;
 
 
-    // Sauvegarde en base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
 }
 
 
@@ -299,11 +307,9 @@ async function eventInsertNewCompteur() {
 
     if (devMode === true){console.log(userCounterList)};
 
-    // Sauvegarde en base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+
     // fonction de création affichage des compteurs
     onDisplayCounter(userCounterList);
     
@@ -400,11 +406,8 @@ async function eventSaveModifyCounter() {
     document.getElementById(`inputRepIncrement_${currentCounterEditorID}`).value = counterData.repIncrement;
     
 
-    // Enregistrement en base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
 
 }
 
@@ -583,11 +586,9 @@ async function onClickIncrementeCounter(idRef) {
         onShowNotifyPopup(notifyTextArray.counterTargetReach);
     }
 
-    //La base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+
     //déverrouille le bouton pour être a nouveau disponible
     setTimeout(() => {
         document.getElementById(`btnRepIncrement_${idRef}`).disabled = false;
@@ -661,12 +662,8 @@ async function onClickResetCounter(idRef) {
 
 
 
-    // Actualise la base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
-
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
 
     if (devMode === true){console.log(userCounterList);};
 
@@ -725,12 +722,10 @@ async function eventResetAllCounter() {
     // reset également l'heure du début de session
     onSetSessionStartTime();
 
-    //sauvegarde dans la base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        doc.startTime = sessionStartTime;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+    onUpdateSessionTimeInStorage();
+
     
 
     // Notification utilisateur  
@@ -785,11 +780,9 @@ async function eventDeleteCounter(){
     onShowNotifyPopup(notifyTextArray.counterDeleted);
 
 
-    // Actualisation base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+
 }
 
 
@@ -914,11 +907,9 @@ async function onClickCounterNavDecrease(idOrigin) {
     // réaffiche les compteurs
     onDisplayCounter();
 
-    //sauvegarde en base
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+
 
 }
 
@@ -941,11 +932,9 @@ async function onClickCounterNavIncrease(idOrigin) {
     // réaffiche les compteurs
     onDisplayCounter();
 
-    // SAUVEGARDE
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        return doc;
-    });
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+
 }
 
 
@@ -1394,12 +1383,9 @@ async function eventGenerateSessionList(){
     // reset également l'heure du début de session
     onSetSessionStartTime();
 
-    // Sauvegarde la nouvelle session
-    await updateDocumentInDB(sessionStoreName, (doc) => {
-        doc.counterList = userCounterList;
-        doc.startTime = sessionStartTime;
-        return doc;
-    });
+    // Sauvegarde la nouvelle session en local storage
+    onUpdateCounterSessionInStorage();
+    onUpdateSessionTimeInStorage();
 
 
     // masque le popup
