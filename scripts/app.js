@@ -7,12 +7,7 @@
 
 
 // Récupération du chemin de base
-const testServiceWorkerUrl = self.location.href;
-const testBasePath = testServiceWorkerUrl.replace(/service-worker\.js$/, '');
-
-console.log(`testServiceWorkerUrl = ${testServiceWorkerUrl}`);
-console.log(`BasePath = ${testBasePath}`);
-
+console.log("valeur de basefolder :",baseFolder);
 
 
 // ------------------------- CONDITION D'UTILISATION ---------------------------
