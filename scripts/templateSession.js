@@ -19,29 +19,32 @@ let templateSessionsNameList = {
 
 
 
-// Insertion nouveau activity
+// Insertion nouveau activity (session de template) avec ID auto
 async function onInsertNewTemplateSessionInDB(templateSessionToInsert) {
     try {
-        // Obtenir le prochain ID
-        const nextId = await getNextIdNumber("templateSession");
-
-        // Créer l'objet avec le nouvel ID
+        // Créer l'objet SANS _id
         const newTemplateSession = {
-            _id: `${templateSessionStoreName}_${nextId}`,
             type: templateSessionStoreName,
             ...templateSessionToInsert
         };
 
-        // Insérer dans la base
-        await db.put(newTemplateSession);
+        // Insérer avec post() pour générer un ID auto
+        const response = await db.post(newTemplateSession);
 
-        if (devMode === true ) {console.log("[DATABASE] [TEMPLATE] [SESSION] modèle de session inséré :", newTemplateSession);};
+        // Ajouter les métadonnées (utile si tu veux les renvoyer)
+        newTemplateSession._id = response.id;
+        newTemplateSession._rev = response.rev;
+
+        if (devMode === true) {
+            console.log("[DATABASE] [TEMPLATE] [SESSION] modèle de session inséré :", newTemplateSession);
+        }
 
         return newTemplateSession;
     } catch (err) {
         console.error("[DATABASE] [TEMPLATE] [SESSION] Erreur lors de l'insertion du modèle de session :", err);
     }
 }
+
 
 // Modification template
 async function onInsertTemplateSessionModificationInDB(templateToUpdate, key) {

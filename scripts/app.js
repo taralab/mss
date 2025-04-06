@@ -4,15 +4,12 @@
 const envPath = window.location.pathname; // exemple: "/mss/index.html"
 const envBaseFolder = envPath.split('/')[1]; // "mss"
 
-
-console.log(envBaseFolder);
-
 if (envBaseFolder !== "mss") {
     document.getElementById("divHeader").classList.add("header-dev");
     console.log("configuration style dev");
 }
 
-
+console.log(Date.now());
 // ------------------------- CONDITION D'UTILISATION ---------------------------
 
 

@@ -70,23 +70,25 @@ async function onLoadTemplateFromDB() {
 
 
 
-// Insertion nouveau template
+// Insertion nouveau template (avec ID auto)
 async function onInsertNewTemplateInDB(templateToInsertFormat) {
     try {
-        // Obtenir le prochain ID
-        const nextId = await getNextIdNumber("template");
-
-        // Créer l'objet avec le nouvel ID
+        // Créer l'objet SANS _id (PouchDB va le générer)
         const newTemplate = {
-            _id: `${templateStoreName}_${nextId}`,
             type: templateStoreName,
             ...templateToInsertFormat
         };
 
-        // Insérer dans la base
-        await db.put(newTemplate);
+        // Insérer dans la base avec post()
+        const response = await db.post(newTemplate);
 
-        if (devMode === true ) {console.log("[DATABASE] [TEMPLATE] Template inséré :", newTemplate);};
+        // On peut récupérer l'ID généré si besoin
+        newTemplate._id = response.id;
+        newTemplate._rev = response.rev;
+
+        if (devMode === true) {
+            console.log("[DATABASE] [TEMPLATE] Template inséré :", newTemplate);
+        }
 
         return newTemplate;
     } catch (err) {
