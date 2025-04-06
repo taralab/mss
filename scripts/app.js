@@ -7,7 +7,7 @@ const envBaseFolder = envPath.split('/')[1]; // "mss"
 
 console.log(envBaseFolder);
 
-if (envBaseFolder != "mss-dev") {
+if (envBaseFolder !== "mss") {
     document.getElementById("divHeader").classList.add("header-dev");
     console.log("configuration style dev");
 }
