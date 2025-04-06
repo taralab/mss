@@ -8,7 +8,7 @@
 
 // Récupération du chemin de base
 const testServiceWorkerUrl = self.location.href;
-const testBasePath = serviceWorkerUrl.replace(/service-worker\.js$/, '');
+const testBasePath = testServiceWorkerUrl.replace(/service-worker\.js$/, '');
 
 console.log(`testServiceWorkerUrl = ${testServiceWorkerUrl}`);
 console.log(`BasePath = ${testBasePath}`);
