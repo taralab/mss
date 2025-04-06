@@ -77,7 +77,7 @@ function toggleLaunchButton() {
 
 
 
-let dbName = "MSS-DataBase",
+let dbName = `${envBaseFolder}_db`,
     countIDStoreName = "CountIDStore",
     activityStoreName = "ActivityList",
     profilStoreName = "Profil",
@@ -86,10 +86,7 @@ let dbName = "MSS-DataBase",
     templateStoreName = "Template",
     favorisStoreName = "Favoris",
     sessionStoreName = "Sessions",
-    templateSessionStoreName = "TemplateSession",
-    // Nom des stores à importer et exporter dans les fonctions import export. 
-    currentBaseVersion = 7,
-    cookiesBddVersion_KeyName = "MSS-bddVersion";
+    templateSessionStoreName = "TemplateSession";
     
 
 
