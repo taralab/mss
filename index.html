@@ -1293,8 +1293,10 @@
 
     <!-- ENREGISTREMENT DU SERVICE WORKER -->
     <script>
+
+        // Détection du chemin relatif
         const path = window.location.pathname; // exemple: "/mss/index.html"
-        const baseFolder = path.split('/')[1]; // "mss"
+        const baseFolder = path.split('/')[1]; // "mss" ou "mss-dev"
 
         console.log("Dossier de base :", baseFolder);
 

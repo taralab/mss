@@ -1,13 +1,14 @@
-// Detection de l'environnement (test prod ou local)
-// console.log("Environnement : ", window.envConfig.environment);
-// if (window.envConfig.environment != "production") {
-//     document.getElementById("divHeader").classList.add("header-dev");
-//     console.log("configuration style dev");
-// }
 
 
-// Récupération du chemin de base
-console.log("valeur de basefolder :",baseFolder);
+// Detection de l'environnement
+const path = window.location.pathname; // exemple: "/mss/index.html"
+const baseFolder = path.split('/')[1]; // "mss"
+
+
+if (baseFolder === "mss-dev") {
+    document.getElementById("divHeader").classList.add("header-dev");
+    console.log("configuration style dev");
+}
 
 
 // ------------------------- CONDITION D'UTILISATION ---------------------------
