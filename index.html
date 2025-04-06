@@ -1293,6 +1293,12 @@
 
     <!-- ENREGISTREMENT DU SERVICE WORKER -->
     <script>
+        const path = window.location.pathname; // exemple: "/mss/index.html"
+        const baseFolder = path.split('/')[1]; // "mss"
+
+        console.log("Dossier de base :", baseFolder);
+
+        
         if ('serviceWorker' in navigator) {
             window.addEventListener('load', () => {
                 navigator.serviceWorker.register('/service-worker.js')
