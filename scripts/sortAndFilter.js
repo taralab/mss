@@ -485,7 +485,8 @@ function onSortActivity(sortType,filteredData) {
             if (dateDiff !== 0) {
                 return dateDiff; // Tri par date décroissante
             }
-            return b._id.localeCompare(a._id); // Tri alphabétique descendant si les dates sont identiques
+            // ➕ Tri par date de création si même jour
+            return new Date(b.createdAt) - new Date(a.createdAt);
         });
     } else if (sortType === "dateAncienne") {
         filteredData.sort((a, b) => {
@@ -493,7 +494,7 @@ function onSortActivity(sortType,filteredData) {
             if (dateDiff !== 0) {
                 return dateDiff; // Tri par date croissante
             }
-            return a._id.localeCompare(b._id); // Tri alphabétique descendant si les dates sont identiques
+            return new Date(a.createdAt) - new Date(b.createdAt);
         });
     }else if (sortType === "distanceCroissante") {
         filteredData.sort((a, b) => a.distance - b.distance); // Tri par distance croissante

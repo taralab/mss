@@ -8,7 +8,7 @@ let activityToInsertFormat = {
     distance : "",
     duration : "",
     comment : "",
-    divers:{},
+    createdAt : "",
     isPlanned : false
 };
 
@@ -78,23 +78,25 @@ async function onLoadActivityFromDB () {
 
 
 
-// Insertion nouveau activity
+
+// Insertion nouvelle activité (ID auto, )
 async function onInsertNewActivityInDB(activityToInsertFormat) {
     try {
-        // Obtenir le prochain ID
-        const nextId = await getNextIdNumber("activity");
-
-        // Créer l'objet avec le nouvel ID
         const newActivity = {
-            _id: `${activityStoreName}_${nextId}`,
             type: activityStoreName,
             ...activityToInsertFormat
         };
 
-        // Insérer dans la base
-        await db.put(newActivity);
+        // Utilisation de post() pour génération automatique de l’ID
+        const response = await db.post(newActivity);
 
-        if (devMode === true ) {console.log("[DATABASE] [ACTIVITY] Activité insérée :", newActivity);};
+        // Mise à jour de l’objet avec _id et _rev retournés
+        newActivity._id = response.id;
+        newActivity._rev = response.rev;
+
+        if (devMode === true) {
+            console.log("[DATABASE] [ACTIVITY] Activité insérée :", newActivity);
+        }
 
         return newActivity;
     } catch (err) {
@@ -677,7 +679,15 @@ function onFormatActivity() {
     activityToInsertFormat.location = onSetToUppercase(inputLocationRef.value);
     activityToInsertFormat.comment = textareaCommentRef.value;
     activityToInsertFormat.duration = inputActivityNumberToTime();
-    activityToInsertFormat.divers = {};
+
+    // Ne set la date de création que lors d'une création et non lors d'une modification
+    if (activityEditorMode === "creation") {
+        activityToInsertFormat.createdAt = new Date().toISOString();
+    }else {
+        activityToInsertFormat.createdAt = currentActivityDataInView.createAt;
+    };
+
+    
 
 
     // Gestion planification  : les dates après la date du jour sont obligatoirement des activités planifiées
@@ -710,7 +720,6 @@ function onCheckIfModifiedRequired(activityToInsertFormat) {
         { oldValue: currentActivityDataInView.location, newValue: activityToInsertFormat.location },
         { oldValue: currentActivityDataInView.comment, newValue:  activityToInsertFormat.comment },
         { oldValue: currentActivityDataInView.duration, newValue:  activityToInsertFormat.duration },
-        { oldValue: currentActivityDataInView.divers, newValue:  activityToInsertFormat.divers },
         { oldValue: currentActivityDataInView.isPlanned, newValue:  activityToInsertFormat.isPlanned }
     ];
 
