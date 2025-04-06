@@ -200,76 +200,15 @@ function onGenerateFakeOptionList(idParentTarget) {
 
 
 
-// Génère le prochain id 
-async function getNextIdNumber(storeTarget) {
-    let countID;
-
-    try {
-        let counterDoc = await db.get(countIDStoreName);
-
-        switch (storeTarget) {
-            case "activity":
-                countID = counterDoc.countIDStoreList.activity;
-                break;
-            case "template":
-                countID = counterDoc.countIDStoreList.template;
-                break;
-            case "counter":
-                countID = counterDoc.countIDStoreList.counter;
-                break;
-            case "templateSession":
-                countID = counterDoc.countIDStoreList.templateSession;
-                break;
-        
-            default:
-                break;
-        }
-
-
-
-        // Incrémenter le compteur
-        countID++;
-
-        // Mettre à jour la base
-        switch (storeTarget) {
-            case "activity":
-                await updateDocumentInDB(countIDStoreName, (doc) => {
-                    doc.countIDStoreList.activity = countID;
-                    return doc;
-                });
-                break;
-            case "template":
-                await updateDocumentInDB(countIDStoreName, (doc) => {
-                    doc.countIDStoreList.template = countID;
-                    return doc;
-                });
-                break;
-            case "counter":
-                await updateDocumentInDB(countIDStoreName, (doc) => {
-                    doc.countIDStoreList.counter = countID;
-                    return doc;
-                });
-                break;
-            case "templateSession":
-                await updateDocumentInDB(countIDStoreName, (doc) => {
-                    doc.countIDStoreList.templateSession = countID;
-                    return doc;
-                });
-                break;
-        
-            default:
-                break;
-        }
-        
-
-        if (devMode === true ) {console.log(`Nouveau compteur pour ${storeTarget} :`, counterDoc.counter);};
-
-        return countID.toString().padStart(7,"0"); // Retourne le nouveau numéro au format 0 000 001
-    } catch (err) {
-        console.error("[TEMPLATE] Erreur lors de l'incrémentation du compteur :", err);
-    }
+// Génère un id court aléatoire, avec control des doublons
+function getRandomShortID(prefixe, existingIds = {}) {
+    let id;
+    do {
+        const randomPart = Math.random().toString(36).slice(2, 11); // 9 caractères aléatoires
+        id = `${prefixe}${randomPart}`;
+    } while (id in existingIds);
+    return id;
 }
-
 
 // fonction pour retirer le bouton radio plein
 

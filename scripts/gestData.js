@@ -263,7 +263,7 @@ async function importBdD(dataToImport) {
                 distance: e.distance,
                 duration: e.duration,
                 comment: e.comment,
-                divers: e.divers,
+                createdAt: e.createdAt,
                 isPlanned: e.isPlanned
             });
             await onInsertNewActivityInDB(activityToInsertFormat);
@@ -342,14 +342,6 @@ async function importBdD(dataToImport) {
             await updateDocumentInDB(sessionStoreName, (doc) => {
                 doc.counterList = e.counterList;
                 doc.startTime = e.startTime;
-                return doc;
-            });
-
-        // Et récupère également  le numéro d'ID pour les compteurs de session
-        //Pas pour les autres count!
-        } else if (e.type === countIDStoreName){
-            await updateDocumentInDB(countIDStoreName, (doc) => {
-                doc.countIDStoreList.counter = e.countIDStoreList.counter;
                 return doc;
             });
 

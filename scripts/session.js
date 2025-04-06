@@ -272,7 +272,7 @@ function onConfirmCounterEditor() {
 }
 
 
-async function eventCreateCounter() {
+function eventCreateCounter() {
     
     // masque le popup de création
     document.getElementById("divEditCounter").style.display = "none";
@@ -281,8 +281,7 @@ async function eventCreateCounter() {
     let counterData = onFormatNewCounter();
 
     // Obtenir le prochain ID
-    let nextId = await getNextIdNumber("counter");
-    nextId = `counter_${nextId}`;
+    let nextId = getRandomShortID("counter_",userCounterList);
 
     // Ajout du nouveau compteur à l'array
     userCounterList[nextId] = counterData;
@@ -1390,7 +1389,7 @@ async function eventGenerateSessionList(){
     // Retire le popup
 
     // formate les nouveaux compteur et les sauvegardes
-    let nextSessionIDCount = await onGenerateMultipleCounter(itemForSession);
+    onGenerateMultipleCounter(itemForSession);
 
     // reset également l'heure du début de session
     onSetSessionStartTime();
@@ -1399,13 +1398,6 @@ async function eventGenerateSessionList(){
     await updateDocumentInDB(sessionStoreName, (doc) => {
         doc.counterList = userCounterList;
         doc.startTime = sessionStartTime;
-        return doc;
-    });
-
-
-    // Sauvegarde le nouveau countID pour session
-    await updateDocumentInDB(countIDStoreName, (doc) => {
-        doc.countIDStoreList.counter = nextSessionIDCount;
         return doc;
     });
 
@@ -1420,25 +1412,17 @@ async function eventGenerateSessionList(){
 }
 
 // Fonction de création de la session
-async function onGenerateMultipleCounter(newSessionList) {
+function onGenerateMultipleCounter(newSessionList) {
 
     // Vide l'array
     userCounterList = {};
-
-    //récupère le counterID de départ
-    let counterRef = await db.get(countIDStoreName),
-        newIDCount = counterRef.countIDStoreList.counter;
 
 
     // Pour chaque élément de la liste
     newSessionList.forEach((e,index)=>{
 
-        // génère un id incrementé et le formate
-        newIDCount++;
-
-        let idFormatedCount = newIDCount.toString().padStart(7,"0"); // Retourne le nouveau numéro au format 0 000 001
-
-        let counterId = `counter_${idFormatedCount}`;
+        // Génération de l'ID
+        let counterId = getRandomShortID("counter_",userCounterList);
 
         //formatage du counter (majuscule etc)
         let formatedCounter = {
@@ -1458,10 +1442,6 @@ async function onGenerateMultipleCounter(newSessionList) {
 
 
     if (devMode === true){console.log(userCounterList)};
-
-
-    // Retourne le derniere numéro d'ID pour le générateur d'ID
-    return newIDCount;
 
 
 }

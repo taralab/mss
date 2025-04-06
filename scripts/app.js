@@ -75,7 +75,6 @@ function toggleLaunchButton() {
 
 
 let dbName = `${envBaseFolder}_db`,
-    countIDStoreName = "CountIDStore",
     activityStoreName = "ActivityList",
     profilStoreName = "Profil",
     rewardsStoreName = "Recompenses",
@@ -236,14 +235,6 @@ async function onCreateDBStore() {
     });
     await createStore(rewardsStoreName, { type: rewardsStoreName, rewards: [] });
     await createStore(sessionStoreName, { type: sessionStoreName, counterList: {}, startTime: "00:00:00"});
-    await createStore(countIDStoreName, { type: countIDStoreName, 
-        countIDStoreList: {
-            activity:0,
-            template:0,
-            counter:0,
-            templateSession:0
-        }
-    });
 
 }
 
