@@ -684,7 +684,7 @@ function onFormatActivity() {
     if (activityEditorMode === "creation") {
         activityToInsertFormat.createdAt = new Date().toISOString();
     }else {
-        activityToInsertFormat.createdAt = currentActivityDataInView.createAt;
+        activityToInsertFormat.createdAt = currentActivityDataInView.createdAt;
     };
 
     
@@ -813,6 +813,9 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 
 // Séquence d'insertion d'une modification
 async function eventInsertActivityModification(dataToInsert) {
+
+    console.log("modification dataToInsert:", dataToInsert);
+
     await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
     await onLoadActivityFromDB();
 
