@@ -1,0 +1,1324 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="shortcut icon" href="./Icons/MSS-Logo.ico" type="image/x-icon">
+    <link rel="stylesheet" href="./styles/global.css?v=1.6.20">
+    <link rel="manifest" href="manifest.json">
+    <title>Mon Suivi Sportif</title>
+</head>
+<body>
+
+    <div class="app">
+
+        <div id="divHeader" class="header">
+            <p id="pMenuTitle" class="app-title">
+                Mon Suivi Sportif
+            </p>
+            
+            <p id="customInfo" class="custom-info">
+                <!-- Injection du nom de l'utilisateur via le profils -->
+            </p>
+        </div>
+
+
+
+    <!-------------------------------------- div accueil  -------------------------------------------------->
+       
+        <div id="divFilterSort" class="item-container-head">
+            <div class="item-category-selector" onclick="onClickFakeSelectFilter()">
+                <select  class="item-category-selector" name="category" id="selectorCategoryFilter">
+                    <!-- Injection des options-->
+                </select>
+            </div>
+
+            <div class="item-data-container">
+                <div class="item-data-area1">
+                    <button id="btnSortDistance" class="btn-sort" onclick="onUserChangeSortType('distance')">Distance</button>
+                    <button id="btnSortDuration" class="btn-sort" onclick="onUserChangeSortType('duration')">Chrono</button>
+                    <button id="btnSortDate" class="btn-sort" onclick="onUserChangeSortType('date')">Date</button>
+                </div>
+            </div>
+        </div>          
+
+
+        <!-- Fake selecteur pour le filtre d'activité menu principal -->
+        <div id="divFakeSelectOptFilterActivity" class="fake-select-area" onclick="onCloseFakeSelectFilter(event)">
+            <div id="divFakeSelectOptFilterActivityList" class="fake-option-area">
+                <!-- Injection des éléments -->
+            </div>
+        </div>
+
+        <div id="divItemList" class="items-list ">
+            <!-- Injection des items -->
+        </div>
+
+    <!-------------------------------------- FIN div accueil  -------------------------------------------------->
+
+        
+
+
+
+    <!-- ---------------------------------- DIV edit activity ------------------------------------------------>
+
+        <div id="divActivityEditor" class="new-interface">
+           
+            <div class="activityPreview">
+                <img id="imgEditorActivityPreview" src="./images/icon-cap.webp" alt="" srcset="" class="activityPreview">
+                <p id="pEditorActivityPreviewPlannedIcon">🗓️ Cette activité est planifiée.</p>  
+                              
+            </div>
+            <p class="activity-editor">
+                <label for="">Activité : </label>
+            </p>
+
+            <div class="fake-selector" onclick="onClickFakeSelect('activityEditor')">
+                <select class="select-locked" name="category" id="selectorCategoryChoice">
+                    <!-- Injection des options -->
+                </select>
+            </div>
+
+            <p class="activity-editor">
+                <span class="spanCheckbox">Planifiée : </span>
+                <input id="inputIsPlanned" type="checkbox" onchange="onChangeActivityPlanned(this.checked)">
+            </p>
+
+            <p class="activity-editor">
+                <label for="">Date : </label>
+                <input type="date" id="inputDate" onchange="onInputDateChange()">
+            </p>
+
+
+            <p class="activity-editor">
+                <label for="">Lieu : </label>
+                <input id="inputLocation" type="text" maxlength="40">
+            </p>
+
+            <p class="activity-editor">
+                <label for="">Distance :  </label>
+            </p>
+            <div class="number-container">
+                <input id="inputDistance" type="number" class="distance">
+                <span class="chrono-separator">km</span>
+            </div>
+        
+            <p class="activity-editor">
+                <label for="">Chrono : </label>
+            </p>
+
+            <div class="number-container">
+                <input type="number" id="inputDurationActivityHours" min="0" max="999" value="00"
+                oninput="formatNumberInput(this, 99, 2)"
+                onfocus="selectAllText(this)" 
+                onblur="formatNumberInput(this, 99, 2)"
+                oncontextmenu="disableContextMenu(event)">
+
+            
+                <span class="chrono-separator">:</span>
+                <input type="number" id="inputDurationActivityMinutes" min="0" max="59" value="00"
+                    oninput="formatNumberInput(this, 59, 2)"
+                    onfocus="selectAllText(this)" 
+                    onblur="formatNumberInput(this, 59, 2)"
+                    oncontextmenu="disableContextMenu(event)">
+
+                
+                <span class="chrono-separator">:</span>
+                <input type="number" id="inputDurationActivitySeconds" min="0" max="59" value="00"
+                    oninput="formatNumberInput(this, 59, 2)"
+                    onfocus="selectAllText(this)" 
+                    onblur="formatNumberInput(this, 59, 2)"
+                    oncontextmenu="disableContextMenu(event)">
+            </div>
+           
+            <p>
+                <label for="">Commentaire : </label>
+                <textarea name="" id="textareaComment" maxlength="1000"></textarea>
+            </p>
+        </div>
+
+
+        <div id="divBtnActivity" class="button-editor">
+            <button class="btn-menu" onclick="onClickReturnFromActivityEditor()">
+                <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+                <span>Retour</span>
+            </button>
+            <button id="btnDeleteActivity" class="btn-menu delete" onclick="onClickDeleteFromActivityEditor()">
+                <img src="./Icons/Icon-Delete.webp" alt="Icone">
+                <span class="textWhite">Supprimer</span>
+            </button>
+            <button class="btn-menu btnFocus" onclick="onClickSaveFromActivityEditor()">
+                <img src="./Icons/Icon-Valider.webp" alt="Icone">
+                <span class="textWhite">Sauver</span>
+            </button>            
+        </div>
+
+    <!-- ---------------------------------- FIN div edit activity ------------------------------------------------>
+
+
+    <!-- ----------------------------Div confirmation suppression activité --------------------------------------------->
+    <div id="divConfirmDeleteActivity" onclick="onAnnulDeleteActivity(event)" class="confirmationDelete">
+        <button id="btnConfirmDelete" class="confirmPopup" onclick="onConfirmDeleteActivity(event)"><img class="confirmPopup" src="./Icons/Icon-Delete-color.webp" alt="Icone"></button>
+    </div>
+    <!---------------------------  FIN Div confirmation suppression activité ------------------------------------------->
+
+    <!-- ----------------------------Div FAKE SELECTOR OPTION -------------------------------------->
+    <div id="divFakeSelectOpt" class="fake-select-area" onclick="onCloseFakeSelectOpt(event)">
+        <div id="divFakeSelectOptList" class="fake-option-area">
+            <!-- Injection des éléments -->
+        </div>
+    </div>
+
+    <!---------------------------  FIN DIV FAKE SELECTOR OPTION  ------------------------------------------->
+ 
+
+
+    <!-- ----------------------------------      DIV SESSION        ------------------------------------------------>
+    <div id="divSession" class="new-interface">
+        <!-- Injection de la liste des compteurs -->
+    </div>
+
+
+
+    <!-- Div Create new counter POPUP -->
+    <div id="divEditCounter" onclick="onAnnulCounterEditor(event)" class="popup-new-counter">
+        <div id="divEditCounterContent" class="popup-new-counter-content" onclick="onClickDivNewPopupContent(event)">
+            <p>
+                <label for="">Nom du compteur :</label>
+                <input class="counterName" type="text" name="" id="inputEditCounterName" placeholder="Nouveau compteur" maxlength="30">
+                <label for="">Nbre de série :</label>
+                <input class="compteur" type="number" id="inputEditSerieTarget"  onfocus="selectAllText(this)" oncontextmenu="disableContextMenu(event)">
+                <label for="">Nbre de répétition :</label>
+                <input class="compteur" type="number" id="inputEditRepIncrement"  onfocus="selectAllText(this)" oncontextmenu="disableContextMenu(event)">
+                <label for="">Couleur : </label>
+                <button class="btnChooseColor" type="button" style="background-color: white;" onclick="onChooseCounterColor('white')">Blanc</button>
+                <button class="btnChooseColor" type="button" style="background-color: #d3ffd0;" onclick="onChooseCounterColor('green')">Vert</button>
+                <button class="btnChooseColor" type="button" style="background-color: #fdffd0;" onclick="onChooseCounterColor('yellow')">Jaune</button>
+                <button class="btnChooseColor" type="button" style="background-color: #ffd7d0;" onclick="onChooseCounterColor('red')">Rouge</button>
+                <button class="btnChooseColor" type="button" style="background-color: #d0ebff;" onclick="onChooseCounterColor('blue')">Bleu</button>
+                <button class="btnChooseColor" type="button" style="background-color: #f7d0ff;" onclick="onChooseCounterColor('violet')">Violet</button>
+            </p>
+            
+            <div class="custom-editor-btn-menu">
+                <button class="btn-menu" onclick="onAnnulCounterEditor(event)">
+                    <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+                    <span>Retour</span>
+                </button>
+                <button class="btn-menu btnFocus" onclick="onConfirmCounterEditor(event)">
+                    <img src="./Icons/Icon-Accepter.webp" alt="Icone">
+                    <span class="textWhite">Valider</span>
+                </button>  
+            </div>
+        </div>
+    </div>
+    <!-- FIN Div create new counter-->
+     
+    <!-- ----------------------------Div confirmation session (suppression, modification etc )-------------------------------------->
+    <div id="divPopupConfirmSession" onclick="onAnnulPopUPConfirmSession(event)" class="confirmationDeleteCounter">
+        <p id="pTextConfirmPopupSession">
+            <!-- Injection du texte de confirmation -->
+        </p>
+        <button class="confirmPopup" onclick="onConfirmPopupSession(event)">
+            <img id="imgComfirmPopupSession" class="confirmPopup" src="./Icons/Icon-Delete.webp" alt="Icone">
+        </button>
+    </div>
+
+
+
+    <!-- Fake selecteur pour choix d'envoie vers activité -->
+    <div id="divFakeSelectSession" class="fake-select-area" onclick="onCloseFakeSelectSession(event)">
+        <div id="divFakeSelectSessionList" class="fake-option-area">
+            <!-- Injection des éléments -->
+        </div>
+    </div>
+
+
+    <!-- popup de création de session -->
+    <div id="divPopCreateSession" class="popupCreateSession" onclick="onCancelCreateSession(event)">
+        <!-- zone utilisable -->
+        <div class="createSessionArea" onclick="onClickOnCreateSessionArea(event)">
+            <!-- Titre -->
+            <div class="custom-editor-btn-menu">
+             <p>
+                <label>
+                    Générer une session.
+                </label>
+             </p>
+        </div>
+            <!-- Le selecteur de modèle -->
+            <select class="chooseTemplateSession" name="" id="selectSessionTableModelName" onchange="onChangeSelectorChooseTemplateSession(this.value)">
+                <!-- Injection des options -->
+            </select>
+            <div class="session-list">
+
+
+                <!-- Le tableau de création de session -->
+                <table>
+                    <thead>
+                        <tr>
+                            <th class="gen-session-col-nom">Nom</th>
+                            <th class="gen-session-col-series">Série</th>
+                            <th class="gen-session-col-rep">Rép.</th>
+                            <th class="gen-session-col-color">Color</th>
+                        </tr>
+                    </thead>
+                    <tbody id="bodyTableGenerateSession">
+                        <!-- Injection des lignes -->
+                    </tbody>
+                </table>
+            </div>
+            <!-- Fin de liste de session -->
+
+            <div class="custom-editor-btn-menu">
+                <button class="btn-menu" onclick="onCancelCreateSession(event)">
+                    <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+                    <span>Retour</span>
+                </button>
+                <button class="btn-menu btnFocus" onclick="eventGenerateSessionList()">
+                    <img src="./Icons/Icon-Accepter.webp" alt="Icone">
+                    <span class="textWhite">Génerer</span>
+                </button>  
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Menu SESSION -->
+    <div id="divBtnSession" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromSession()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>
+        <button id="btnAddNewCounter" class="btn-menu" onclick="onClickAddCounter()">
+            <img src="./Icons/Icon-Counter.webp" alt="Icone">
+            <span>Compteur</span>
+        </button>           
+        <button class="btn-menu" onclick="onClickResetAllCounter()">
+            <img src="./Icons/Icon-Reset.webp" alt="Icone">
+            <span>Reset</span>
+        </button>
+        <button class="btn-menu" onclick="onClickOpenSessionMenuSup()">
+            <img src="./Icons/Icon-Autres.webp" alt="Icone">
+            <span>Actions</span>
+        </button>
+    </div>
+
+    <!-- Menu SUP SESSION -->
+    <div id="divSessionMenuSup" class="main-menu-sup" onclick="onAnnulSessionMenuSup(event)">
+        <div class="main-menu-sup-button-area">
+            <button onclick="onChooseSessionMenuSup(event,'generateSession')">Générer une session</button>
+            <button onclick="onChooseSessionMenuSup(event,'sendToActivity')">Envoyer vers une activité</button>
+        </div>
+    </div>
+
+    <!-- ----------------------------------  FIN    DIV SESSION     ------------------------------------------------>
+
+
+    <!-- ----------------------------------      DIV MENU TEMPLATE SESSION        ------------------------------------------------>
+    <div id="divMenuTemplateSession" class="new-interface">
+        <!-- Contient la liste des template -->
+        <div id="divTemplateSessionListMenu" class="templateList">
+            <div class="item-container" onclick="onModifyTemplateSession(idTarget)">
+                <span>Crossfit Haut</span>
+            </div>
+        </div>
+    </div>
+
+
+    <!-- Menu principale modele de session -->
+    <div id="divBtnMenuTemplateSession" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromMenuTemplateSession()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+        <button class="btn-menu btnFocus" id="btnCreateTemplateSession" onclick="onChangeMenu('NewTemplateSession')">
+            <img src="./Icons/Icon-Plus.webp" alt="Icone">
+            <span class="textWhite">Nouveau</span>
+        </button>
+    </div>
+
+
+
+
+
+    <!-- ----------------------------------      FIN DIV MENU TEMPLATE SESSION        ------------------------------------------------>
+    
+        <!-- ---------------------------------- DIV edit TEMPLATE SESSION  ------------------------------------------------>
+
+    <div id="divTemplateSessionEditor" class="new-interface">
+        <div class="divEditorTemplateSessionArea">
+            <!-- Le tableau de création de session -->
+            <label for="">Nom :</label>
+            <input type="text" placeholder="Nom du modèle" id="inputTemplateSessionName" maxlength="30">
+
+            <label for="">Compteurs :</label>
+            <table>
+                <thead>
+                    <tr>
+                        <th class="gen-session-col-nom">Nom</th>
+                        <th class="gen-session-col-series">Série</th>
+                        <th class="gen-session-col-rep">Rép.</th>
+                        <th class="gen-session-col-color">Color</th>
+                    </tr>
+                </thead>
+                <tbody id="bodyTableGenerateSessionEditor">
+                    <!-- Injection des lignes -->
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+
+    <div id="divBtnTemplateSessionEditor" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromTemplateSessionEditor()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>
+        <button id="btnDeleteTemplateSession" class="btn-menu delete" onclick="onClickDeleteFromTemplateSessionEditor()">
+            <img src="./Icons/Icon-Delete.webp" alt="Icone">
+            <span class="textWhite">Supprimer</span>
+        </button>
+        <button class="btn-menu btnFocus" onclick="onClickSaveFromTemplateSessionEditor()">
+            <img src="./Icons/Icon-Valider.webp" alt="Icone">
+            <span class="textWhite">Sauver</span>
+        </button>            
+    </div>
+
+    <!-- ---------------------------------- FIN div edit TEMPLATE SESSION ------------------------------------------------>
+
+
+
+
+    <!-- ----------------------------------      DIV PROFIL        ------------------------------------------------>
+    <div id="divProfil" class="new-interface">
+
+        <p>
+            <label for="inputProfilUserPseudo">Pseudo : </label>
+            <input id="inputProfilUserPseudo" type="text" maxlength="20">
+        </p>
+
+        <p>
+            <label for="textareaCustomNotes">Mes notes :</label>
+            <textarea class="notes" name="" id="textareaCustomNotes" maxlength="250"></textarea>
+        </p>
+    </div>
+    
+    <div id="divBtnProfil" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromProfil()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>
+        <button class="btn-menu btnFocus" onclick="onClickSaveProfil()">
+            <img src="./Icons/Icon-Valider.webp" alt="Icone">
+            <span class="textWhite">Sauver</span>
+        </button>           
+    </div>
+    <!-- ----------------------------------  FIN    DIV PROFIL     ------------------------------------------------>
+
+
+
+
+    <!-- ----------------------------------      DIV GESTION DONNEES        ------------------------------------------------>
+    <div id="divGestData" class="new-interface">
+
+        <!-- Exporter des donnes -->
+        <p>
+            <label class="labelSetting" for="fileInputJsonTask">Exporter ses données :</label>
+        </p>
+        <div>
+            <p id="pGestDataLastExportDate" class="settingAlert">
+                <!-- Injection -->
+            </p> 
+        </div>
+
+
+        <div class="btn-import-export">
+            <button class="btn-menu-setting" onclick="eventSaveData(false)" id="btnExportBdD"><img src="./Icons/Icon-Download.webp" alt="Icone"></button>
+        </div>
+
+         <!-- Import des données -->
+         <p>
+            <label class="labelSetting" for="fileInputJsonTask">Importer des données :</label>
+            <input type="file" id="fileInputJsonTask" accept=".json">
+        </p>
+        <div>
+            <p id="pImportActivityResult" class="setting-action-result">
+                <!-- Injection du texte -->
+            </p>
+        </div>
+
+        <div class="btn-import-export">
+            <button class="btn-menu-setting import" onclick="eventImportBdD('fileInputJsonTask')" id="btnImportBdD">Importer<img src="./Icons/Icon-Upload.webp" alt="" srcset="" ></button>
+        </div>
+
+
+
+
+        <!-- Suppression des données -->
+
+        <div>
+            <p><label class="labelSetting" for="fileInputJsonTask">Suppression des données :</label></p>
+        </div>
+        <div class="setting-align-center">
+            <p>
+                <button class="delete-data" id="btnDeteteBdd" onclick="onClickDeleteDataBaseFromGestData()">Supprimer toutes mes données</button>
+            </p>
+        </div>
+
+    </div>
+
+    <!-- Div confirmation suppression des données -->
+    <div id="divConfirmDeleteDataBase" onclick="onCancelDeleteDataBase(event)" class="confirmationDeleteBdD">
+        <h2>Suppression des données</h2>
+
+        <p>
+            <u>Cette action est irreversible.</u> En confirmant, les données suivantes seront effacées : 
+            <ul>
+                <li>Pseudo;</li>
+                <li>Favoris;</li>
+                <li>Modèles;</li>
+                <li>Paramètres;</li>
+                <li>Activités;</li>
+                <li>Récompenses.</li>
+            </ul>
+            Etes vous sûr de vouloir supprimer vos données ?
+        </p>
+        <button id="btnConfirmDeleteDataBase" class="btn-menu deleteConfirmBdD" onclick="onConfirmDeleteDataBase(event)">Confirmer</button>
+    </div>
+
+
+
+    <div id="divBtnGestData" class="button-editor">
+        <button class="btn-menu" id="btnReturnFromGestData" onclick="onClickReturnFromGestData()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+
+    <!-- ----------------------------------  FIN    GESTION DONNEES     ------------------------------------------------>
+
+    <!-- ----------------------------------      DIV SETTING        ------------------------------------------------>
+    <div id="divSetting" class="new-interface">
+        <h3 class="settingCategorie">Affichage</h3>
+
+        <p>
+            <label class="labelSetting" for="">Activité planifiées :</label>
+            <select class="setting" name="" id="selectSettingCommentModePlanned">
+                <option value="Collapse">Réduit</option>
+                    <option value="Compact">Compacté</option>
+                    <option value="Expand">Déployé</option>
+            </select>
+        </p>
+        <p>
+            <label class="labelSetting" for="">Activités réalisées :</label>
+            <select class="setting" name="" id="selectSettingCommentModeDone">
+                <option value="Collapse">Réduit</option>
+                    <option value="Compact">Compacté</option>
+                    <option value="Expand">Déployé</option>
+            </select>
+        </p>
+
+
+
+        <!-- SESSION -->
+        <h3 class="settingCategorie">Session</h3>
+        <p>
+            <label class="labelSetting" for="">Données envoyées vers activité :</label>
+            <select class="setting" name="" id="selectSettingSessionCommentMode" onchange="onChangeSettingSettionCommentMode(this.value)">
+                <option value="MINIMAL">Minimales</option>
+                <option value="NORMAL">Normales</option>
+                <option value="COMPLETE">Complètes</option>
+                <option value="SERIES">Séries</option>
+            </select>
+        </p>
+            <!-- Test exemple -->
+
+        <div>
+            <p class="settingAlert" id="pSettingSessionCommentModeExemple">
+                <!-- Injection -->
+                Ex: Tractions: 10.
+            </p>
+        </div>
+        
+
+
+
+        <!-- AGENDA -->
+        <span class="settingSeparator"></span>
+        <h3 class="settingCategorie">Agenda</h3>
+        <p>
+            <label class="labelSetting" for="">Type :</label>
+            <select class="setting" name="" id="selectSettingAgenda">
+                <option value="NONE">Aucun</option>
+                <option value="GOOGLE">Google</option>
+                <option value="OUTLOOK">Outlook</option>
+            </select>
+        </p>
+
+        <p>
+            <label class="labelSetting" for="">Créneau par défaut :</label>
+        </p>
+
+        <div>
+            <p class="settingAlert">
+                de :
+            </p>
+        </div>
+        <p>
+            <input type="time" name="" id="inputTimeSettingScheduleStart" onchange="onCheckAgendaNotifyTime(this)">
+        </p>
+        <div>
+            <p class="settingAlert">
+                à :
+            </p>
+        </div>
+        <p>
+            <input type="time" name="" id="inputTimeSettingScheduleEnd" onchange="onCheckEndSchedule()">
+        </p>
+
+
+        <div class="setting-align-center""> 
+            <p class="settingAlertComment">ℹ️ Paramètrage par défaut lors d'un export agenda.</p>
+        </div>
+        <!-- TRAVAIL AUTO SAVE -->
+        <span class="settingSeparator"></span>
+        <H3 class="settingCategorie">Export automatique</H3>
+
+        <p>
+            <span class="spanCheckbox">Activation : </span>
+            <input id="inputSettingIsAutoSave" type="checkbox"">
+        </p>
+        <p>
+            <span class="spanCheckbox">Fréquence (en jours) : </span>
+            <input id="inputSettingSaveFrequency" type="number" value="7" max="30" onchange="onDataInSettingSaveFrequencyChange()">
+        </p>
+        <span class="spanCheckbox">Dernier export auto : </span>
+        <div>
+            <p id="pSettingLastAutoSaveDate" class="settingAlert">
+                <!-- Injection -->
+            </p>
+        </div>
+
+        <div class="setting-align-center""> 
+            <p class="settingAlertComment">ℹ️ Export effectué au lancement de l'application.</p>
+        </div>
+       
+
+        <!-- FIN TRAVAIL AUTO SAVE -->
+
+        <span class="settingSeparator"></span>
+        <H3 class="settingCategorie">Notifications</H3>
+        <div>
+            <p>
+                <label for="">Statut des notifications :</label>
+            </p>
+            
+            <p class="settingAlert" id="pMobileNotifyStatus">Vérification en cours...</p>
+        </div>
+
+        
+        <span class="settingSeparator"></span>
+        <h3 class="settingCategorie">Divers</h3>
+        <!-- Mode developpeur -->
+        <div>    
+            <p>
+                <label for="">Mode LOG développeur : </label>
+            </p>
+        </div>
+ 
+        <div class="setting-align-center">
+            <input type="checkbox" id="inputCheckboxDevMode">
+        </div>
+        <div class="setting-align-center">
+            <p class="settingAlertComment">
+                ⚠️Impact sur les performances !
+            </p>
+        </div>
+
+    </div>
+
+    <div id="divBtnSetting" class="button-editor">
+        <button class="btn-menu" id="btnReturnFromSetting" onclick="onClickReturnFromSetting()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>
+        <button class="btn-menu btnFocus" onclick="onClickSaveFromSetting()">
+            <img src="./Icons/Icon-Valider.webp" alt="Icone">
+            <span class="textWhite">Sauver</span>
+        </button>
+    </div>
+    
+    <!-- ----------------------------------  FIN    DIV SETTING     ------------------------------------------------>
+    
+
+    <!-- ----------------------------------      DIV FAVORIS        ------------------------------------------------>
+
+
+        
+
+    <div id="divFavoris" class="div-favoris-list">
+
+        <ul id="ulActivityListParent">
+            <!-- Injection de la liste d'activité -->
+        </ul>
+
+    </div>
+    
+
+    <div id="divBtnFavoris" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromFavoris()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+
+    <!-- ----------------------------------  FIN    DIV FAVORIS     ------------------------------------------------>
+
+    <!-- ----------------------------------      DIV TEMPLATE  GESTION      ------------------------------------------------>
+    <div id="divGestTemplate" class="new-interface">
+        <!-- Contient la liste des template -->
+        <div id="divTemplateListMenu" class="templateList">
+            <div class="item-container">
+                <img class="templateList" src="./images/icon-baseball.webp" alt="">
+                <span>Course à pied</span>
+            </div>
+        </div>
+    </div>
+
+    <div id="divBtnGestTemplate" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromGestTemplate()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+        <button class="btn-menu btnFocus" id="btnCreateTemplate" onclick="onChangeMenu('NewTemplate')">
+            <img src="./Icons/Icon-Plus.webp" alt="Icone">
+            <span class="textWhite">Nouveau</span>
+        </button>
+    </div>
+
+    <!-- ----------------------------------  FIN    DIV TEMPLATE GESTION   ------------------------------------------------>
+
+        <!-- ---------------------------------- DIV edit TEMPLATE  ------------------------------------------------>
+
+        <div id="divTemplateEditor" class="new-interface">
+           
+            <div class="activityPreview">
+                <img id="imgTemplateEditorPreview" src="./images/icon-cap.webp" alt="" srcset="" class="activityPreview">
+                <p id="pTemplateEditorInfo">📄Modèle d'activité :</p>  
+                              
+            </div>
+
+            <p class="activity-editor">
+                <label for="">Titre : </label>
+                <input type="text" id="inputTemplateTitle" onchange="onInputTemplateTitleChange()" maxlength="40">
+            </p>
+
+            <p class="activity-editor">
+                <label for="">Activité : </label>
+            </p>
+
+            <div class="fake-selector" onclick="onClickFakeSelect('templateEditor')">
+                <select class="select-locked" name="category" id="selectorTemplateCategoryChoice">
+                    <!-- Injection des options -->
+                </select>
+            </div>
+
+            <p class="activity-editor">
+                <span class="spanCheckbox">Planifiée : </span>
+                <input id="inputTemplateIsPlanned" type="checkbox" onchange="onChangeTemplatePlanned(this.checked)">
+            </p>
+
+
+            <p class="activity-editor">
+                <label for="">Lieu : </label>
+                <input id="inputTemplateLocation" type="text" maxlength="40">
+            </p>
+
+            <p class="activity-editor">
+                <label for="">Distance :  </label>
+            </p>
+            <div class="number-container">
+                <input id="inputTemplateDistance" type="number" class="distance">
+                <span class="chrono-separator">km</span>
+            </div>
+
+            <p class="activity-editor">
+                <label for="">Chrono : </label>
+            </p>
+            <div class="number-container">
+                <input type="number" id="inputDurationTemplateHours" min="0" max="999" value="00" class="numberFakeH"
+                    oninput="formatNumberInput(this, 99, 2)"
+                    onfocus="selectAllText(this)" 
+                    onblur="formatNumberInput(this, 99, 2)"
+                    oncontextmenu="disableContextMenu(event)">
+
+            
+                <span>:</span>
+                <input type="number" id="inputDurationTemplateMinutes" min="0" max="59" value="00" class="numberFakeMS"
+                    oninput="formatNumberInput(this, 59, 2)"
+                    onfocus="selectAllText(this)" 
+                    onblur="formatNumberInput(this, 59, 2)"
+                    oncontextmenu="disableContextMenu(event)">
+
+                
+                <span>:</span>
+                <input type="number" id="inputDurationTemplateSeconds" min="0" max="59" value="00" class="numberFakeMS"
+                    oninput="formatNumberInput(this, 59, 2)"
+                    onfocus="selectAllText(this)" 
+                    onblur="formatNumberInput(this, 59, 2)"
+                    oncontextmenu="disableContextMenu(event)">
+            </div>            
+            <p>
+                <label for="">Commentaire : </label>
+                <textarea name="" id="textareaTemplateComment" maxlength="250"></textarea>
+            </p>
+        </div>
+
+
+        <div id="divBtnTemplateEditor" class="button-editor">
+            <button class="btn-menu" onclick="onClickReturnFromTemplateEditor()">
+                <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+                <span>Retour</span>
+            </button>
+            <button id="btnDeleteTemplate" class="btn-menu delete" onclick="onClickDeleteFromTemplateEditor()">
+                <img src="./Icons/Icon-Delete.webp" alt="Icone">
+                <span class="textWhite">Supprimer</span>
+            </button>
+            <button class="btn-menu btnFocus" onclick="onClickSaveFromTemplateEditor()">
+                <img src="./Icons/Icon-Valider.webp" alt="Icone">
+                <span class="textWhite">Sauver</span>
+            </button>            
+        </div>
+
+    <!-- ---------------------------------- FIN div edit TEMPLATE ------------------------------------------------>
+
+    <!-- ----------------------------Div confirmation suppression template -------------------------------------->
+    <div id="divConfirmDeleteTemplate" onclick="onAnnulDeleteTemplate(event)" class="confirmationDelete">
+        <button id="btnConfirmDeleteTemplate" class="confirmPopup" onclick="onConfirmDeleteTemplate(event)"><img class="confirmPopup" src="./Icons/Icon-Delete-color.webp" alt="Icone"></button>
+    </div>
+    <!---------------------------  FIN Div confirmation suppression template ------------------------------------------->
+
+
+    <!-- ----------------------------Div Selection New From template -------------------------------------->
+    <div id="divTemplateChoice" class="fake-select-area" onclick="onAnnulSelectTemplate(event)">
+        <div id="divTemplateChoiceList" class="fake-option-area">
+            <!-- Injection des éléments -->
+        </div>
+    </div>
+
+    <!---------------------------  FIN Div Selection New From template ------------------------------------------->
+
+
+
+   <!-- ----------------------------------      DIV STAT        ------------------------------------------------>
+    <div id="divStat" class="new-interface">
+
+        <p>
+            <label class="stat-activity-choice" for="">Choisit une activité :</label>
+        </p>
+        <div class="fake-selector" onclick="onClickFakeStatSelect()">
+            <select class="select-locked" id="selectorStat">
+                <!-- Injection des options-->
+            </select>
+        </div>
+
+        
+        <!-- Affichage du résultat -->
+        <div id="stats" class="stat">
+            <!-- Injection -->
+        </div>
+
+
+
+        <!-- STAT GRAPHIQUE -->
+
+        <div id="stats" class="statYears">
+            <p>
+                <select name="" id="selectStatGraphYear"class="graph-stat" onchange="onChangeSelectorYearGraph(this.value)">
+                    <!-- Injection des années -->
+                </select> 
+            </p>
+
+            <!-- Affichage du résultat général pour l'année sélectionnée -->
+            <section class="stat">
+                <p id="pStatResumeByYear">
+                    <!-- Activité : 120 ; Distance : 140.3km; Heures : 250.3h -->
+                    <!-- Injection -->
+                </p> 
+            </section>
+        </div>
+
+        
+
+        <!-- COUNT -->
+        <div class="statGraphique">
+            <h3 class="stat">Répartition du nombre d'activité :</h3>
+            <div class="stat-months">
+                <!-- JANVIER -->
+                <div class="stat-month">
+                    <span id="stat-number-january">0</span>
+                    <div id="stat-PB-january" class="stat-progress-bar" style="--progress: 0%;" ></div>
+                    <span id="spanGraphCountMonthName-january">J</span>
+                </div>
+                <!-- FEVRIER -->
+                <div class="stat-month">
+                    <span id="stat-number-february">0</span>
+                    <div id="stat-PB-february" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-february">F</span>
+                </div>
+                <!-- MARS -->
+                <div class="stat-month">
+                    <span id="stat-number-march">0</span>
+                    <div id="stat-PB-march" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-march">M</span>
+                </div>
+                <!-- AVRIL -->
+                <div class="stat-month">
+                    <span id="stat-number-april">0</span>
+                    <div id="stat-PB-april" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-april">A</span>
+                </div>
+                <!-- MAI -->
+                <div class="stat-month">
+                    <span id="stat-number-may">0</span>
+                    <div id="stat-PB-may" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-may">M</span>
+                </div>
+                <!-- JUIN -->
+                <div class="stat-month">
+                    <span id="stat-number-june">0</span>
+                    <div id="stat-PB-june" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-june">J</span>
+                </div>
+                <!-- JUILLET -->
+                <div class="stat-month">
+                    <span id="stat-number-july">0</span>
+                    <div id="stat-PB-july" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-july">J</span>
+                </div>
+                <!-- AOUT -->
+                <div class="stat-month">
+                    <span id="stat-number-august">0</span>
+                    <div id="stat-PB-august" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-august">A</span>
+                </div>
+                <!-- SEPTEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-number-september">0</span>
+                    <div id="stat-PB-september" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-september">S</span>
+                </div>
+                <!-- OCTOBRE -->
+                <div class="stat-month">
+                    <span id="stat-number-october">0</span>
+                    <div id="stat-PB-october" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-october">O</span>
+                </div>
+                <!-- NOVEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-number-november">0</span>
+                    <div id="stat-PB-november" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-november">N</span>
+                </div>
+                <!-- DECEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-number-december">0</span>
+                    <div id="stat-PB-december" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphCountMonthName-december">D</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DUREE -->
+        <div class="statGraphique">
+            <h3 class="stat">Répartition des durées (heures) :</h3>
+            <div class="stat-months">
+                <!-- JANVIER -->
+                <div class="stat-month">
+                    <span id="stat-duration-january">0</span>
+                    <div id="stat-PB-Duration-january" class="stat-progress-bar" style="--progress: 0%;" ></div>
+                    <span id="spanGraphDurationMonthName-january">J</span>
+                </div>
+                <!-- FEVRIER -->
+                <div class="stat-month">
+                    <span id="stat-duration-february">0</span>
+                    <div id="stat-PB-Duration-february" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-february">F</span>
+                </div>
+                <!-- MARS -->
+                <div class="stat-month">
+                    <span id="stat-duration-march">0</span>
+                    <div id="stat-PB-Duration-march" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-march">M</span>
+                </div>
+                <!-- AVRIL -->
+                <div class="stat-month">
+                    <span id="stat-duration-april">0</span>
+                    <div id="stat-PB-Duration-april" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-april">A</span>
+                </div>
+                <!-- MAI -->
+                <div class="stat-month">
+                    <span id="stat-duration-may">0</span>
+                    <div id="stat-PB-Duration-may" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-may">M</span>
+                </div>
+                <!-- JUIN -->
+                <div class="stat-month">
+                    <span id="stat-duration-june">0</span>
+                    <div id="stat-PB-Duration-june" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-june">J</span>
+                </div>
+                <!-- JUILLET -->
+                <div class="stat-month">
+                    <span id="stat-duration-july">0</span>
+                    <div id="stat-PB-Duration-july" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-july">J</span>
+                </div>
+                <!-- AOUT -->
+                <div class="stat-month">
+                    <span id="stat-duration-august">0</span>
+                    <div id="stat-PB-Duration-august" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-august">A</span>
+                </div>
+                <!-- SEPTEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-duration-september">0</span>
+                    <div id="stat-PB-Duration-september" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-september">S</span>
+                </div>
+                <!-- OCTOBRE -->
+                <div class="stat-month">
+                    <span id="stat-duration-october">0</span>
+                    <div id="stat-PB-Duration-october" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-october">O</span>
+                </div>
+                <!-- NOVEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-duration-november">0</span>
+                    <div id="stat-PB-Duration-november" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-november">N</span>
+                </div>
+                <!-- DECEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-duration-december">0</span>
+                    <div id="stat-PB-Duration-december" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDurationMonthName-december">D</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- DISTANCE -->
+        <div class="statGraphique">
+            <h3 class="stat">Répartition des distances (km) :</h3>
+            <div class="stat-months">
+                <!-- JANVIER -->
+                <div class="stat-month">
+                    <span id="stat-distance-january">0</span>
+                    <div id="stat-PB-Distance-january" class="stat-progress-bar" style="--progress: 0%;" ></div>
+                    <span id="spanGraphDistanceMonthName-january">J</span>
+                </div>
+                <!-- FEVRIER -->
+                <div class="stat-month">
+                    <span id="stat-distance-february">0</span>
+                    <div id="stat-PB-Distance-february" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-february">F</span>
+                </div>
+                <!-- MARS -->
+                <div class="stat-month">
+                    <span id="stat-distance-march">0</span>
+                    <div id="stat-PB-Distance-march" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-march">M</span>
+                </div>
+                <!-- AVRIL -->
+                <div class="stat-month">
+                    <span id="stat-distance-april">0</span>
+                    <div id="stat-PB-Distance-april" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-april">A</span>
+                </div>
+                <!-- MAI -->
+                <div class="stat-month">
+                    <span id="stat-distance-may">0</span>
+                    <div id="stat-PB-Distance-may" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-may">M</span>
+                </div>
+                <!-- JUIN -->
+                <div class="stat-month">
+                    <span id="stat-distance-june">0</span>
+                    <div id="stat-PB-Distance-june" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-june">J</span>
+                </div>
+                <!-- JUILLET -->
+                <div class="stat-month">
+                    <span id="stat-distance-july">0</span>
+                    <div id="stat-PB-Distance-july" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-july">J</span>
+                </div>
+                <!-- AOUT -->
+                <div class="stat-month">
+                    <span id="stat-distance-august">0</span>
+                    <div id="stat-PB-Distance-august" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-august">A</span>
+                </div>
+                <!-- SEPTEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-distance-september">0</span>
+                    <div id="stat-PB-Distance-september" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-september">S</span>
+                </div>
+                <!-- OCTOBRE -->
+                <div class="stat-month">
+                    <span id="stat-distance-october">0</span>
+                    <div id="stat-PB-Distance-october" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-october">O</span>
+                </div>
+                <!-- NOVEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-distance-november">0</span>
+                    <div id="stat-PB-Distance-november" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-november">N</span>
+                </div>
+                <!-- DECEMBRE -->
+                <div class="stat-month">
+                    <span id="stat-distance-december">0</span>
+                    <div id="stat-PB-Distance-december" class="stat-progress-bar" style="--progress: 0%;"></div>
+                    <span id="spanGraphDistanceMonthName-december">D</span>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- FIN STAT GRAPHIQUE -->
+         <span class="info-basDePage">ℹ️ Activités planifiées exclues des statistiques.</span>
+    </div>
+
+    <div id="divBtnStat" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromStat()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+
+
+    <!-- Fake selecteur option activity stat -->
+    <div id="divFakeSelectOptStat" class="fake-select-area" onclick="onCloseFakeStatSelectOpt(event)">
+        <div id="divFakeSelectOptStatList" class="fake-option-area">
+            <!-- Injection des éléments -->
+        </div>
+    </div>
+
+    <!-- ----------------------------------  FIN    DIV STAT     ------------------------------------------------>
+
+
+    <!-- ----------------------------------      DIV INFO        ------------------------------------------------>
+    <div id="divInfo" class="new-interface">
+        <div class="center">
+            <img class="imgQRcode" src="./Icons/MSS_Prod-QR-code.webp" alt="" srcset="">
+        </div>
+        <div class="release-licence">
+            <p class="release-licence">Une application pour gérer vos activités physiques.</p>
+            <p class="release-licence">Optimisée pour Google Chrome.</p>
+            <p class="release-licence"><strong>Version :</strong>1.6.20</p>
+            <p class="release-licence"><strong>Développement/Conception :</strong> Emmanuel TARACONAT.</p>
+            <p class="release-licence"><strong>Collaboration :</strong> Morgane C.</p>
+            <p class="release-licence"><strong>Licence :</strong><a href="https://creativecommons.org/licenses/by-nc/4.0/"  target="_blank">CC BY-NC 4.0</a>.</p>
+            <p class="release-licence"><strong>Icônes :</strong> créées par Freepik, Smashicons, Icongeek26, Vectorslab, afif fudin, 
+                alkhalifi design, Mayor Icons, juicy_fish, Google, disponibles sur <a href="https://www.flaticon.com/" target="_blank">Flaticon.</a></p>
+            <p class="release-licence"><strong>CONDITION D'UTILISATION :</strong></p>
+              
+        </div>
+
+        <!-- Condition d'utilisation -->
+        <div class="release-licence" id="divConditionDynamicTextInfo">
+            <!-- Injection des conditions -->
+        </div>
+
+        <div class="release-licence">
+            <p class="release-licence"> © 2025 - taralab - Tous droits réservés.</p>  
+        </div>
+    </div>
+
+
+
+    <div id="divBtnInfo" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromInfo()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+
+    <!-- ----------------------------------  FIN    DIV INFO     ------------------------------------------------>
+
+    <!-- ----------------------------------      DIV REWARDS        ------------------------------------------------>
+    <div id="divRewards" class="new-interface">
+
+        <div class="rewards-grid" id="divRewardsList">
+            <!-- Injection des badges utilisateur -->
+        </div>
+    </div>
+
+    <!-- Menu Rewards -->
+    <div id="divBtnRewards" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromRewards()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+
+
+    <!-- Plein écran -->
+    <div onclick="onHiddenFullscreenRewards()" id="divFullScreenRewards" class="fullScreenTrophy">
+        <div class="fullScreenRewardContent">
+            <p>
+                <img id="imgRewardsFullScreen" src="./Badges/Badge-BASKETBALL-A.webp" alt="" class="trophyFullScreen">
+            </p>
+            
+            <p id="pRewardsFullScreenTitle" class="trophy">Titre</p>
+            <p id="pRewardsFullScreenText" class="trophyDetail">Tu as pratiqué 5 séances de basket ball</p>
+
+            <div class="custom-editor-btn-menu">
+                <button class="btn-menu" onclick="shareImage(event)">
+                    <img src="./Icons/Icon-Share.webp" alt="Image Share" srcset="">
+                </button>
+            </div>
+
+            <!-- Canvas pour générer l'image à partager -->
+            <canvas id="canvasCreateShareImg" style="display:none;"></canvas>
+            <!-- image d'arrière plan fake pour eviter le problème d'interception du SW -->
+            <img src="./Icons/RewardShareBackground.webp";" alt="" srcset="" style="display:none;">
+        </div>
+
+    </div>
+
+
+    <!-- ----------------------------------  FIN    DIV REWARDS     ------------------------------------------------>
+
+
+
+
+
+
+
+    <!-- ----------------------------------      DIV CONDITION ACCEPTATION      ------------------------------------------------>
+    <div id="divConditionUtilisation" class="condition-interface">
+
+
+        <div class="entete-condition">
+            <img class="logo" src="./Icons/Logo_MSS-512.png" alt="" srcset="">
+            <h3 class="conditionUtilisation">Bienvenue sur "Mon Suivi Sportif"</h3>
+            <h3>Conditions d'utilisation</h3>
+        </div>
+        
+        <div id="divConditionDynamicText">
+            <!-- Injection des conditions dynamiques -->
+        </div>
+
+        
+        <select class="conditionUtilisation" onchange="toggleLaunchButton()" name="" id="selectStatusCondition">
+            <option value="Refused">Je décline.</option>
+            <option value="Accepted">J'ai compris et j'accepte.</option>
+        </select> 
+
+        <div class="buttonAcceptation">
+            <button  id="launch-btn" class="btn-menu btnFocus" onclick="onClickAcceptCondition()"><img src="./Icons/Icon-Accepter.webp" alt="Icone"></button>  
+        </div>
+    </div>
+    <!-- ----------------------------------  FIN   DIV CONDITION ACCEPTATION    ------------------------------------------------>
+
+
+    <!-- ----------------------------------      DIV POPUP NOTIFY     ------------------------------------------------>
+    <div id="popupNotify" class="popupNotify">Activité supprimée !</div>
+    <div id="popupReward" class="popupReward">
+        <img src="./Icons/notifyRewardsColor192.png" alt="" srcset="">
+    </div>
+
+    <!-- ----------------------------------  FIN   DIV POPUP NOTIFY   ------------------------------------------------>
+
+    <!------------------------------------- DIV Main Menu ------------------------------------------------------>
+    <button class="btnFlottant newActivity" onclick="onChangeMenu('NewActivity')" id="btnNewActivity"><img src="./Icons/Icon-New.webp" alt="Icone"></button>
+    <button class="btnFlottant new-from-template" onclick="onChangeMenu('TemplateChoice')" id="btnNewFromTemplate"><img src="./Icons/Icon-From-Modele.webp" alt="Icone"></button>
+    <div id="divMainBtnMenu" class="main-menu">
+        <button class="btn-menu" onclick="onChangeMenu('Session')">
+            <img src="./Icons/Icon-Session.webp" alt="Icone">
+            <span>Session</span>
+        </button>
+        <button class="btn-menu" onclick="onChangeMenu('Stat')">
+            <img src="./Icons/Icon-Stat.webp" alt="Icone">
+            <span>Stats</span>
+        </button>
+        <button id="btnMenuRewards" class="btn-menu" onclick="onChangeMenu('Rewards')">
+            <img src="./Icons/Icon-Trophy.webp" alt="Icone">
+            <span>Trophées</span>
+        </button>
+        <button class="btn-menu" onclick="onClickMainMenuSup()">
+            <img src="./Icons/Icon-Autres.webp" alt="Icone">
+            <span>Plus</span>
+        </button>
+    </div>
+
+    <!-- DIV main menu supplémentaire -->
+    <div id="divMainMenuSup" class="main-menu-sup" onclick="onAnnulMenuSup(event)">
+        <div class="main-menu-sup-button-area">
+            <button onclick="onClickMenuSup(event,'Profil')">Profil</button>
+            <button onclick="onClickMenuSup(event,'Favoris')">Favoris</button>
+            <button onclick="onClickMenuSup(event,'GestTemplate')">Modèles d'activité</button>
+            <button onclick="onClickMenuSup(event,'MenuTemplateSession')">Modèles de session</button>
+            <button onclick="onClickMenuSup(event,'Setting')">Paramètres</button>
+            <button onclick="onClickMenuSup(event,'GestData')">Gestion des données</button>
+            <button onclick="onClickMenuSup(event,'Info')">A propos</button>
+        </div>
+    </div>
+    <!------------------------------------- FIN DIV Main Menu ------------------------------------------------------>
+
+</div>
+    <script src="./scripts/pouchdb.min.js?v=9.0.0"></script>
+    <script src="./scripts/globalFunction.js?v=1.6.20"></script>
+    <script src="./scripts/setting.js?v=1.6.20"></script>
+    <script src="./scripts/notify.js?v=1.6.20"></script>
+    <script src="./scripts/profil.js?v=1.6.20"></script>
+    <script src="./scripts/favoris.js?v=1.6.20"></script>
+    <script src="./scripts/sortAndFilter.js?v=1.6.20"></script>
+    <script src="./scripts/activityList.js?v=1.6.20"></script>
+    <script src="./scripts/activitySystem.js?v=1.6.20"></script>
+    <script src="./scripts/templateSession.js?v=1.6.20"></script>
+    <script src="./scripts/session.js?v=1.6.20"></script>
+    <script src="./scripts/info.js?v=1.6.20"></script>
+    <script src="./scripts/stat.js?v=1.6.20"></script>
+    <script src="./scripts/rewardData.js?v=1.6.20"></script>
+    <script src="./scripts/rewards.js?v=1.6.20"></script>
+    <script src="./scripts/gestData.js?v=1.6.20"></script>
+    <script src="./scripts/template.js?v=1.6.20"></script>
+    <script src="./scripts/app.js?v=1.6.20"></script>
+
+    <!-- ENREGISTREMENT DU SERVICE WORKER -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js')
+                .then((registration) => {
+                    console.log('Service Worker enregistré avec succès :', registration);
+                })
+                .catch((error) => {
+                    console.error("Échec de l'enregistrement du Service Worker :", error);
+                });
+            });
+    
+            navigator.serviceWorker.addEventListener("message", (event) => {
+                if (event.data.type === "UPDATE_READY") {
+                    alert("Une nouvelle version est disponible. Veuillez actualiser.");
+    
+                    if (confirm("Actualiser maintenant ?")) {
+                        console.log("Rechargement dans 1 seconde...");
+                        setTimeout(() => {
+                            window.location.reload(true);
+                        }, 1000);   
+                    }
+                }
+            });
+        }
+    </script>
+    
+        
+</body>
+</html>

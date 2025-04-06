@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mon Suivit Sportif</title>
+</head>
+<body>
+
+    <style>
+
+        body{
+            margin: 0;
+            padding: 0;
+        }
+        div.header{
+            width: 100%;   
+            display: flex;
+            justify-content: space-between; /* Espace entre chaque paragraphe */
+            background-color: #0081C9;
+            margin-bottom: 10px;
+        }
+
+        p.app-title{
+            display: inline;
+            text-align: left;
+            color:  white;
+            font-weight: bold;
+            font-size: 18px;
+            margin-left: 10px;
+        }
+
+        div.hors-ligne{
+            display: flex;
+            width: 100%;
+            height: 50vh;
+            align-items: center;
+            justify-content: center;
+        }
+        div.hors-ligne p{
+            font-weight: bold;
+        }
+        div.hors-ligne img{
+            width: 70px;
+        }
+
+
+    </style>
+
+    <div id="divHeader" class="header">
+        <p id="pMenuTitle" class="app-title">
+            Mon Suivit Sportif
+        </p>
+    </div>
+    <div class="hors-ligne">
+        <img src="./Icons/Icon-No-Network.webp" alt="">
+        <p>Tu es actuellement hors ligne...</p>
+    </div>
+
+
+</body>
+</html>

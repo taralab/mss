@@ -1,0 +1,43 @@
+# --- Systèmes d'exploitation ---
+.DS_Store           # macOS
+Thumbs.db           # Windows
+desktop.ini
+
+# --- Fichiers d’éditeurs de code ---
+.vscode/
+.idea/
+*.code-workspace
+*.sublime-project
+*.sublime-workspace
+
+# --- Fichiers temporaires ---
+*.log
+*.tmp
+*.swp
+*.swo
+*.bak
+
+# --- Dossiers de build (si build tool utilisé) ---
+dist/
+build/
+out/
+tmp/
+.cache/
+
+# --- Fichiers de configuration sensibles (si utilisés) ---
+.env
+*.env
+.env.*
+*.key
+*.pem
+
+# --- Dépendances locales (si utilisées avec npm ou autre) ---
+node_modules/
+
+# --- Autres éventuels fichiers inutiles ---
+*.zip
+*.tar.gz
+*.rar
+
+# --- Coverage / test (si ajouts de tests plus tard) ---
+coverage/
