@@ -9,7 +9,7 @@ if (envBaseFolder !== "mss") {
     console.log("configuration style dev");
 }
 
-console.log(Date.now());
+
 // ------------------------- CONDITION D'UTILISATION ---------------------------
 
 

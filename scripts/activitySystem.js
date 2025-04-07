@@ -814,8 +814,6 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 // Séquence d'insertion d'une modification
 async function eventInsertActivityModification(dataToInsert) {
 
-    console.log("modification dataToInsert:", dataToInsert);
-
     await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
     await onLoadActivityFromDB();
 

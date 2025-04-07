@@ -125,8 +125,6 @@ async function onOpenMenuSession(){
     getCounterListFromLocalStorage();
     getSessionStartTimeFromLocalStorage();
 
-    console.log(userCounterList);
-
     if (devMode === true){console.log(userCounterList)};
 
     // set l'heure d'initialisation de session dans le texte
