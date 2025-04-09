@@ -74,7 +74,7 @@ function toggleLaunchButton() {
 
 
 
-let dbName = `${envBaseFolder}_db`,
+let dbName = `MSS_db`,
     activityStoreName = "ActivityList",
     profilStoreName = "Profil",
     rewardsStoreName = "Recompenses",
