@@ -1,63 +1,67 @@
+// Referencement
+let selectorStatRef = document.getElementById("selectorStat");
+
+// Array qui va contenir toutes les keys des activités non planifiées
+let statActivityNonPlannedKeys = [];
+
+
+
+
 
 // Ouverture du menu
 function onOpenMenuStat(){
     if (devMode === true){console.log("Ouverture menu STAT");};
 
 
-    statActivityNonPlannedArray = allUserActivityArray.filter(activity =>{
-        return activity.isPlanned === false
-    });
+    // récupère les keys des activités non planifiées
+    statActivityNonPlannedKeys = Object.entries(allUserActivityArray)
+    .filter(([key, value]) => value.isPlanned === false)
+    .map(([key, value]) => key);
 
-    if (devMode === true){
-        console.log("Retrait des activités programmées");
-        console.log("Nbre activité retiré = " + (allUserActivityArray.length - statActivityNonPlannedArray.length));
+
+    // Récupère la liste dynamique des catégories
+    let dynamicFilterList = getNonPlannedActivitiesKeysForStat(statActivityNonPlannedKeys);
     
-    };
+    // Crée les options dans le selecteur de catégorie le vrai et la fake
+    onGenerateStatOptionFilter(dynamicFilterList);
+    onGenerateFakeStatOptionFilter(dynamicFilterList);
 
-    onGenerateDynamiqueStatFilter(statActivityNonPlannedArray);
-
-    displayGeneralStats(statActivityNonPlannedArray);
+    displayGeneralStats(statActivityNonPlannedKeys);
 }
 
-// Referencement
-let selectorStatRef = document.getElementById("selectorStat");
-
-// Array qui va contenir toutes les activités non planifiées
-let statActivityNonPlannedArray = [];
 
 
-
-
-// remplit dynamiquement les options dans le selection de statistique
-function onGenerateDynamiqueStatFilter(allData) {
+// filtre sur les éléments non planifié et les tries par ordre alpha
+function getNonPlannedActivitiesKeysForStat(nonPlannedActivitiesKeys) {
     if (devMode === true){console.log("[STAT] récupère les types d'activité de l'utilisateur" )};
-    let dynamicFilterList = [];
-    
+
+    let filteredList = [];
 
 
-    // Recupère les nouvelle catégorie présente dans la liste en cours
-    allData.forEach(data=>{
-        if (!dynamicFilterList.includes(data.name))  {
-            dynamicFilterList.push(data.name);
+    // Recupère les nouvelles catégories présentes dans la liste en cours
+    nonPlannedActivitiesKeys.forEach(key=>{
+        if (!filteredList.includes(allUserActivityArray[key].name))  {
+            filteredList.push(allUserActivityArray[key].name);
         };
     });
 
-    dynamicFilterList.sort();
 
-
+    // Classement par ordre alpha
+    filteredList.sort();
     if (devMode === true){
-        console.log("[STAT] valeur de dynamicFilterList = " );
-        console.log(dynamicFilterList);
+        console.log("Retrait des activités programmées");
+        console.log("Nbre activité retiré = " + (Object.keys(allUserActivityArray).length - Object.keys(nonPlannedActivitiesKeys).length));
+        console.log(filteredList);
+    
     };
 
-    // Crée les options dans le selection pour les catégorie
-    onGenerateStatOptionFilter(dynamicFilterList);
+    return filteredList;
 };
 
 
 
 // Génération des options d'activité pour le filtre avec tri
-function onGenerateStatOptionFilter(allActivityTypeData) {
+function onGenerateStatOptionFilter(dynamicFilterList) {
 
     selectorStatRef.innerHTML = "";
 
@@ -71,7 +75,7 @@ function onGenerateStatOptionFilter(allActivityTypeData) {
 
 
     // Ajouter les autres options triées
-    allActivityTypeData.forEach(activityType => {
+    dynamicFilterList.forEach(activityType => {
 
         let newOption = document.createElement("option");
         newOption.value = activityType;
@@ -80,13 +84,12 @@ function onGenerateStatOptionFilter(allActivityTypeData) {
     });
 
 
-    onGenerateFakeStatOptionFilter(allActivityTypeData);
 };
 
 
 
 
-function onGenerateFakeStatOptionFilter(allActivityData) {
+function onGenerateFakeStatOptionFilter(dynamicFilterList) {
     let parentTargetRef = document.getElementById("divFakeSelectOptStatList");
 
     // Traite d'abord les favoris
@@ -136,7 +139,7 @@ function onGenerateFakeStatOptionFilter(allActivityData) {
 
 
     // Ajout de reste des activités
-    allActivityData.forEach((e,index)=>{
+    dynamicFilterList.forEach((e,index)=>{
 
          // Creation
         let newContainer = document.createElement("div");
@@ -151,7 +154,7 @@ function onGenerateFakeStatOptionFilter(allActivityData) {
 
 
         // Style sans border botton pour le dernier
-        if (index === (allActivityData.length - 1)) {
+        if (index === (dynamicFilterList.length - 1)) {
             newContainer.classList.add("fake-opt-item-last-container");
         }
 
@@ -229,7 +232,7 @@ function onChangeStatActivitySelector(value) {
 
     if (value === "GENERAL") {
         // Appeler la fonction pour afficher les statistiques générales
-        displayGeneralStats(statActivityNonPlannedArray);
+        displayGeneralStats(statActivityNonPlannedKeys);
     } else {
         // Appeler la fonction pour afficher les statistiques de l'activité sélectionnée
         displayActivityStats(value);
@@ -572,10 +575,10 @@ function onChangeSelectorYearGraph(yearTarget){
 
 
     if (currentActivitySelected === "GENERAL") {
-        getActivityStatCountByMonth(statActivityNonPlannedArray,Number(yearTarget));
+        getActivityStatCountByMonth(statActivityNonPlannedKeys,Number(yearTarget));
     } else {
         // Récupère uniquement les données concernant l'activité en question
-        let activitiesTargetData = statActivityNonPlannedArray.filter(e=>{
+        let activitiesTargetData = statActivityNonPlannedKeys.filter(e=>{
             // Recupère toutes les activités concernés
             return e.name === currentActivitySelected;
         });
@@ -598,7 +601,7 @@ function displayActivityStats(activityName) {
     if (devMode === true){console.log("[STAT] demande de stat pour " + activityName);};
 
     // Récupère uniquement les données concernant l'activité en question
-    let activitiesTargetData = statActivityNonPlannedArray.filter(e=>{
+    let activitiesTargetData = statActivityNonPlannedKeys.filter(e=>{
         // Recupère toutes les activités concernés
         return e.name === activityName;
     });
@@ -769,7 +772,7 @@ function onResetStatGraph() {
     document.getElementById("selectStatGraphYear").innerHTML= "";
 
     // Vide le tableau de toutes les activités non planifié
-    statActivityNonPlannedArray = [];
+    statActivityNonPlannedKeys = [];
 
 
     monthStatNamesArray.forEach(e=>{
