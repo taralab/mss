@@ -779,8 +779,12 @@ function onInputDateChange() {
 //Soi depuis l'éditeur d'activité, soit une activité généré depuis les sessions
 
 async function eventInsertNewActivity(dataToInsert,isFromSession) {
-    await onInsertNewActivityInDB(dataToInsert);
-    await onLoadActivityFromDB();
+
+    // Insere en base
+    let newActivityToAdd = await onInsertNewActivityInDB(dataToInsert);
+
+    // Insère également dans l'array d'objet
+    allUserActivityArray[newActivityToAdd._id] = newActivityToAdd;
 
 
     // est ce que la derniere activité est planifié donc pas de check reward
@@ -818,8 +822,11 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 // Séquence d'insertion d'une modification
 async function eventInsertActivityModification(dataToInsert) {
 
-    await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
-    await onLoadActivityFromDB();
+    // Sauvegarde dans la base
+    let activityUpdated = await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
+
+    // met à jour l'array d'objet
+    allUserActivityArray[currentActivityEditorID] = activityUpdated;
 
     // est ce que la derniere activité est planifié donc pas de check reward
     const isCheckRewardsRequiered = dataToInsert.isPlanned === false;
@@ -879,8 +886,12 @@ function onConfirmDeleteActivity(event){
 
 // Sequence de suppression d'un template
 async function eventDeleteActivity(idToDelete) {
+
+    // Supprime en base
     await deleteActivity(idToDelete);
-    await onLoadActivityFromDB();
+    
+    // met à jour l'array d'objet
+    delete allUserActivityArray[idToDelete];
 
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
