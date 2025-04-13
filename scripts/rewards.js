@@ -594,8 +594,8 @@ function onCheckDeRetour(activityKeys) {
         const diffInMs = dates[i] - dates[i - 1];
         const diffInDays = diffInMs / (1000 * 60 * 60 * 24);
         if (diffInDays > 30) {
-                rewardsEligibleArray.push("DE-RETOUR");
-            if (devMode === true){console.log(`[REWARDS] [COMMUN]  : DE-RETOUR resultat : ` + isEligible);};   
+            rewardsEligibleArray.push("DE-RETOUR");
+            if (devMode === true){console.log(`[REWARDS] [COMMUN]  : DE-RETOUR resultat : Eligible`)};   
             return true;
         }
     }

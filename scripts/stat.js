@@ -27,6 +27,8 @@ function onOpenMenuStat(){
     onGenerateFakeStatOptionFilter(dynamicFilterList);
 
     displayGeneralStats(statActivityNonPlannedKeys);
+    // traitement des graphiques
+    onTreateStatGraphic(statActivityNonPlannedKeys);
 }
 
 
@@ -233,6 +235,8 @@ function onChangeStatActivitySelector(value) {
     if (value === "GENERAL") {
         // Appeler la fonction pour afficher les statistiques générales
         displayGeneralStats(statActivityNonPlannedKeys);
+        // traitement des graphiques
+        onTreateStatGraphic(statActivityNonPlannedKeys);
     } else {
         // Appeler la fonction pour afficher les statistiques de l'activité sélectionnée
         displayActivityStats(value);
@@ -322,7 +326,7 @@ function getStats(activityList, days = null) {
 }
 
 
-function onTreateStatGraphic(activityList) {
+function onTreateStatGraphic(activityKeysList) {
 
     if (devMode === true){
         console.log("[STAT] Traitement des graphiques");
@@ -330,8 +334,8 @@ function onTreateStatGraphic(activityList) {
     };
         // extraction des années 
         let yearArray = [];
-        activityList.forEach(e=>{
-            const dateObject = new Date(e.date);
+        activityKeysList.forEach(key=>{
+            const dateObject = new Date(allUserActivityArray[key].date);
             const year = dateObject.getFullYear();
             if (!yearArray.includes(year)) {
                 yearArray.push(year);
@@ -360,7 +364,7 @@ function onTreateStatGraphic(activityList) {
         });
 
         // Lancement du comptage sur la première année du tableau
-        getActivityStatCountByMonth(activityList,yearArray[0]);
+        getActivityStatCountByMonth(activityKeysList,yearArray[0]);
 
 }
 
@@ -373,7 +377,7 @@ const monthStatNamesArray = [
     'july', 'august', 'september', 'october', 'november', 'december'
 ];
 
-function getActivityStatCountByMonth(activityList,yearTarget) {
+function getActivityStatCountByMonth(activityKeysList,yearTarget) {
 
 
     // Objet qui stocke les comptes des activité classé
@@ -396,9 +400,9 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
         totalDistanceYear = 0,
         totalDurationYear = 0;
 
-    activityList.forEach(e=>{
+    activityKeysList.forEach(key=>{
 
-        const dateObject = new Date(e.date);
+        const dateObject = new Date(allUserActivityArray[key].date);
         const year = dateObject.getFullYear();
         const month = dateObject.getMonth();
         const monthName = monthStatNamesArray[month];
@@ -412,7 +416,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
             // ancienne valeur
             let oldDistance = Number(countActivityByMonth[monthName].distance) || 0;
             // Valeur à ajouter
-            let newDistance = parseFloat(e.distance) ||0 ;
+            let newDistance = parseFloat(allUserActivityArray[key].distance) ||0 ;
             // addition
             let distanceToAdd = oldDistance + newDistance;
             distanceToAdd = Math.round(distanceToAdd * 10) / 10;//arrondi 1 décimale
@@ -425,7 +429,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
             let oldDuration = Number(countActivityByMonth[monthName].duration) || 0;
 
             // Valeur à ajouter
-            let newDuration = durationToMinutes(e.duration || "00:00:00");
+            let newDuration = durationToMinutes(allUserActivityArray[key].duration || "00:00:00");
 
 
             let durationToAdd = oldDuration + newDuration;
@@ -442,7 +446,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
 
     if (devMode === true){
         
-        console.log("[STAT] longueur de la liste d'activité cible :" + activityList.length);
+        console.log("[STAT] longueur de la liste d'activité cible :" + activityKeysList.length);
         console.log("[STAT] Comptage répartition par mois selon l'année : " + yearTarget);
         console.log(countActivityByMonth);
         console.log("[STAT] Recherche du mois avec la valeur la plus haute");
@@ -682,8 +686,8 @@ function displayActivityStats(activityName) {
 
 
 // Fonction pour afficher les statistiques générales
-function displayGeneralStats(activityList) {
-    if (!activityList || activityList.length === 0) {
+function displayGeneralStats(nonPlannedActivitiesKeys) {
+    if (!Object.keys(nonPlannedActivitiesKeys) || Object.keys(nonPlannedActivitiesKeys).length === 0) {
         document.getElementById("stats").innerHTML = `
             <p>Bienvenue ! Commence à enregistrer tes activités pour découvrir tes statistiques ici. 🚀</p>
         `;
@@ -691,17 +695,42 @@ function displayGeneralStats(activityList) {
     }
 
     // Calculs nécessaires
-    const totalActivities = activityList.length;
-    const totalDuration = activityList.reduce((sum, activity) => 
-        sum + durationToMinutes(activity.duration || "00:00:00"), 0
-    );
-    const totalDistance = activityList.reduce((sum, activity) => 
-        sum + parseFloat(activity.distance || 0), 0
-    );
-    const firstActivityDate = new Date(Math.min(...activityList.map(a => new Date(a.date))));
+    const totalActivities = Object.keys(nonPlannedActivitiesKeys).length;
+    
+
+    const totalDuration = nonPlannedActivitiesKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.duration) {
+            return sum + durationToMinutes(activity.duration || "00:00:00");
+        }
+        return sum
+    },0);
+
+
+
+    const totalDistance = nonPlannedActivitiesKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.distance) {
+            return sum + parseFloat(activity.distance || 0);
+        }
+        return sum;
+    }, 0);
+    
+
+
+    const firstActivityDate = new Date(Math.min(
+        ...nonPlannedActivitiesKeys
+            .map(key => {
+                const activity = allUserActivityArray[key];
+                return activity?.date ? new Date(activity.date) : null;
+            })
+            .filter(date => date instanceof Date && !isNaN(date)) // on garde les dates valides
+    ));
+    
+
     const formattedDate = firstActivityDate.toLocaleDateString("fr-FR");
 
-    const favouriteActivityName =getMostPracticedActivity(activityList); // Activité la plus pratiquée
+    const favouriteActivityName = getMostPracticedActivity(nonPlannedActivitiesKeys); // Activité la plus pratiquée
 
 
 
@@ -720,34 +749,28 @@ function displayGeneralStats(activityList) {
         </section>
     `;
 
-
-
-    // traitement des graphiques
-    onTreateStatGraphic(activityList);
 }
 
 
 
 // Fonction de calcul de l'activité la plus pratiquée
-function getMostPracticedActivity(data) {
-
-    if (devMode === true){console.log(" [STAT] General : calcul de l'activité la plus pratiquée.");};
-
-
-    if (!Array.isArray(data) || data.length === 0) {
-        return null; // Retourne null si le tableau est vide ou invalide
+function getMostPracticedActivity(dataKeys) {
+    if (devMode === true) {
+        console.log(" [STAT] General : calcul de l'activité la plus pratiquée.");
     }
 
-    // Étape 1 : Compter les occurrences de chaque activité
-    const activityCounts = data.reduce((acc, obj) => {
+    if (!Array.isArray(dataKeys) || dataKeys.length === 0) {
+        return null;
+    }
 
-        if (obj.name) {
-            acc[obj.name] = (acc[obj.name] || 0) + 1; // Incrémente le compteur
+    const activityCounts = dataKeys.reduce((acc, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity?.name) {
+            acc[activity.name] = (acc[activity.name] || 0) + 1;
         }
         return acc;
     }, {});
 
-    // Étape 2 : Trouver l'activité avec la valeur maximale
     let mostPracticed = null;
     let maxCount = 0;
 
@@ -758,11 +781,13 @@ function getMostPracticedActivity(data) {
         }
     }
 
-    if (devMode === true){console.log(`[STAT] Resultat : ${mostPracticed} avec ${maxCount} activités.` );};
-
+    if (devMode === true) {
+        console.log(`[STAT] Résultat : ${mostPracticed} avec ${maxCount} activités.`);
+    }
 
     return mostPracticed;
 }
+
 
 
 // Reset les éléments du graphique
