@@ -13,10 +13,10 @@ let activityToInsertFormat = {
 };
 
 
-let allUserActivityArray = [], //Contient toutes les activités créé par l'utilisateur
-    userActivityListToDisplay = [], // contient les activités triées et filtrées à afficher
+let allUserActivityArray = {}, //Contient toutes les activités créé par l'utilisateur
+    userActivityKeysListToDisplay = [], // contient les activités triées et filtrées à afficher
     maxActivityPerCycle = 15,//Nbre d'élément maximale à afficher avant d'avoir le bouton "afficher plus"
-    userActivityListIndexToStart = 0, //Index de démarrage pour l'affichage d'activité
+    userActivityKeysListIndexToStart = 0, //Index de démarrage pour l'affichage d'activité
     currentActivityDataInView,//contient les données d'une activité en cours d'affichage. Permet de comparer les modifications
     activityTagPlanned  = "planifie",
     activityTagDone = "effectue",
@@ -56,25 +56,27 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 
 
 // fonction pour récupérer les activité et les modèles
-async function onLoadActivityFromDB () {
-    allUserActivityArray = [];
+async function onLoadActivityFromDB() {
+    allUserActivityArray = {}; // devient un objet
     try {
-        const result = await db.allDocs({ include_docs: true }); // Récupère tous les documents
+        const result = await db.allDocs({ include_docs: true });
 
-        // Filtrer les éléments concernée
-        allUserActivityArray = result.rows
+        result.rows
             .map(row => row.doc)
-            .filter(doc => doc.type === activityStoreName);
-            if (devMode === true){
-                console.log("[DATABASE] [ACTIVITY] Activités chargées :", activityStoreName);
-                console.log(allUserActivityArray[0]);
-            };
+            .filter(doc => doc.type === activityStoreName)
+            .forEach(doc => {
+                allUserActivityArray[doc._id] = { ...doc }; // on garde tout
+            });
+
+        if (devMode === true) {
+            console.log("[DATABASE] [ACTIVITY] Activités chargées :", activityStoreName);
+            const firstKey = Object.keys(allUserActivityArray)[0];
+            console.log(allUserActivityArray[firstKey]);
+        }
     } catch (err) {
         console.error("[DATABASE] [ACTIVITY] Erreur lors du chargement:", err);
     }
 }
-
-
 
 
 
@@ -271,22 +273,22 @@ function initMaxDate() {
 
 // Insertion des activités dans la liste
 
-function onInsertActivityInList(activityToDisplay) {
+function onInsertActivityInList(activityKeysToDisplay) {
 
     // Stock les activité à afficher dans un tableau
-    userActivityListToDisplay = activityToDisplay;
-    userActivityListIndexToStart = 0;
+    userActivityKeysListToDisplay = activityKeysToDisplay;
+    userActivityKeysListIndexToStart = 0;
 
 
     if (devMode === true){
-        console.log("nbre d'activité total à afficher = " + userActivityListToDisplay.length);
+        console.log("nbre d'activité total à afficher = " + userActivityKeysListToDisplay.length);
         console.log("Nbre max d'activité affiché par cycle = " + maxActivityPerCycle);
         console.log("Vide la liste des activités");
     };
 
     divItemListRef.innerHTML = "";
 
-    if (userActivityListToDisplay.length === 0) {
+    if (userActivityKeysListToDisplay.length === 0) {
         divItemListRef.innerHTML = "Aucune activité à afficher !";
         return
     }else{
@@ -297,27 +299,29 @@ function onInsertActivityInList(activityToDisplay) {
 
 };
 
+
+
 // séquence d'insertion  d'activité dans la liste selon le nombre limite définit
 function onInsertMoreActivity() {
     if (devMode === true){console.log("Lancement d'un cycle d'insertion d'activité.");};
     let cycleCount = 0;
 
-    if (devMode === true){console.log("Index de départ = " + userActivityListIndexToStart);};
+    if (devMode === true){console.log("Index de départ = " + userActivityKeysListIndexToStart);};
 
 
 
-    for (let i = userActivityListIndexToStart; i < userActivityListToDisplay.length; i++) {
+    for (let i = userActivityKeysListIndexToStart; i < Object.keys(userActivityKeysListToDisplay).length; i++) {
 
         if (cycleCount >= maxActivityPerCycle) {
             if (devMode === true){console.log("Max par cycle atteinds = " + maxActivityPerCycle);};
             // Creation du bouton More
             onCreateMoreActivityBtn();
-            userActivityListIndexToStart += maxActivityPerCycle;
-            if (devMode === true){console.log("mise a jour du prochain index to start = " + userActivityListIndexToStart);};
+            userActivityKeysListIndexToStart += maxActivityPerCycle;
+            if (devMode === true){console.log("mise a jour du prochain index to start = " + userActivityKeysListIndexToStart);};
             // Arrete la boucle si lorsque le cycle est atteind
             return
         }else{
-            onInsertOneActivity(userActivityListToDisplay[i],i === userActivityListToDisplay.length-1);
+            onInsertOneActivity(Object.values(allUserActivityArray)[i],i === Object.keys(userActivityKeysListToDisplay).length-1);
         };
         cycleCount++;
     };
