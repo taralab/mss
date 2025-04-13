@@ -321,7 +321,7 @@ function onInsertMoreActivity() {
             // Arrete la boucle si lorsque le cycle est atteind
             return
         }else{
-            onInsertOneActivity(Object.values(allUserActivityArray)[i],i === Object.keys(userActivityKeysListToDisplay).length-1);
+            onInsertOneActivity(allUserActivityArray[userActivityKeysListToDisplay[i]],i === Object.keys(userActivityKeysListToDisplay).length-1);
         };
         cycleCount++;
     };
@@ -596,7 +596,7 @@ function onClickOnActivity(keyRef) {
 
     currentActivityEditorID = keyRef;
 
-    let activityToDisplay = onSearchActivity(keyRef);
+    let activityToDisplay = allUserActivityArray[keyRef];
 
     currentActivityDataInView = activityToDisplay;//pour la comparaison par la suite
     onEditActivity(activityToDisplay);
