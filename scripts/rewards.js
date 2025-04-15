@@ -57,7 +57,7 @@ function onSearchActivitiesTotalDistanceRange(filteredKeys, bottomValue, topValu
     const totalDistance = filteredKeys.reduce((sum, key) => {
         const activity = allUserActivityArray[key];
         if (activity && activity.distance) {
-            return sum + parseFloat(activity.distance);
+            return sum + parseFloat(activity.distance || 0);
         }
         return sum;
     }, 0);

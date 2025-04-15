@@ -275,20 +275,20 @@ function formatDuration(totalMinutes) {
 
 
 
-// Récupère les statistiques de l'activité
-function getStats(activityList, days = null) {
+// Récupère les statistiques de l'activité pour le résumé
+function getStats(activityTargetKeysList, days = null) {
     const today = new Date();
 
-    // Filtrer les sessions pour l'activité donnée
-    const filteredSessions = activityList.filter(activity => {
+    // NE garde que les clés des activités qui sont concernée par la recherche. (tous, 7jours, 30jours)
+    let filteredKeys = activityTargetKeysList.filter(key => {
         const isWithinDays = days
-            ? (today - new Date(activity.date)) / (1000 * 60 * 60 * 24) <= days
+            ? (today - new Date(allUserActivityArray[key].date)) / (1000 * 60 * 60 * 24) <= days
             : true; // Inclure toutes les sessions si `days` est null
         return isWithinDays;
     });
 
     // Si aucune session n'est trouvée, renvoyer des valeurs par défaut
-    if (filteredSessions.length === 0) {
+    if (filteredKeys.length === 0) {
         return {
             totalSessions: 0,
             totalDuration: 0,
@@ -298,23 +298,57 @@ function getStats(activityList, days = null) {
         };
     }
 
-    // Trier les sessions par date (du plus récent au plus ancien)
-    filteredSessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Trier les keys par date (du plus récent au plus ancien)
+    filteredKeys.sort((a, b) => new Date(allUserActivityArray[b].date) - new Date(allUserActivityArray[a].date));
 
     // Calculer les statistiques
-    const totalSessions = filteredSessions.length;
-    const totalDuration = filteredSessions.reduce((sum, session) =>
-        sum + durationToMinutes(session.duration || "00:00:00"), 0
-    ); // En minutes
-    const totalDistance = filteredSessions.reduce((sum, session) =>
-        sum + parseFloat(session.distance || 0), 0
+    const totalSessions = filteredKeys.length;
+
+    // const totalDuration = filteredSessions.reduce((sum, session) =>
+    //     sum + durationToMinutes(session.duration || "00:00:00"), 0
+    // ); // En minutes
+
+    const totalDuration = filteredKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.duration) {
+            return sum + durationToMinutes(activity.duration || "00:00:00");
+        }
+        return sum;
+    }, 0);
+
+
+    // const totalDistance = filteredSessions.reduce((sum, session) =>
+    //     sum + parseFloat(session.distance || 0), 0
+    // );
+
+    const totalDistance = filteredKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.distance) {
+            return sum + parseFloat(activity.distance);
+        }
+        return sum;
+    }, 0);
+
+
+    console.log(
+        "days :", days,
+        "total session : ",totalSessions,
+        "durée :",totalDuration, // En minutes
+        "distance :",totalDistance // En km
     );
 
+
+
     // Dernière activité pratiquée (la plus récente)
-    const lastActivityDate = new Date(filteredSessions[0].date); // La première après le tri est la plus récente
+    const lastActivityDate = new Date(allUserActivityArray[filteredKeys[0]].date); // La première après le tri est la plus récente
+
+
+    console.log(lastActivityDate);
+
 
     // Première activité pratiquée (la plus ancienne)
-    const firstActivityDate = new Date(filteredSessions[filteredSessions.length - 1].date); // La dernière après le tri est la plus ancienne
+    const lastIndex = filteredKeys.length - 1;
+    const firstActivityDate = new Date(allUserActivityArray[filteredKeys[lastIndex]].date); // La dernière après le tri est la plus ancienne
 
     return {
         totalSessions,
@@ -604,17 +638,18 @@ function onChangeSelectorYearGraph(yearTarget){
 function displayActivityStats(activityName) {
     if (devMode === true){console.log("[STAT] demande de stat pour " + activityName);};
 
-    // Récupère uniquement les données concernant l'activité en question
-    let activitiesTargetData = statActivityNonPlannedKeys.filter(e=>{
-        // Recupère toutes les activités concernés
-        return e.name === activityName;
-    });
+    // Récupère uniquement les keys données concernant l'activité en question et non planifié
+    let activitiesTargetKeys = Object.entries(allUserActivityArray)
+    .filter(([key, value]) => value.isPlanned === false && value.name === activityName)
+    .map(([key, value]) => key);
 
 
-    // Récupérer les statistiques
-    const statsAllTime = getStats(activitiesTargetData);
-    const stats7Days = getStats(activitiesTargetData, 7);
-    const stats30Days = getStats(activitiesTargetData, 30);
+    console.log(activitiesTargetKeys);
+
+    // Récupérer les statistiques pour le résumé
+    const statsAllTime = getStats(activitiesTargetKeys);
+    const stats7Days = getStats(activitiesTargetKeys, 7);
+    const stats30Days = getStats(activitiesTargetKeys, 30);
 
     // Formater les dates des premières et dernières activités pratiquées
     const firstActivityDateFormatted = statsAllTime.firstActivityDate
