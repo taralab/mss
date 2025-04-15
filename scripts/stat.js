@@ -615,11 +615,11 @@ function onChangeSelectorYearGraph(yearTarget){
     if (currentActivitySelected === "GENERAL") {
         getActivityStatCountByMonth(statActivityNonPlannedKeys,Number(yearTarget));
     } else {
-        // Récupère uniquement les données concernant l'activité en question
-        let activitiesTargetData = statActivityNonPlannedKeys.filter(e=>{
-            // Recupère toutes les activités concernés
-            return e.name === currentActivitySelected;
-        });
+        // Récupère uniquement les données concernant l'activité en question et non planifié
+        let activitiesTargetData = Object.entries(allUserActivityArray)
+            .filter(([key, value]) => value.isPlanned === false && value.name === currentActivitySelected)
+            .map(([key, value]) => key);
+
         getActivityStatCountByMonth(activitiesTargetData,Number(yearTarget));
     }    
 }
@@ -639,17 +639,17 @@ function displayActivityStats(activityName) {
     if (devMode === true){console.log("[STAT] demande de stat pour " + activityName);};
 
     // Récupère uniquement les keys données concernant l'activité en question et non planifié
-    let activitiesTargetKeys = Object.entries(allUserActivityArray)
+    let specificActivitiesKeys = Object.entries(allUserActivityArray)
     .filter(([key, value]) => value.isPlanned === false && value.name === activityName)
     .map(([key, value]) => key);
 
 
-    console.log(activitiesTargetKeys);
+    console.log(specificActivitiesKeys);
 
     // Récupérer les statistiques pour le résumé
-    const statsAllTime = getStats(activitiesTargetKeys);
-    const stats7Days = getStats(activitiesTargetKeys, 7);
-    const stats30Days = getStats(activitiesTargetKeys, 30);
+    const statsAllTime = getStats(specificActivitiesKeys);
+    const stats7Days = getStats(specificActivitiesKeys, 7);
+    const stats30Days = getStats(specificActivitiesKeys, 30);
 
     // Formater les dates des premières et dernières activités pratiquées
     const firstActivityDateFormatted = statsAllTime.firstActivityDate
@@ -714,7 +714,7 @@ function displayActivityStats(activityName) {
     `;
 
     // traitement des graphiques
-    onTreateStatGraphic(activitiesTargetData);
+    onTreateStatGraphic(specificActivitiesKeys);
 }
 
 
