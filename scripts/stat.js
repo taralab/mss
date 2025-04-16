@@ -330,20 +330,9 @@ function getStats(activityTargetKeysList, days = null) {
     }, 0);
 
 
-    console.log(
-        "days :", days,
-        "total session : ",totalSessions,
-        "durée :",totalDuration, // En minutes
-        "distance :",totalDistance // En km
-    );
-
-
-
     // Dernière activité pratiquée (la plus récente)
     const lastActivityDate = new Date(allUserActivityArray[filteredKeys[0]].date); // La première après le tri est la plus récente
 
-
-    console.log(lastActivityDate);
 
 
     // Première activité pratiquée (la plus ancienne)
@@ -643,8 +632,6 @@ function displayActivityStats(activityName) {
     .filter(([key, value]) => value.isPlanned === false && value.name === activityName)
     .map(([key, value]) => key);
 
-
-    console.log(specificActivitiesKeys);
 
     // Récupérer les statistiques pour le résumé
     const statsAllTime = getStats(specificActivitiesKeys);
