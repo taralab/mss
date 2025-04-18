@@ -1,8 +1,10 @@
 //contient la liste des noms et id des modèles de session
 let templateSessionsNameList = {
-        "id1":{name:"saucisse"},
-        "id2":{name:"tomate"}
+        // "id1":{name:"saucisse"},
+        // "id2":{name:"tomate"}
     },
+    templateSessionKeys = [],
+    isTemplateSessionLoadedFromBase = false,//pour une premier chargement via la base de donnée
     maxTemplateSession = 30,
     templateSessionEditorMode = "", // le mode d'ouverture de l'éditeur (creation,modification)
     currentTemplateSessionID = "",
@@ -22,7 +24,7 @@ let templateSessionsNameList = {
 // Insertion nouveau activity (session de template) avec ID auto
 async function onInsertNewTemplateSessionInDB(templateSessionToInsert) {
     try {
-        // Créer l'objet SANS _id
+        // Ajoute le "type" aux données
         const newTemplateSession = {
             type: templateSessionStoreName,
             ...templateSessionToInsert
@@ -31,7 +33,7 @@ async function onInsertNewTemplateSessionInDB(templateSessionToInsert) {
         // Insérer avec post() pour générer un ID auto
         const response = await db.post(newTemplateSession);
 
-        // Ajouter les métadonnées (utile si tu veux les renvoyer)
+        // Ajouter les métadonnées pour renvoi
         newTemplateSession._id = response.id;
         newTemplateSession._rev = response.rev;
 
@@ -78,21 +80,12 @@ async function onLoadTemplateSessionNameFromDB() {
         const result = await db.allDocs({ include_docs: true }); // Récupère tous les documents
 
         // Filtrer et extraire uniquement les champs nécessaires sous forme de tableau
-        let sessionsArray = result.rows
-            .filter(row => row.doc.type === templateSessionStoreName)
-            .map(row => ({
-                id: row.doc._id,
-                name: row.doc.sessionName
-            }));
-
-        // Trier alphabétique par sessionName
-        sessionsArray.sort((a, b) => a.name.localeCompare(b.name, 'fr', { sensitivity: 'base' }));
-
-        // Reconstruire l'objet trié
-        templateSessionsNameList = sessionsArray.reduce((acc, session) => {
-            acc[session.id] = { name: session.name };
-            return acc;
-        }, {});
+        result.rows
+            .map(row => row.doc)
+            .filter(doc => doc.type === templateSessionStoreName)
+            .forEach(doc => {
+                templateSessionsNameList[doc._id] = {name:doc.sessionName};
+            });
 
         if (devMode === true) {
             console.log("[DATABASE] [TEMPLATE] [SESSION] Templates chargés :", templateSessionsNameList);
@@ -103,6 +96,27 @@ async function onLoadTemplateSessionNameFromDB() {
 }
 
 
+
+// Actualisation des keys et classement par ordre alpha selon le champ name
+function onUpdateAndSortTemplateSessionKey() {
+    console.log("actualisation et trie");
+
+    // Récupère les clés
+    templateSessionKeys = Object.keys(templateSessionsNameList);
+
+    // (Facultatif) debug
+    console.log(templateSessionsNameList[templateSessionKeys[0]].name);
+    console.log(templateSessionKeys);
+
+    // Trie les clés par ordre alphabétique sur le champ "name"
+    templateSessionKeys.sort((a, b) =>
+        templateSessionsNameList[a].name.localeCompare(
+            templateSessionsNameList[b].name,
+            'fr',
+            { sensitivity: 'base' }
+        )
+    );
+}
 
 // Suppression template
 async function deleteTemplateSession(templateKey) {
@@ -127,7 +141,7 @@ async function deleteTemplateSession(templateKey) {
 // Gestion si le nombre maximal de modèle de session atteints
 function gestionMaxTemplateSessionReach() {
     // Gestion bouton new compteur
-    document.getElementById("btnCreateTemplateSession").disabled = Object.keys(templateSessionsNameList).length >= maxTemplateSession ? true : false;
+    document.getElementById("btnCreateTemplateSession").disabled = templateSessionKeys.length >= maxTemplateSession ? true : false;
 }
 
 
@@ -191,6 +205,14 @@ class TemplateSessionItemList {
 
 async function onOpenMenuTemplateSession() {
 
+    // La première fois, récupère les templates dans la base
+    if (!isTemplateSessionLoadedFromBase) {
+        await onLoadTemplateSessionNameFromDB();
+        isTemplateSessionLoadedFromBase = true;
+        if (devMode === true){console.log("chargement des templates session depuis la base")};
+        console.log("chargement des templates session depuis la base");
+    }
+
     // Actualisation de la liste d'affichage
     eventUpdateTemplateSessionList();
     
@@ -202,8 +224,9 @@ async function onOpenMenuTemplateSession() {
 // Sequence d'actualisation de la liste d'affichage des modèles de session
 
 async function eventUpdateTemplateSessionList() {
-    // Récupère la liste des modèle de session depuis la base
-    await onLoadTemplateSessionNameFromDB();
+
+    // Récupère les keys et les tries
+    onUpdateAndSortTemplateSessionKey();
 
 
     if (devMode === true){console.log(templateSessionsNameList)};
@@ -226,14 +249,14 @@ function onSetTemplateSessionNameList() {
     parentRef.innerHTML = "";
 
     //Affichage si aucun modèle de session
-    if (Object.keys(templateSessionsNameList).length === 0 ) {
+    if (templateSessionKeys.length === 0 ) {
        parentRef.innerHTML = "Aucun modèle à afficher !";
        return;
     }
 
     // Pour chaque ligne dans le tableau
     
-    Object.keys(templateSessionsNameList).forEach((key,index)=>{
+    templateSessionKeys.forEach((key,index)=>{
         // Crée une div
         new TemplateSessionItemList(key,templateSessionsNameList[key].name,parentRef);
 
@@ -387,13 +410,21 @@ async function onClickSaveFromTemplateSessionEditor() {
     switch (templateSessionEditorMode) {
         case "creation":    
             // Sauvegarde la création
-            await onInsertNewTemplateSessionInDB(templateSessionTosave);
+            let templateAdded = await onInsertNewTemplateSessionInDB(templateSessionTosave);
+
+            // Ajoute également à la variable
+            templateSessionsNameList[templateAdded._id] = {name: templateAdded.sessionName};
+
             // Notification
             onShowNotifyPopup(notifyTextArray.templateCreation);
             break;
         case "modification":
             // Sauvegarde la modification
             await  onInsertTemplateSessionModificationInDB(templateSessionTosave,currentTemplateSessionID);
+
+            // Modifie également à la variable
+            templateSessionsNameList[currentTemplateSessionID] = {name: templateSessionTosave.sessionName};
+
             // Notification
             onShowNotifyPopup(notifyTextArray.templateModification);
             break;
@@ -467,6 +498,9 @@ async function eventDeleteTemplateSessionModel() {
 
     // supprime en base
     await deleteTemplateSession(currentTemplateSessionID);
+
+    //supprime également dans la variable
+    delete templateSessionsNameList[currentTemplateSessionID];
 
     // Notification
     onShowNotifyPopup(notifyTextArray.templateDeleted);

@@ -1354,7 +1354,7 @@ function onGenerateModelSelectList() {
     parentRef.appendChild(defaultOption);
 
     // Pour chaque nom de model
-    Object.keys(templateSessionsNameList).forEach(key=>{
+    templateSessionKeys.forEach(key=>{
 
         // crée une option et l'insere
         let newOption = document.createElement("option");
