@@ -298,7 +298,9 @@ async function initApp() {
     await onCreateDBStore();  // 1️⃣ Création des stores
     await onLoadStores();       // 2️⃣ Extraction des données des stores génériques
     await onLoadActivityFromDB(); // 3️⃣Extraction liste activité
+
     await onLoadTemplateFromDB(); // Extraction liste modèle
+    onUpdateTemplateKeys();//récupère les clés des modèles d'activités triés
 }
 
 

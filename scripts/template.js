@@ -1,5 +1,8 @@
 
-let userTemplateList = [{activityName:"",title:"",key:""}],
+let userTemplateListItems = {
+        "id": {activityName:"",title:""}
+    },
+    userTemplateListKeys = [],
     currentTemplateEditorID = "",
     templateAvailable = false,
     currentTemplateInView = {},
@@ -33,35 +36,20 @@ let imgTemplateEditorPreviewRef = document.getElementById("imgTemplateEditorPrev
 
 // Fonction pour récupérer les templates depuis la base
 async function onLoadTemplateFromDB() {
-    userTemplateList = [];
+    userTemplateListItems = {}
     try {
         const result = await db.allDocs({ include_docs: true }); // Récupère tous les documents
 
         // Filtrer et extraire uniquement les champs nécessaires
-        userTemplateList = result.rows
+        result.rows
             .map(row => row.doc)
             .filter(doc => doc.type === templateStoreName)
-            .map(({ _id, activityName, title }) => ({ key: _id, activityName: activityName, title: title })); // Associe _id à key
-
-
-        // trie sur type d'activité puis par alphabétique
-        userTemplateList.sort((a, b) => {
-            if (a.activityName < b.activityName) return -1;
-            if (a.activityName > b.activityName) return 1;
+            .forEach(doc => {
+                userTemplateListItems[doc._id] = { activityName : doc.activityName, title:doc.title};
+            });
         
-            // Si activityName est identique, on trie par title
-            if (a.title < b.title) return -1;
-            if (a.title > b.title) return 1;
-        
-            return 0;
-        });
-
-        //gère l'affichage du bouton de création new template selon si le max atteind
-        document.getElementById("btnCreateTemplate").disabled = userTemplateList.length >= maxTemplate ? true : false;
-
-
         if (devMode === true) {
-            console.log("[DATABASE] [TEMPLATE] Templates chargés :", userTemplateList);
+            console.log("[DATABASE] [TEMPLATE] Templates chargés :", userTemplateListItems);
         }
     } catch (err) {
         console.error("[DATABASE] [TEMPLATE] Erreur lors du chargement:", err);
@@ -69,6 +57,35 @@ async function onLoadTemplateFromDB() {
 }
 
 
+// récupère les clé des modèles et les tries et gère le bouton d'affichage
+function onUpdateTemplateKeys() {
+
+     // Si des éléments sont présent traitement des keys et trie
+     if (userTemplateListItems) {
+        // Traitement des clés
+        userTemplateListKeys = Object.keys(userTemplateListItems);
+
+        // trie les keys sur type d'activité puis par alphabétique
+        userTemplateListKeys.sort((a, b) => {
+            if (userTemplateListItems[a].activityName < userTemplateListItems[b].activityName) return -1;
+            if (userTemplateListItems[a].activityName > userTemplateListItems[b].activityName) return 1;
+        
+            // Si activityName est identique, on trie par title
+            if (userTemplateListItems[a].title < userTemplateListItems[b].title) return -1;
+            if (userTemplateListItems[a].title > userTemplateListItems[b].title) return 1;
+        
+            return 0;
+        });
+
+        console.log(userTemplateListItems);
+        console.log(userTemplateListKeys);
+        //gère l'affichage du bouton de création new template selon si le max atteind
+        document.getElementById("btnCreateTemplate").disabled = userTemplateListKeys.length >= maxTemplate ? true : false;
+    }else{
+        //si pas de modèle, le bouton de création est disponible
+        document.getElementById("btnCreateTemplate").disabled = false;
+    }
+}
 
 // Insertion nouveau template (avec ID auto)
 async function onInsertNewTemplateInDB(templateToInsertFormat) {
@@ -168,11 +185,11 @@ async function findTemplateById(templateId) {
 // Actualise la liste des modele et gere les boutons selons
 function onUpdateTemplateList(updateMenuListRequired) {
 
-    templateAvailable = userTemplateList.length > 0;
+    templateAvailable = userTemplateListKeys.length > 0;
 
     if (devMode === true){
         console.log("[TEMPLATE] Actualisation de la liste des modèles");
-        console.log("[TEMPLATE] Nombre de modele : " + userTemplateList.length);
+        console.log("[TEMPLATE] Nombre de modele : " + userTemplateListKeys.length);
     };
 
     if (updateMenuListRequired) {
@@ -211,7 +228,7 @@ function onUpdateTemplateList(updateMenuListRequired) {
     // Actualise la liste des template dans le menu template si nécessaire
     if (updateMenuListRequired) {
         if (devMode === true){console.log("[TEMPLATE] Recré la liste de template");};
-        onCreateTemplateMenuList(userTemplateList);
+        onCreateTemplateMenuList(userTemplateListKeys);
     }
 }
 
@@ -220,7 +237,7 @@ function onUpdateTemplateList(updateMenuListRequired) {
 function onOpenMenuGestTemplate() {
 
     // Génération de la liste des modèles
-    onCreateTemplateMenuList(userTemplateList);
+    onCreateTemplateMenuList(userTemplateListKeys);
 
 
     
@@ -239,7 +256,7 @@ function onOpenMenuGestTemplate() {
 
 
 // Génération de la liste des modèle de le menu modèle
-function onCreateTemplateMenuList(templateList) {
+function onCreateTemplateMenuList(templateKeysList) {
     if (devMode === true){console.log(" [TEMPLATE] génération de la liste");};
 
     let divTemplateListMenuRef = document.getElementById("divTemplateListMenu");
@@ -248,28 +265,28 @@ function onCreateTemplateMenuList(templateList) {
 
 
     // Affichage en cas d'aucune modèle
-    if (templateList.length < 1) {
+    if (templateKeysList.length < 1) {
         divTemplateListMenuRef.innerHTML = "Aucun modèle à afficher !";
         return
     }
 
 
     // Génère la liste
-    templateList.forEach((e,index)=>{
+    templateKeysList.forEach((key,index)=>{
 
         // Creation
         let newContainer = document.createElement("div");
         newContainer.classList.add("item-template-container");
         newContainer.onclick = function (){
-            onClicOnTemplateInTemplateMenu(e.key); 
+            onClicOnTemplateInTemplateMenu(key); 
         }
 
         let newImg = document.createElement("img");
         newImg.classList.add("templateList");
-        newImg.src = activityChoiceArray[e.activityName].imgRef;
+        newImg.src = activityChoiceArray[userTemplateListItems[key].activityName].imgRef;
 
         let newTitle = document.createElement("span");
-        newTitle.innerHTML = e.title;
+        newTitle.innerHTML = userTemplateListItems[key].title;
         newTitle.classList.add("templateList","gestion");
 
         // Insertion
@@ -281,7 +298,7 @@ function onCreateTemplateMenuList(templateList) {
 
 
         // Creation de la ligne de fin pour le dernier index
-        if (index === (userTemplateList.length - 1)) {
+        if (index === (userTemplateListKeys.length - 1)) {
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = "ℹ️ Créez jusqu'à 30 modèles d'activités.";
@@ -523,8 +540,15 @@ function onCheckIfTemplateModifiedRequired(templateToInsertFormat) {
 
 // Séquence d'insertion d'un nouveau template
 async function eventInsertNewTemplate(templateToInsertFormat) {
-    await onInsertNewTemplateInDB(templateToInsertFormat);
-    await onLoadTemplateFromDB();
+
+    //Insere En base
+    let templateAdded = await onInsertNewTemplateInDB(templateToInsertFormat);
+
+    // Insère en variable
+    userTemplateListItems[templateAdded._id] = { activityName : templateAdded.activityName, title:templateAdded.title};
+
+    // Actualise le tableau de clé des modèles
+    onUpdateTemplateKeys();
 
 
     // Popup notification
@@ -540,13 +564,19 @@ async function eventInsertNewTemplate(templateToInsertFormat) {
 
 // Séquence d'insertion d'une modification
 async function eventInsertTemplateModification(templateToInsertFormat) {
-    await onInsertTemplateModificationInDB(templateToInsertFormat,currentTemplateEditorID);
-    await onLoadTemplateFromDB();
+    //Modifie en base
+    let templateModified = await onInsertTemplateModificationInDB(templateToInsertFormat,currentTemplateEditorID);
 
+    //Modifie la variable
+    userTemplateListItems[currentTemplateEditorID] = { activityName : templateModified.activityName, title:templateModified.title};
+
+    // Actualise le tableau de clé des modèles
+    onUpdateTemplateKeys();
+   
     // Popup notification
     onShowNotifyPopup(notifyTextArray.templateModification);
 
-    // Remet à jour les éléments
+    // Remet à jour les éléments visuels
     onUpdateTemplateList(true);
 
     //Gestion de l'affichage 
@@ -637,13 +667,20 @@ function onConfirmDeleteTemplate(event){
 
 // Sequence de suppression d'un template
 async function eventDeleteTemplate(idToDelete) {
+
+    //Supprime en base
     await deleteTemplate(idToDelete);
-    await onLoadTemplateFromDB();
+
+    //supprime de la variable
+    delete userTemplateListItems[idToDelete];
+
+    //actualise le tableau des clés
+    onUpdateTemplateKeys();
 
     // Popup notification
     onShowNotifyPopup(notifyTextArray.templateDeleted);
 
-    // Remet à jour les éléments
+    // Remet à jour les éléments visuel
     onUpdateTemplateList(true);
 
     //Gestion de l'affichage 
@@ -697,19 +734,19 @@ function onCreateTemplateChoiceList() {
     divTemplateChoiceListRef.innerHTML = "";
 
     // Génère la liste
-    userTemplateList.forEach((e,index)=>{
+    userTemplateListKeys.forEach((key,index)=>{
 
         // Creation
         let newContainer = document.createElement("div");
         newContainer.classList.add("fake-opt-item-container");
         newContainer.onclick = async function (){
             onChangeMenu("NewActivityFromTemplate");
-            let templateItem = await findTemplateById(e.key);
+            let templateItem = await findTemplateById(key);
             onOpenNewActivityFromTemplate(templateItem);
         }
 
         // Style sans border botton pour le dernier
-        if (index === (userTemplateList.length - 1)) {
+        if (index === (userTemplateListKeys.length - 1)) {
             newContainer.classList.add("fake-opt-item-last-container");
         }
 
@@ -718,10 +755,10 @@ function onCreateTemplateChoiceList() {
 
         let newImg = document.createElement("img");
         newImg.classList.add("fake-opt-item");
-        newImg.src = activityChoiceArray[e.activityName].imgRef;
+        newImg.src = activityChoiceArray[userTemplateListItems[key].activityName].imgRef;
 
         let newTitle = document.createElement("span");
-        newTitle.innerHTML = e.title;
+        newTitle.innerHTML = userTemplateListItems[key].title;
         newTitle.classList.add("fake-opt-item");
 
 
