@@ -50,6 +50,79 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 
 
 
+// class ActivityItem
+
+class ActivityItem {
+    constructor(id, imgRef, itemContainerClass, distance, duration, date, location, comment, commentClass, distanceClass, durationClass, attribute, parentRef, isPlanned) {
+        this.id = id;
+        this.imgRef = imgRef;
+        this.itemContainerClass = itemContainerClass;
+        this.distance = distance;
+        this.duration = duration;
+        this.date = date;
+        this.location = location;
+        this.comment = comment;
+        this.commentClass = commentClass;
+        this.distanceClass = distanceClass;
+        this.durationClass = durationClass;
+        this.attribute = attribute;
+        this.parentRef = parentRef;
+        this.isPlanned = isPlanned;
+
+        // Conteneur principal
+        this.element = document.createElement("div");
+        this.element.classList.add(this.itemContainerClass);
+        this.element.onclick = () => {
+            onClickOnActivity(this.id);
+        };
+
+        this.render();
+    }
+
+    render() {
+        const distance = this.distance ? `${this.distance} km` : "---";
+        const location = this.location ? this.location : "---";
+        const date = onDisplayUserFriendlyDate(this.date);
+
+        this.element.innerHTML = `
+            <div class="item-image-container">
+                <img class="activity" src="${this.imgRef}">
+            </div>
+            <div class="item-data-container">
+                <div class="item-data-area1">
+                    <p class="${this.distanceClass}">${distance}</p>
+                    <p class="${this.durationClass}">${this.duration}</p>
+                    <p class="item-data-date">${date}</p>
+                </div>
+                <div class="item-data-area2">
+                    <p class="item-data-location">${location}</p>
+                    ${this.isPlanned ? `<button class="buttonAddCalendar">🗓️</button>` : ""}
+                </div>
+                <div class="item-data-area3">
+                    <p data-type="${this.attribute}" class="${this.commentClass}">${this.comment}</p>
+                </div>
+            </div>
+        `;
+
+        // Ajout du bouton ICS s’il est présent
+        if (this.isPlanned) {
+            const btnICS = this.element.querySelector(".buttonAddCalendar");
+            if (btnICS) {
+                btnICS.addEventListener("click", (event) => {
+                    event.stopPropagation(); // pour ne pas déclencher le clic sur l’item
+                    onClickAddToCalendar(this.id);
+                });
+            }
+        }
+
+        // Insertion dans le parent
+        this.parentRef.appendChild(this.element);
+    }
+}
+
+
+
+
 
 
 // ------------------------------Fonction générale pour activity ----------------------------------
@@ -339,136 +412,28 @@ function onInsertMoreActivity() {
 // et gestion pour les activités planifiées
 function onInsertOneActivity(activity,isLastIndex) {
 
-    // La div de l'item avec une marge spéciale pour le dernier éléments
-    let newItemContainer = document.createElement("div");
 
-    newItemContainer.classList.add("item-container");
-    if (activity.isPlanned) {
-        newItemContainer.classList.add("item-planned");
-    }
+    let containerClass = activity.isPlanned ? ["item-container", "item-planned"]: ["item-container"],
+        imageRef = activityChoiceArray[activity.name].imgRef,
+        distanceClass = activity.isPlanned ? "item-data-distance-planned" : "item-data-distance",
+        durationClass = activity.isPlanned ? "item-data-duration-planned" : "item-data-duration",
+        commentClass = activity.isPlanned ? currentCommentPlannedClassName : currentCommentDoneClassName,
+        attribute = activity.isPlanned ? activityTagPlanned : activityTagDone;
 
-    newItemContainer.onclick = function () {
-        onClickOnActivity(activity._id);
-    };
-
-
-    // La zone de l'image
-    let newImageContainer = document.createElement("div");
-    newImageContainer.classList.add("item-image-container");
-
-    let newImage = document.createElement("img");
-    newImage.classList.add("activity");
-    newImage.src = activityChoiceArray[activity.name].imgRef;
-
-    newImageContainer.appendChild(newImage);
-
-
-
-    // la zone des données
-
-    let newDivDataContainer =  document.createElement("div");
-    newDivDataContainer.classList.add("item-data-container");
-
-
-    // Area 1
-    let newDivDataArea1 = document.createElement("div");
-    newDivDataArea1.classList.add("item-data-area1");
-
-    let newItemDistance = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemDistance.classList.add("item-data-distance-planned");
-    }else{
-        newItemDistance.classList.add("item-data-distance");
-    }
-
-
-
-
-    newItemDistance.innerHTML = activity.distance != "" ? activity.distance + " km": "---";
-
-    let newItemDuration = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemDuration.classList.add("item-data-duration-planned");
-    }else{
-        newItemDuration.classList.add("item-data-duration");
-    }
-
-
-
-    newItemDuration.innerHTML = activity.duration;
-
-    let newItemDate = document.createElement("p");
-    newItemDate.classList.add("item-data-date");
-    newItemDate.innerHTML = onDisplayUserFriendlyDate(activity.date);
-
+    new ActivityItem(
+        activity._id,imageRef,
+        containerClass,
+        activity.distance,
+        activity.duration,
+        activity.date,
+        activity.location,
+        activity.comment,
+        commentClass,distanceClass,durationClass,
+        attribute,
+        divItemListRef,
+        activity.isPlanned
+    );
     
-
-    newDivDataArea1.appendChild(newItemDistance);
-    newDivDataArea1.appendChild(newItemDuration);
-    newDivDataArea1.appendChild(newItemDate);
-
-    // Area 2
-    let newDivDataArea2 = document.createElement("div");
-    newDivDataArea2.classList.add("item-data-area2");
-
-    let newItemLocation = document.createElement("p");
-    newItemLocation.classList.add("item-data-location");
-    newItemLocation.innerHTML = activity.location != "" ? activity.location : "---";
-
-    newDivDataArea2.appendChild(newItemLocation);
-    
-
-    // Area3
-    let newDivDataArea3 = document.createElement("div");
-    newDivDataArea3.classList.add("item-data-area3");
-
-    let newItemComment = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemComment.setAttribute("data-type",activityTagPlanned);
-        newItemComment.classList.add(currentCommentPlannedClassName);
-
-    } else {
-        newItemComment.setAttribute("data-type",activityTagDone);
-        newItemComment.classList.add(currentCommentDoneClassName);
-    }
-
-
-
-
-    newItemComment.innerHTML = activity.comment;
-    newDivDataArea3.appendChild(newItemComment);
-
-
-
-    // Insertion totale
-    newDivDataContainer.appendChild(newDivDataArea1);
-    newDivDataContainer.appendChild(newDivDataArea2);
-    newDivDataContainer.appendChild(newDivDataArea3);
-
-    newItemContainer.appendChild(newImageContainer);
-    newItemContainer.appendChild(newDivDataContainer);
-
-    // TEST BOUTON ICS
-    if (activity.isPlanned) {
-        // Génération
-        let newBtnICS = document.createElement("button");
-        newBtnICS.innerHTML = "🗓️";
-        newBtnICS.classList.add("buttonAddCalendar");
-        newBtnICS.onclick = function (event){
-            event.stopPropagation();
-            onClickAddToCalendar(activity._id);
-        }
-        //Insertion
-        newDivDataArea2.appendChild(newBtnICS);
-    }
-
-
-
-
-
-    divItemListRef.appendChild(newItemContainer);
-
-
 
     // gestion derniere activité de la liste
     // Insertion d'un trait en fin de liste
