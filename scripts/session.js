@@ -1235,7 +1235,6 @@ async function onClickMenuCreateSession() {
             await onLoadTemplateSessionNameFromDB();
             isTemplateSessionLoadedFromBase = true;
             if (devMode === true){console.log("1er chargement des templates session depuis la base")};
-            console.log("chargement des templates session depuis la base");
 
             // Récupère et tries les clés
             onUpdateAndSortTemplateSessionKey();

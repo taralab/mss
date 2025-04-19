@@ -99,14 +99,17 @@ async function onLoadTemplateSessionNameFromDB() {
 
 // Actualisation des keys et classement par ordre alpha selon le champ name
 function onUpdateAndSortTemplateSessionKey() {
-    console.log("actualisation et trie");
+
 
     // Récupère les clés
     templateSessionKeys = Object.keys(templateSessionsNameList);
 
-    // (Facultatif) debug
-    console.log(templateSessionsNameList[templateSessionKeys[0]].name);
-    console.log(templateSessionKeys);
+    if (devMode === true) {
+        console.log("actualisation et trie");
+        console.log(templateSessionsNameList[templateSessionKeys[0]].name);
+        console.log(templateSessionKeys);
+    };
+
 
     // Trie les clés par ordre alphabétique sur le champ "name"
     templateSessionKeys.sort((a, b) =>
@@ -209,8 +212,7 @@ async function onOpenMenuTemplateSession() {
     if (!isTemplateSessionLoadedFromBase) {
         await onLoadTemplateSessionNameFromDB();
         isTemplateSessionLoadedFromBase = true;
-        if (devMode === true){console.log("chargement des templates session depuis la base")};
-        console.log("1er chargement des templates session depuis la base");
+        if (devMode === true){console.log("1er chargement des templates session depuis la base")};
     }
 
     // Actualisation de la liste d'affichage
@@ -415,6 +417,9 @@ async function onClickSaveFromTemplateSessionEditor() {
             // Ajoute également à la variable
             templateSessionsNameList[templateAdded._id] = {name: templateAdded.sessionName};
 
+
+        if (devMode === true) {console.log(templateSessionsNameList);};
+
             // Notification
             onShowNotifyPopup(notifyTextArray.templateCreation);
             break;
@@ -424,6 +429,7 @@ async function onClickSaveFromTemplateSessionEditor() {
 
             // Modifie également à la variable
             templateSessionsNameList[currentTemplateSessionID] = {name: templateSessionTosave.sessionName};
+            if (devMode === true) {console.log(templateSessionsNameList);};
 
             // Notification
             onShowNotifyPopup(notifyTextArray.templateModification);
@@ -501,6 +507,8 @@ async function eventDeleteTemplateSessionModel() {
 
     //supprime également dans la variable
     delete templateSessionsNameList[currentTemplateSessionID];
+
+    if (devMode === true) {console.log(templateSessionsNameList);};
 
     // Notification
     onShowNotifyPopup(notifyTextArray.templateDeleted);

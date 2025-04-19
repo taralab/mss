@@ -200,11 +200,14 @@ function onOpenNewActivityFromTemplate(templateItem) {
 
     activityEditorMode = "creation";
 
-    if (devMode === true){console.log("ouverture de l'editeur d'activité depuis un template en mode " + activityEditorMode);};
+    if (devMode === true){
+        console.log("ouverture de l'editeur d'activité depuis un template en mode " + activityEditorMode);
+        console.log("Valeur de templateItem : ");
+        console.log(templateItem);
+    };
 
 
-    console.log("Valeur de templateItem : ");
-    console.log(templateItem);
+    
 
 
     //Set avec le élément du template
@@ -785,6 +788,8 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 
     // Insère également dans l'array d'objet
     allUserActivityArray[newActivityToAdd._id] = newActivityToAdd;
+    if (devMode === true){console.log(allUserActivityArray);};
+
 
 
     // est ce que la derniere activité est planifié donc pas de check reward
@@ -827,6 +832,7 @@ async function eventInsertActivityModification(dataToInsert) {
 
     // met à jour l'array d'objet
     allUserActivityArray[currentActivityEditorID] = activityUpdated;
+    if (devMode === true){console.log(allUserActivityArray);};
 
     // est ce que la derniere activité est planifié donc pas de check reward
     const isCheckRewardsRequiered = dataToInsert.isPlanned === false;
@@ -892,6 +898,8 @@ async function eventDeleteActivity(idToDelete) {
     
     // met à jour l'array d'objet
     delete allUserActivityArray[idToDelete];
+
+    if (devMode === true){console.log(allUserActivityArray);};
 
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);

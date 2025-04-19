@@ -77,8 +77,12 @@ function onUpdateTemplateKeys() {
             return 0;
         });
 
-        console.log(userTemplateListItems);
-        console.log(userTemplateListKeys);
+        if (devMode === true) {
+            console.log(userTemplateListItems);
+            console.log(userTemplateListKeys);
+        }
+
+        
         //gère l'affichage du bouton de création new template selon si le max atteind
         document.getElementById("btnCreateTemplate").disabled = userTemplateListKeys.length >= maxTemplate ? true : false;
     }else{
@@ -547,6 +551,9 @@ async function eventInsertNewTemplate(templateToInsertFormat) {
     // Insère en variable
     userTemplateListItems[templateAdded._id] = { activityName : templateAdded.activityName, title:templateAdded.title};
 
+    if (devMode=== true) {console.log(userTemplateListItems);};
+
+
     // Actualise le tableau de clé des modèles
     onUpdateTemplateKeys();
 
@@ -569,6 +576,8 @@ async function eventInsertTemplateModification(templateToInsertFormat) {
 
     //Modifie la variable
     userTemplateListItems[currentTemplateEditorID] = { activityName : templateModified.activityName, title:templateModified.title};
+
+    if (devMode=== true) {console.log(userTemplateListItems);};
 
     // Actualise le tableau de clé des modèles
     onUpdateTemplateKeys();
@@ -673,6 +682,8 @@ async function eventDeleteTemplate(idToDelete) {
 
     //supprime de la variable
     delete userTemplateListItems[idToDelete];
+
+    if (devMode=== true) {console.log(userTemplateListItems);};
 
     //actualise le tableau des clés
     onUpdateTemplateKeys();
