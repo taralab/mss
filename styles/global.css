@@ -705,6 +705,7 @@ div.main-menu{
     height: 100vh;
     display: none;
     position: fixed;
+    z-index: 2;
 }
 
 

@@ -265,19 +265,19 @@ async function onLoadStores() {
         if (settings) {
 
             userSetting = {
-                agenda : settings.data.agenda || "NONE",
-                agendaScheduleStart: settings.data.agendaScheduleStart || "08:00",
-                agendaScheduleEnd: settings.data.agendaScheduleEnd || "10:00",
-                displayCommentDoneMode : settings.data.displayCommentDoneMode,
-                displayCommentPlannedMode : settings.data.displayCommentPlannedMode,
-                isAutoSaveEnabled : settings.data.isAutoSaveEnabled,
-                lastAutoSaveDate : settings.data.lastAutoSaveDate,
-                lastAutoSaveTime : settings.data.lastAutoSaveTime,
-                lastManualSaveDate : settings.data.lastManualSaveDate,
-                lastManualSaveTime :settings.data.lastManualSaveTime,
-                autoSaveFrequency : settings.data.autoSaveFrequency,
-                fromSessionToActivityMode : settings.data.fromSessionToActivityMode || "MINIMAL",
-                devMode : settings.data.devMode
+                agenda : settings.data.agenda || defaultSetting.agenda,
+                agendaScheduleStart: settings.data.agendaScheduleStart || defaultSetting.agendaScheduleStart,
+                agendaScheduleEnd: settings.data.agendaScheduleEnd || defaultSetting.agendaScheduleEnd,
+                displayCommentDoneMode : settings.data.displayCommentDoneMode || defaultSetting.displayCommentDoneMode,
+                displayCommentPlannedMode : settings.data.displayCommentPlannedMode || defaultSetting.displayCommentPlannedMode,
+                isAutoSaveEnabled : settings.data.isAutoSaveEnabled || defaultSetting.isAutoSaveEnabled,
+                lastAutoSaveDate : settings.data.lastAutoSaveDate || defaultSetting.lastAutoSaveDate,
+                lastAutoSaveTime : settings.data.lastAutoSaveTime || defaultSetting.lastAutoSaveTime,
+                lastManualSaveDate : settings.data.lastManualSaveDate || defaultSetting.lastManualSaveDate,
+                lastManualSaveTime :settings.data.lastManualSaveTime || defaultSetting.lastManualSaveTime,
+                autoSaveFrequency : settings.data.autoSaveFrequency || defaultSetting.autoSaveFrequency,
+                fromSessionToActivityMode : settings.data.fromSessionToActivityMode || defaultSetting.fromSessionToActivityMode,
+                devMode : settings.data.devMode || defaultSetting.devMode
             };
         }
 
