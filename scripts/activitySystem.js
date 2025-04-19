@@ -53,19 +53,15 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 // class ActivityItem
 
 class ActivityItem {
-    constructor(id, imgRef, itemContainerClass, distance, duration, date, location, comment, commentClass, distanceClass, durationClass, attribute, parentRef, isPlanned) {
+    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned) {
         this.id = id;
         this.imgRef = imgRef;
-        this.itemContainerClass = itemContainerClass;
+        this.itemContainerClass = isPlanned ? ["item-container", "item-planned"] : ["item-container"];
         this.distance = distance;
         this.duration = duration;
         this.date = date;
         this.location = location;
         this.comment = comment;
-        this.commentClass = commentClass;
-        this.distanceClass = distanceClass;
-        this.durationClass = durationClass;
-        this.attribute = attribute;
         this.parentRef = parentRef;
         this.isPlanned = isPlanned;
 
@@ -83,6 +79,10 @@ class ActivityItem {
         const distance = this.distance ? `${this.distance} km` : "---";
         const location = this.location ? this.location : "---";
         const date = onDisplayUserFriendlyDate(this.date);
+        const distanceClass = this.isPlanned ? "item-data-distance-planned" : "item-data-distance";
+        const durationClass = this.isPlanned ? "item-data-duration-planned" : "item-data-duration";
+        const commentClass = this.isPlanned ? currentCommentPlannedClassName : currentCommentDoneClassName;
+        const attribute = this.isPlanned ? activityTagPlanned : activityTagDone;
 
         this.element.innerHTML = `
             <div class="item-image-container">
@@ -90,8 +90,8 @@ class ActivityItem {
             </div>
             <div class="item-data-container">
                 <div class="item-data-area1">
-                    <p class="${this.distanceClass}">${distance}</p>
-                    <p class="${this.durationClass}">${this.duration}</p>
+                    <p class="${distanceClass}">${distance}</p>
+                    <p class="${durationClass}">${this.duration}</p>
                     <p class="item-data-date">${date}</p>
                 </div>
                 <div class="item-data-area2">
@@ -99,7 +99,7 @@ class ActivityItem {
                     ${this.isPlanned ? `<button class="buttonAddCalendar">🗓️</button>` : ""}
                 </div>
                 <div class="item-data-area3">
-                    <p data-type="${this.attribute}" class="${this.commentClass}">${this.comment}</p>
+                    <p data-type="${attribute}" class="${commentClass}">${this.comment}</p>
                 </div>
             </div>
         `;
@@ -412,24 +412,14 @@ function onInsertMoreActivity() {
 // et gestion pour les activités planifiées
 function onInsertOneActivity(activity,isLastIndex) {
 
-
-    let containerClass = activity.isPlanned ? ["item-container", "item-planned"]: ["item-container"],
-        imageRef = activityChoiceArray[activity.name].imgRef,
-        distanceClass = activity.isPlanned ? "item-data-distance-planned" : "item-data-distance",
-        durationClass = activity.isPlanned ? "item-data-duration-planned" : "item-data-duration",
-        commentClass = activity.isPlanned ? currentCommentPlannedClassName : currentCommentDoneClassName,
-        attribute = activity.isPlanned ? activityTagPlanned : activityTagDone;
-
     new ActivityItem(
-        activity._id,imageRef,
-        containerClass,
+        activity._id,
+        activityChoiceArray[activity.name].imgRef,
         activity.distance,
         activity.duration,
         activity.date,
         activity.location,
         activity.comment,
-        commentClass,distanceClass,durationClass,
-        attribute,
         divItemListRef,
         activity.isPlanned
     );
