@@ -171,7 +171,10 @@ function eventSaveResult(isAutoSave){
         document.getElementById("pGestDataLastExportDate").innerHTML = `Date dernier export : le ${onFormatDateToFr(userSetting.lastManualSaveDate)} à ${userSetting.lastManualSaveTime}`;
     }
 
-    console.log(userSetting);
+    if (devMode === true) {
+        console.log(userSetting);
+    }
+
 };
 
 
@@ -303,6 +306,7 @@ async function importBdD(dataToImport) {
                 lastManualSaveDate: e.data.lastManualSaveDate,
                 lastManualSaveTime: e.data.lastManualSaveTime,
                 autoSaveFrequency: e.data.autoSaveFrequency,
+                fromSessionToActivityMode : e.data.fromSessionToActivityMode,
                 devMode : e.data.devMode
             });
 
@@ -504,7 +508,6 @@ function onDisplayTextDataBaseEvent(isDelete) {
     newPercentText.id = "pPercentImportText";
     newPercentText.textContent = "0%"
 
-    console.log("CREATION pPercentImportText");
 
     // Insertion
     newDiv.appendChild(newImg);
