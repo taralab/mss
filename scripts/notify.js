@@ -212,7 +212,7 @@ function updateStatusDisplay (){
 
 
 function onClickAddToCalendar(keyRef) {
-    let activityTarget = onSearchActivity(keyRef);
+    let activityTarget = allUserActivityArray[keyRef];
 
     switch (userSetting.agenda) {
         case "NONE":
@@ -254,7 +254,7 @@ function generateGoogleCalendarLink(activityTarget) {
     let dateStart = `${dateFormated}T${scheduleStartFormated}00`,
         dateEnd = `${dateFormated}T${scheduleEndFormated}00`;
 
-    console.log(dateStart);
+    
 
 
     return `https://calendar.google.com/calendar/render?action=TEMPLATE` +

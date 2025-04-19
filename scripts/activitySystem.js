@@ -71,7 +71,7 @@ class ActivityItem {
 
         // Conteneur principal
         this.element = document.createElement("div");
-        this.element.classList.add(this.itemContainerClass);
+        this.itemContainerClass.forEach(cls => this.element.classList.add(cls));//parce ce que itemContainerClass est un array
         this.element.onclick = () => {
             onClickOnActivity(this.id);
         };
