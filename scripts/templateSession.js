@@ -210,7 +210,7 @@ async function onOpenMenuTemplateSession() {
         await onLoadTemplateSessionNameFromDB();
         isTemplateSessionLoadedFromBase = true;
         if (devMode === true){console.log("chargement des templates session depuis la base")};
-        console.log("chargement des templates session depuis la base");
+        console.log("1er chargement des templates session depuis la base");
     }
 
     // Actualisation de la liste d'affichage

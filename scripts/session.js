@@ -1228,7 +1228,19 @@ function onGetSessionDuration(heureDebut, heureFin) {
 
 
 
-function onClickMenuCreateSession() {    
+async function onClickMenuCreateSession() {    
+
+        // La première fois, récupère les templates dans la base
+        if (!isTemplateSessionLoadedFromBase) {
+            await onLoadTemplateSessionNameFromDB();
+            isTemplateSessionLoadedFromBase = true;
+            if (devMode === true){console.log("1er chargement des templates session depuis la base")};
+            console.log("chargement des templates session depuis la base");
+
+            // Récupère et tries les clés
+            onUpdateAndSortTemplateSessionKey();
+        }
+
     onGenerateSessionTable();
 
     // actualise la liste des modèles dans le tableau
@@ -1338,7 +1350,10 @@ function onGetTableSessionItem() {
 // Génération des options du selecteur de session
 function onGenerateModelSelectList() {
 
-     if (devMode === true){console.log("generation de la liste des modèles");};
+    if (devMode === true){
+        console.log("generation de la liste des modèles");
+        console.log(templateSessionKeys);
+    };
 
     // Referencement
     let parentRef = document.getElementById("selectSessionTableModelName");
