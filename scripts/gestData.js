@@ -295,19 +295,19 @@ async function importBdD(dataToImport) {
         }else if (e.type === settingStoreName){
             let settingToUpdate = {};
             Object.assign(settingToUpdate, {
-                agenda : e.data.agenda,
-                agendaScheduleStart: e.data.agendaScheduleStart,
-                agendaScheduleEnd: e.data.agendaScheduleEnd,
-                displayCommentDoneMode: e.data.displayCommentDoneMode,
-                displayCommentPlannedMode: e.data.displayCommentPlannedMode,
-                isAutoSaveEnabled: e.data.isAutoSaveEnabled,
-                lastAutoSaveDate: e.data.lastAutoSaveDate,
-                lastAutoSaveTime: e.data.lastAutoSaveTime,
-                lastManualSaveDate: e.data.lastManualSaveDate,
-                lastManualSaveTime: e.data.lastManualSaveTime,
-                autoSaveFrequency: e.data.autoSaveFrequency,
-                fromSessionToActivityMode : e.data.fromSessionToActivityMode,
-                devMode : e.data.devMode
+                agenda : e.data.agenda || defaultSetting.agenda,
+                agendaScheduleStart: e.data.agendaScheduleStart || defaultSetting.agendaScheduleStart,
+                agendaScheduleEnd: e.data.agendaScheduleEnd || defaultSetting.agendaScheduleEnd,
+                displayCommentDoneMode: e.data.displayCommentDoneMode || defaultSetting.displayCommentDoneMode,
+                displayCommentPlannedMode: e.data.displayCommentPlannedMode || defaultSetting.displayCommentPlannedMode,
+                isAutoSaveEnabled: e.data.isAutoSaveEnabled || defaultSetting.isAutoSaveEnabled,
+                lastAutoSaveDate: e.data.lastAutoSaveDate || defaultSetting.lastAutoSaveDate,
+                lastAutoSaveTime: e.data.lastAutoSaveTime || defaultSetting.lastAutoSaveTime,
+                lastManualSaveDate: e.data.lastManualSaveDate || defaultSetting.lastManualSaveDate,
+                lastManualSaveTime: e.data.lastManualSaveTime || defaultSetting.lastManualSaveTime,
+                autoSaveFrequency: e.data.autoSaveFrequency || defaultSetting.autoSaveFrequency,
+                fromSessionToActivityMode : e.data.fromSessionToActivityMode || defaultSetting.fromSessionToActivityMode,
+                devMode : e.data.devMode || defaultSetting.devMode
             });
 
             // Sauvegarde la modification

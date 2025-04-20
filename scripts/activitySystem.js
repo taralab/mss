@@ -13,10 +13,10 @@ let activityToInsertFormat = {
 };
 
 
-let allUserActivityArray = [], //Contient toutes les activités créé par l'utilisateur
-    userActivityListToDisplay = [], // contient les activités triées et filtrées à afficher
+let allUserActivityArray = {}, //Contient toutes les activités créé par l'utilisateur
+    userActivityKeysListToDisplay = [], // contient les activités triées et filtrées à afficher
     maxActivityPerCycle = 15,//Nbre d'élément maximale à afficher avant d'avoir le bouton "afficher plus"
-    userActivityListIndexToStart = 0, //Index de démarrage pour l'affichage d'activité
+    userActivityKeysListIndexToStart = 0, //Index de démarrage pour l'affichage d'activité
     currentActivityDataInView,//contient les données d'une activité en cours d'affichage. Permet de comparer les modifications
     activityTagPlanned  = "planifie",
     activityTagDone = "effectue",
@@ -50,31 +50,106 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 
 
 
+// class ActivityItem
+
+class ActivityItem {
+    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned) {
+        this.id = id;
+        this.imgRef = imgRef;
+        this.itemContainerClass = isPlanned ? ["item-container", "item-planned"] : ["item-container"];
+        this.distance = distance;
+        this.duration = duration;
+        this.date = date;
+        this.location = location;
+        this.comment = comment;
+        this.parentRef = parentRef;
+        this.isPlanned = isPlanned;
+
+        // Conteneur principal
+        this.element = document.createElement("div");
+        this.itemContainerClass.forEach(cls => this.element.classList.add(cls));//parce ce que itemContainerClass est un array
+        this.element.onclick = () => {
+            onClickOnActivity(this.id);
+        };
+
+        this.render();
+    }
+
+    render() {
+        const distance = this.distance ? `${this.distance} km` : "---";
+        const location = this.location ? this.location : "---";
+        const date = onDisplayUserFriendlyDate(this.date);
+        const distanceClass = this.isPlanned ? "item-data-distance-planned" : "item-data-distance";
+        const durationClass = this.isPlanned ? "item-data-duration-planned" : "item-data-duration";
+        const commentClass = this.isPlanned ? currentCommentPlannedClassName : currentCommentDoneClassName;
+        const attribute = this.isPlanned ? activityTagPlanned : activityTagDone;
+
+        this.element.innerHTML = `
+            <div class="item-image-container">
+                <img class="activity" src="${this.imgRef}">
+            </div>
+            <div class="item-data-container">
+                <div class="item-data-area1">
+                    <p class="${distanceClass}">${distance}</p>
+                    <p class="${durationClass}">${this.duration}</p>
+                    <p class="item-data-date">${date}</p>
+                </div>
+                <div class="item-data-area2">
+                    <p class="item-data-location">${location}</p>
+                    ${this.isPlanned ? `<button class="buttonAddCalendar">🗓️</button>` : ""}
+                </div>
+                <div class="item-data-area3">
+                    <p data-type="${attribute}" class="${commentClass}">${this.comment}</p>
+                </div>
+            </div>
+        `;
+
+        // Ajout du bouton ICS s’il est présent
+        if (this.isPlanned) {
+            const btnICS = this.element.querySelector(".buttonAddCalendar");
+            if (btnICS) {
+                btnICS.addEventListener("click", (event) => {
+                    event.stopPropagation(); // pour ne pas déclencher le clic sur l’item
+                    onClickAddToCalendar(this.id);
+                });
+            }
+        }
+
+        // Insertion dans le parent
+        this.parentRef.appendChild(this.element);
+    }
+}
+
+
+
+
 
 
 // ------------------------------Fonction générale pour activity ----------------------------------
 
 
 // fonction pour récupérer les activité et les modèles
-async function onLoadActivityFromDB () {
-    allUserActivityArray = [];
+async function onLoadActivityFromDB() {
+    allUserActivityArray = {}; // devient un objet
     try {
-        const result = await db.allDocs({ include_docs: true }); // Récupère tous les documents
+        const result = await db.allDocs({ include_docs: true });
 
-        // Filtrer les éléments concernée
-        allUserActivityArray = result.rows
+        result.rows
             .map(row => row.doc)
-            .filter(doc => doc.type === activityStoreName);
-            if (devMode === true){
-                console.log("[DATABASE] [ACTIVITY] Activités chargées :", activityStoreName);
-                console.log(allUserActivityArray[0]);
-            };
+            .filter(doc => doc.type === activityStoreName)
+            .forEach(doc => {
+                allUserActivityArray[doc._id] = { ...doc }; // on garde tout
+            });
+
+        if (devMode === true) {
+            console.log("[DATABASE] [ACTIVITY] Activités chargées :", activityStoreName);
+            const firstKey = Object.keys(allUserActivityArray)[0];
+            console.log(allUserActivityArray[firstKey]);
+        }
     } catch (err) {
         console.error("[DATABASE] [ACTIVITY] Erreur lors du chargement:", err);
     }
 }
-
-
 
 
 
@@ -164,14 +239,6 @@ async function findActivityById(activityId) {
 
 
 
-// Fonction de recherche d'une activité dans AllUserActivityArray.
-function onSearchActivity(keyRef) {
-    if (devMode === true){console.log("Affichage de l'activité dans 'AllUserActivityArray' avec la key :  " + keyRef);};
-    return allUserActivityArray.find(activity => activity._id === keyRef);
-}
-
-
-
 
 // ------------------------------FIN fonction générale pour activity ----------------------------------
 
@@ -198,11 +265,14 @@ function onOpenNewActivityFromTemplate(templateItem) {
 
     activityEditorMode = "creation";
 
-    if (devMode === true){console.log("ouverture de l'editeur d'activité depuis un template en mode " + activityEditorMode);};
+    if (devMode === true){
+        console.log("ouverture de l'editeur d'activité depuis un template en mode " + activityEditorMode);
+        console.log("Valeur de templateItem : ");
+        console.log(templateItem);
+    };
 
 
-    console.log("Valeur de templateItem : ");
-    console.log(templateItem);
+    
 
 
     //Set avec le élément du template
@@ -271,22 +341,22 @@ function initMaxDate() {
 
 // Insertion des activités dans la liste
 
-function onInsertActivityInList(activityToDisplay) {
+function onInsertActivityInList(activityKeysToDisplay) {
 
     // Stock les activité à afficher dans un tableau
-    userActivityListToDisplay = activityToDisplay;
-    userActivityListIndexToStart = 0;
+    userActivityKeysListToDisplay = activityKeysToDisplay;
+    userActivityKeysListIndexToStart = 0;
 
 
     if (devMode === true){
-        console.log("nbre d'activité total à afficher = " + userActivityListToDisplay.length);
+        console.log("nbre d'activité total à afficher = " + userActivityKeysListToDisplay.length);
         console.log("Nbre max d'activité affiché par cycle = " + maxActivityPerCycle);
         console.log("Vide la liste des activités");
     };
 
     divItemListRef.innerHTML = "";
 
-    if (userActivityListToDisplay.length === 0) {
+    if (userActivityKeysListToDisplay.length === 0) {
         divItemListRef.innerHTML = "Aucune activité à afficher !";
         return
     }else{
@@ -297,27 +367,29 @@ function onInsertActivityInList(activityToDisplay) {
 
 };
 
+
+
 // séquence d'insertion  d'activité dans la liste selon le nombre limite définit
 function onInsertMoreActivity() {
     if (devMode === true){console.log("Lancement d'un cycle d'insertion d'activité.");};
     let cycleCount = 0;
 
-    if (devMode === true){console.log("Index de départ = " + userActivityListIndexToStart);};
+    if (devMode === true){console.log("Index de départ = " + userActivityKeysListIndexToStart);};
 
 
 
-    for (let i = userActivityListIndexToStart; i < userActivityListToDisplay.length; i++) {
+    for (let i = userActivityKeysListIndexToStart; i < Object.keys(userActivityKeysListToDisplay).length; i++) {
 
         if (cycleCount >= maxActivityPerCycle) {
             if (devMode === true){console.log("Max par cycle atteinds = " + maxActivityPerCycle);};
             // Creation du bouton More
             onCreateMoreActivityBtn();
-            userActivityListIndexToStart += maxActivityPerCycle;
-            if (devMode === true){console.log("mise a jour du prochain index to start = " + userActivityListIndexToStart);};
+            userActivityKeysListIndexToStart += maxActivityPerCycle;
+            if (devMode === true){console.log("mise a jour du prochain index to start = " + userActivityKeysListIndexToStart);};
             // Arrete la boucle si lorsque le cycle est atteind
             return
         }else{
-            onInsertOneActivity(userActivityListToDisplay[i],i === userActivityListToDisplay.length-1);
+            onInsertOneActivity(allUserActivityArray[userActivityKeysListToDisplay[i]],i === Object.keys(userActivityKeysListToDisplay).length-1);
         };
         cycleCount++;
     };
@@ -332,136 +404,18 @@ function onInsertMoreActivity() {
 // et gestion pour les activités planifiées
 function onInsertOneActivity(activity,isLastIndex) {
 
-    // La div de l'item avec une marge spéciale pour le dernier éléments
-    let newItemContainer = document.createElement("div");
-
-    newItemContainer.classList.add("item-container");
-    if (activity.isPlanned) {
-        newItemContainer.classList.add("item-planned");
-    }
-
-    newItemContainer.onclick = function () {
-        onClickOnActivity(activity._id);
-    };
-
-
-    // La zone de l'image
-    let newImageContainer = document.createElement("div");
-    newImageContainer.classList.add("item-image-container");
-
-    let newImage = document.createElement("img");
-    newImage.classList.add("activity");
-    newImage.src = activityChoiceArray[activity.name].imgRef;
-
-    newImageContainer.appendChild(newImage);
-
-
-
-    // la zone des données
-
-    let newDivDataContainer =  document.createElement("div");
-    newDivDataContainer.classList.add("item-data-container");
-
-
-    // Area 1
-    let newDivDataArea1 = document.createElement("div");
-    newDivDataArea1.classList.add("item-data-area1");
-
-    let newItemDistance = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemDistance.classList.add("item-data-distance-planned");
-    }else{
-        newItemDistance.classList.add("item-data-distance");
-    }
-
-
-
-
-    newItemDistance.innerHTML = activity.distance != "" ? activity.distance + " km": "---";
-
-    let newItemDuration = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemDuration.classList.add("item-data-duration-planned");
-    }else{
-        newItemDuration.classList.add("item-data-duration");
-    }
-
-
-
-    newItemDuration.innerHTML = activity.duration;
-
-    let newItemDate = document.createElement("p");
-    newItemDate.classList.add("item-data-date");
-    newItemDate.innerHTML = onDisplayUserFriendlyDate(activity.date);
-
+    new ActivityItem(
+        activity._id,
+        activityChoiceArray[activity.name].imgRef,
+        activity.distance,
+        activity.duration,
+        activity.date,
+        activity.location,
+        activity.comment,
+        divItemListRef,
+        activity.isPlanned
+    );
     
-
-    newDivDataArea1.appendChild(newItemDistance);
-    newDivDataArea1.appendChild(newItemDuration);
-    newDivDataArea1.appendChild(newItemDate);
-
-    // Area 2
-    let newDivDataArea2 = document.createElement("div");
-    newDivDataArea2.classList.add("item-data-area2");
-
-    let newItemLocation = document.createElement("p");
-    newItemLocation.classList.add("item-data-location");
-    newItemLocation.innerHTML = activity.location != "" ? activity.location : "---";
-
-    newDivDataArea2.appendChild(newItemLocation);
-    
-
-    // Area3
-    let newDivDataArea3 = document.createElement("div");
-    newDivDataArea3.classList.add("item-data-area3");
-
-    let newItemComment = document.createElement("p");
-    if (activity.isPlanned) {
-        newItemComment.setAttribute("data-type",activityTagPlanned);
-        newItemComment.classList.add(currentCommentPlannedClassName);
-
-    } else {
-        newItemComment.setAttribute("data-type",activityTagDone);
-        newItemComment.classList.add(currentCommentDoneClassName);
-    }
-
-
-
-
-    newItemComment.innerHTML = activity.comment;
-    newDivDataArea3.appendChild(newItemComment);
-
-
-
-    // Insertion totale
-    newDivDataContainer.appendChild(newDivDataArea1);
-    newDivDataContainer.appendChild(newDivDataArea2);
-    newDivDataContainer.appendChild(newDivDataArea3);
-
-    newItemContainer.appendChild(newImageContainer);
-    newItemContainer.appendChild(newDivDataContainer);
-
-    // TEST BOUTON ICS
-    if (activity.isPlanned) {
-        // Génération
-        let newBtnICS = document.createElement("button");
-        newBtnICS.innerHTML = "🗓️";
-        newBtnICS.classList.add("buttonAddCalendar");
-        newBtnICS.onclick = function (event){
-            event.stopPropagation();
-            onClickAddToCalendar(activity._id);
-        }
-        //Insertion
-        newDivDataArea2.appendChild(newBtnICS);
-    }
-
-
-
-
-
-    divItemListRef.appendChild(newItemContainer);
-
-
 
     // gestion derniere activité de la liste
     // Insertion d'un trait en fin de liste
@@ -592,7 +546,7 @@ function onClickOnActivity(keyRef) {
 
     currentActivityEditorID = keyRef;
 
-    let activityToDisplay = onSearchActivity(keyRef);
+    let activityToDisplay = allUserActivityArray[keyRef];
 
     currentActivityDataInView = activityToDisplay;//pour la comparaison par la suite
     onEditActivity(activityToDisplay);
@@ -775,8 +729,14 @@ function onInputDateChange() {
 //Soi depuis l'éditeur d'activité, soit une activité généré depuis les sessions
 
 async function eventInsertNewActivity(dataToInsert,isFromSession) {
-    await onInsertNewActivityInDB(dataToInsert);
-    await onLoadActivityFromDB();
+
+    // Insere en base
+    let newActivityToAdd = await onInsertNewActivityInDB(dataToInsert);
+
+    // Insère également dans l'array d'objet
+    allUserActivityArray[newActivityToAdd._id] = newActivityToAdd;
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
+
 
 
     // est ce que la derniere activité est planifié donc pas de check reward
@@ -814,8 +774,12 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 // Séquence d'insertion d'une modification
 async function eventInsertActivityModification(dataToInsert) {
 
-    await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
-    await onLoadActivityFromDB();
+    // Sauvegarde dans la base
+    let activityUpdated = await onInsertActivityModificationInDB(dataToInsert,currentActivityEditorID);
+
+    // met à jour l'array d'objet
+    allUserActivityArray[currentActivityEditorID] = activityUpdated;
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
 
     // est ce que la derniere activité est planifié donc pas de check reward
     const isCheckRewardsRequiered = dataToInsert.isPlanned === false;
@@ -875,8 +839,14 @@ function onConfirmDeleteActivity(event){
 
 // Sequence de suppression d'un template
 async function eventDeleteActivity(idToDelete) {
+
+    // Supprime en base
     await deleteActivity(idToDelete);
-    await onLoadActivityFromDB();
+    
+    // met à jour l'array d'objet
+    delete allUserActivityArray[idToDelete];
+
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
 
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);

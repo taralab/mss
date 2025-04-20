@@ -85,13 +85,13 @@ function onGenerateDynamiqueFilter(allData) {
     let allFilterForControl = [];//uniquement pour comparer des filtres
 
     // Recupère les nouvelle catégorie présente dans la liste en cours
-    allData.forEach(data=>{
-        if (!dynamicFilterList.includes(data.name))  {
-            dynamicFilterList.push(data.name);
+    Object.keys(allData).forEach(key=>{
+        if (!dynamicFilterList.includes(allData[key].name))  {
+            dynamicFilterList.push(allData[key].name);
         };
 
         // recherche la présence d'au moins une activité planifiée et stop recherche lorsque trouvé
-        if (isActivityPlannedExist === false && data.isPlanned === true) {
+        if (isActivityPlannedExist === false && allData[key].isPlanned === true) {
             isActivityPlannedExist = true;
         }
     });
@@ -125,7 +125,7 @@ function onGenerateDynamiqueFilter(allData) {
 
 
 // Génération des options d'activité pour le filtre avec tri
-function onGenerateActivityOptionFilter(allActivityData) {
+function onGenerateActivityOptionFilter(dynamicFilterList) {
 
     selectorRef.innerHTML = "";
 
@@ -145,7 +145,7 @@ function onGenerateActivityOptionFilter(allActivityData) {
     }
 
     // Ajouter les autres options des activités existantes triées
-    allActivityData.forEach(activity => {
+    dynamicFilterList.forEach(activity => {
         let newOption = document.createElement("option");
         newOption.value = activity;
         newOption.innerHTML = activityChoiceArray[activity].displayName;
@@ -157,13 +157,14 @@ function onGenerateActivityOptionFilter(allActivityData) {
 
 
     // Génère les fakes options
-    onGenerateFakeActivityOptionFilter(allActivityData);
+    onGenerateFakeActivityOptionFilter(dynamicFilterList);
 };
 
 
 
 
-function onGenerateFakeActivityOptionFilter(allActivityData) {
+function onGenerateFakeActivityOptionFilter(dynamicFilterList) {
+
     let parentTargetRef = document.getElementById("divFakeSelectOptFilterActivityList");
 
     // Traite d'abord les favoris
@@ -254,7 +255,7 @@ function onGenerateFakeActivityOptionFilter(allActivityData) {
 
 
     // Ajout de reste des activités
-    allActivityData.forEach((e,index)=>{
+    dynamicFilterList.forEach((e,index)=>{
 
          // Creation
         let newContainer = document.createElement("div");
@@ -266,7 +267,7 @@ function onGenerateFakeActivityOptionFilter(allActivityData) {
 
 
         // Style sans border botton pour le dernier
-        if (index === (allActivityData.length - 1)) {
+        if (index === (dynamicFilterList.length - 1)) {
             newContainer.classList.add("fake-opt-item-last-container");
         }
 
@@ -333,39 +334,43 @@ function onCloseFakeSelectFilter(event){
 
 function onFilterActivity(sortType,filterType,activityArray) {
 
-
     if (devMode === true){
         console.log("[SORT FILTER] fonction de filtre sur activité");
         console.log("[SORT FILTER] type de trie = " + sortType + " type de filtre = " + filterType);
     };
 
-    let allDataFiltered = [];
+    let filteredKeys = [];
 
 
     // si le filtre est réglé sur "tous" affiche tous
     if (filterType === defaultFilter) {
         // Insertion de tous les activités dans la liste
 
-
         if (devMode === true){console.log(" [SORT FILTER] Demande de trie sur toutes les données");};
-        onSortActivity(sortType,activityArray);
+
+        
+        onSortActivity(sortType,Object.keys(activityArray));
 
     } else if (filterType === "PLANNED"){
         if (devMode === true){console.log(" [SORT FILTER] Demande de filtre sur les activités planifiées");};
 
-        allDataFiltered = allUserActivityArray.filter(item =>{
-            return item.isPlanned === true;
-        });
-        onSortActivity(sortType,allDataFiltered);
+        filteredKeys = Object.entries(allUserActivityArray)
+            .filter(([key, value]) => value.isPlanned === true)
+            .map(([key, value]) => key);
+
+        onSortActivity(sortType,filteredKeys);
 
     } else {
+        filteredKeys = Object.entries(allUserActivityArray)
+        .filter(([key, value]) => value.name === filterType)
+        .map(([key, value]) => key);
+       
 
-        allDataFiltered = allUserActivityArray.filter(item =>{
-            return item.name === filterType;
-        });
         if (devMode === true){console.log("[SORT FILTER] Demande de trie sur les données filtré");};
         // Lance le trie uniquement sur les éléments filtré
-        onSortActivity(sortType,allDataFiltered);
+
+        console.log(filteredKeys);
+        onSortActivity(sortType,filteredKeys);
 
     };
 
@@ -377,7 +382,7 @@ function onFilterActivity(sortType,filterType,activityArray) {
 
 // Changement du filtre via action de l'utilisateur
 function onChangeSelectorFilter(value,idBtnRadioTarget){
-
+    
 
     if (devMode === true){console.log(" [SORT FILTER] changement de selecteur du filtre pour = " + selectorRef.value);};
     currentFilter = value;
@@ -475,49 +480,50 @@ function onUserChangeSortType(sortCategory) {
 
 
 // Fonction du trie
-function onSortActivity(sortType,filteredData) {
+function onSortActivity(sortType, filteredDataKeys) {
+    if (devMode === true) {
+        console.log("[SORT FILTER] Demande de trie par : " + sortType);
+    }
 
-    if (devMode === true){console.log("[SORT FILTER] Demande de trie par : " + sortType );};
+    const sortedKeys = [...filteredDataKeys].sort((keyA, keyB) => {
+        const a = allUserActivityArray[keyA];
+        const b = allUserActivityArray[keyB];
 
-    if (sortType === "dateRecente") {
-        filteredData.sort((a, b) => {
+        if (sortType === "dateRecente") {
             const dateDiff = new Date(b.date) - new Date(a.date);
-            if (dateDiff !== 0) {
-                return dateDiff; // Tri par date décroissante
-            }
-            // ➕ Tri par date de création si même jour
+            if (dateDiff !== 0) return dateDiff;
             return new Date(b.createdAt) - new Date(a.createdAt);
-        });
-    } else if (sortType === "dateAncienne") {
-        filteredData.sort((a, b) => {
+
+        } else if (sortType === "dateAncienne") {
             const dateDiff = new Date(a.date) - new Date(b.date);
-            if (dateDiff !== 0) {
-                return dateDiff; // Tri par date croissante
-            }
+            if (dateDiff !== 0) return dateDiff;
             return new Date(a.createdAt) - new Date(b.createdAt);
-        });
-    }else if (sortType === "distanceCroissante") {
-        filteredData.sort((a, b) => a.distance - b.distance); // Tri par distance croissante
-    }else if (sortType === "distanceDecroissante") {
-        filteredData.sort((a, b) => b.distance - a.distance); // Tri par distance décroissante
-    }else if (sortType === "chronoCroissant") {
-        filteredData.sort((a, b) => onConvertTimeToSecond(a.duration) - onConvertTimeToSecond(b.duration)); // Tri par distance croissante
-    }else if (sortType === "chronoDecroissant") {
-        filteredData.sort((a, b) => onConvertTimeToSecond(b.duration) - onConvertTimeToSecond(a.duration)); // Tri par distance décroissante
-    };
 
+        } else if (sortType === "distanceCroissante") {
+            return a.distance - b.distance;
 
-    // Mettre à jour le style également
+        } else if (sortType === "distanceDecroissante") {
+            return b.distance - a.distance;
 
-    if (devMode === true){console.log(" [SORT FILTER] appel la fonction de trie");};
+        } else if (sortType === "chronoCroissant") {
+            return onConvertTimeToSecond(a.duration) - onConvertTimeToSecond(b.duration);
+
+        } else if (sortType === "chronoDecroissant") {
+            return onConvertTimeToSecond(b.duration) - onConvertTimeToSecond(a.duration);
+        }
+
+        return 0; // par défaut aucun tri
+    });
+
+    if (devMode === true) {
+        console.log("[SORT FILTER] Clés triées :", sortedKeys);
+    }
+
     onSetIconSort();
 
-
-
-    // Insert uniquement les activités du filtre
-    onInsertActivityInList(filteredData);
-};
-
+    // Ajoute uniquement les activités triées (par leurs clés)
+    onInsertActivityInList(sortedKeys);
+}
 
 
 

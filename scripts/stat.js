@@ -1,63 +1,69 @@
+// Referencement
+let selectorStatRef = document.getElementById("selectorStat");
+
+// Array qui va contenir toutes les keys des activités non planifiées
+let statActivityNonPlannedKeys = [];
+
+
+
+
 
 // Ouverture du menu
 function onOpenMenuStat(){
     if (devMode === true){console.log("Ouverture menu STAT");};
 
 
-    statActivityNonPlannedArray = allUserActivityArray.filter(activity =>{
-        return activity.isPlanned === false
-    });
+    // récupère les keys des activités non planifiées
+    statActivityNonPlannedKeys = Object.entries(allUserActivityArray)
+    .filter(([key, value]) => value.isPlanned === false)
+    .map(([key, value]) => key);
 
-    if (devMode === true){
-        console.log("Retrait des activités programmées");
-        console.log("Nbre activité retiré = " + (allUserActivityArray.length - statActivityNonPlannedArray.length));
+
+    // Récupère la liste dynamique des catégories
+    let dynamicFilterList = getNonPlannedActivitiesKeysForStat(statActivityNonPlannedKeys);
     
-    };
+    // Crée les options dans le selecteur de catégorie le vrai et la fake
+    onGenerateStatOptionFilter(dynamicFilterList);
+    onGenerateFakeStatOptionFilter(dynamicFilterList);
 
-    onGenerateDynamiqueStatFilter(statActivityNonPlannedArray);
-
-    displayGeneralStats(statActivityNonPlannedArray);
+    displayGeneralStats(statActivityNonPlannedKeys);
+    // traitement des graphiques
+    onTreateStatGraphic(statActivityNonPlannedKeys);
 }
 
-// Referencement
-let selectorStatRef = document.getElementById("selectorStat");
-
-// Array qui va contenir toutes les activités non planifiées
-let statActivityNonPlannedArray = [];
 
 
-
-
-// remplit dynamiquement les options dans le selection de statistique
-function onGenerateDynamiqueStatFilter(allData) {
+// filtre sur les éléments non planifié et les tries par ordre alpha
+function getNonPlannedActivitiesKeysForStat(nonPlannedActivitiesKeys) {
     if (devMode === true){console.log("[STAT] récupère les types d'activité de l'utilisateur" )};
-    let dynamicFilterList = [];
-    
+
+    let filteredList = [];
 
 
-    // Recupère les nouvelle catégorie présente dans la liste en cours
-    allData.forEach(data=>{
-        if (!dynamicFilterList.includes(data.name))  {
-            dynamicFilterList.push(data.name);
+    // Recupère les nouvelles catégories présentes dans la liste en cours
+    nonPlannedActivitiesKeys.forEach(key=>{
+        if (!filteredList.includes(allUserActivityArray[key].name))  {
+            filteredList.push(allUserActivityArray[key].name);
         };
     });
 
-    dynamicFilterList.sort();
 
-
+    // Classement par ordre alpha
+    filteredList.sort();
     if (devMode === true){
-        console.log("[STAT] valeur de dynamicFilterList = " );
-        console.log(dynamicFilterList);
+        console.log("Retrait des activités programmées");
+        console.log("Nbre activité retiré = " + (Object.keys(allUserActivityArray).length - Object.keys(nonPlannedActivitiesKeys).length));
+        console.log(filteredList);
+    
     };
 
-    // Crée les options dans le selection pour les catégorie
-    onGenerateStatOptionFilter(dynamicFilterList);
+    return filteredList;
 };
 
 
 
 // Génération des options d'activité pour le filtre avec tri
-function onGenerateStatOptionFilter(allActivityTypeData) {
+function onGenerateStatOptionFilter(dynamicFilterList) {
 
     selectorStatRef.innerHTML = "";
 
@@ -71,7 +77,7 @@ function onGenerateStatOptionFilter(allActivityTypeData) {
 
 
     // Ajouter les autres options triées
-    allActivityTypeData.forEach(activityType => {
+    dynamicFilterList.forEach(activityType => {
 
         let newOption = document.createElement("option");
         newOption.value = activityType;
@@ -80,13 +86,12 @@ function onGenerateStatOptionFilter(allActivityTypeData) {
     });
 
 
-    onGenerateFakeStatOptionFilter(allActivityTypeData);
 };
 
 
 
 
-function onGenerateFakeStatOptionFilter(allActivityData) {
+function onGenerateFakeStatOptionFilter(dynamicFilterList) {
     let parentTargetRef = document.getElementById("divFakeSelectOptStatList");
 
     // Traite d'abord les favoris
@@ -136,7 +141,7 @@ function onGenerateFakeStatOptionFilter(allActivityData) {
 
 
     // Ajout de reste des activités
-    allActivityData.forEach((e,index)=>{
+    dynamicFilterList.forEach((e,index)=>{
 
          // Creation
         let newContainer = document.createElement("div");
@@ -151,7 +156,7 @@ function onGenerateFakeStatOptionFilter(allActivityData) {
 
 
         // Style sans border botton pour le dernier
-        if (index === (allActivityData.length - 1)) {
+        if (index === (dynamicFilterList.length - 1)) {
             newContainer.classList.add("fake-opt-item-last-container");
         }
 
@@ -229,7 +234,9 @@ function onChangeStatActivitySelector(value) {
 
     if (value === "GENERAL") {
         // Appeler la fonction pour afficher les statistiques générales
-        displayGeneralStats(statActivityNonPlannedArray);
+        displayGeneralStats(statActivityNonPlannedKeys);
+        // traitement des graphiques
+        onTreateStatGraphic(statActivityNonPlannedKeys);
     } else {
         // Appeler la fonction pour afficher les statistiques de l'activité sélectionnée
         displayActivityStats(value);
@@ -268,20 +275,20 @@ function formatDuration(totalMinutes) {
 
 
 
-// Récupère les statistiques de l'activité
-function getStats(activityList, days = null) {
+// Récupère les statistiques de l'activité pour le résumé
+function getStats(activityTargetKeysList, days = null) {
     const today = new Date();
 
-    // Filtrer les sessions pour l'activité donnée
-    const filteredSessions = activityList.filter(activity => {
+    // NE garde que les clés des activités qui sont concernée par la recherche. (tous, 7jours, 30jours)
+    let filteredKeys = activityTargetKeysList.filter(key => {
         const isWithinDays = days
-            ? (today - new Date(activity.date)) / (1000 * 60 * 60 * 24) <= days
+            ? (today - new Date(allUserActivityArray[key].date)) / (1000 * 60 * 60 * 24) <= days
             : true; // Inclure toutes les sessions si `days` est null
         return isWithinDays;
     });
 
     // Si aucune session n'est trouvée, renvoyer des valeurs par défaut
-    if (filteredSessions.length === 0) {
+    if (filteredKeys.length === 0) {
         return {
             totalSessions: 0,
             totalDuration: 0,
@@ -291,23 +298,46 @@ function getStats(activityList, days = null) {
         };
     }
 
-    // Trier les sessions par date (du plus récent au plus ancien)
-    filteredSessions.sort((a, b) => new Date(b.date) - new Date(a.date));
+    // Trier les keys par date (du plus récent au plus ancien)
+    filteredKeys.sort((a, b) => new Date(allUserActivityArray[b].date) - new Date(allUserActivityArray[a].date));
 
     // Calculer les statistiques
-    const totalSessions = filteredSessions.length;
-    const totalDuration = filteredSessions.reduce((sum, session) =>
-        sum + durationToMinutes(session.duration || "00:00:00"), 0
-    ); // En minutes
-    const totalDistance = filteredSessions.reduce((sum, session) =>
-        sum + parseFloat(session.distance || 0), 0
-    );
+    const totalSessions = filteredKeys.length;
+
+    // const totalDuration = filteredSessions.reduce((sum, session) =>
+    //     sum + durationToMinutes(session.duration || "00:00:00"), 0
+    // ); // En minutes
+
+    const totalDuration = filteredKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.duration) {
+            return sum + durationToMinutes(activity.duration || "00:00:00");
+        }
+        return sum;
+    }, 0);
+
+
+    // const totalDistance = filteredSessions.reduce((sum, session) =>
+    //     sum + parseFloat(session.distance || 0), 0
+    // );
+
+    const totalDistance = filteredKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.distance) {
+            return sum + parseFloat(activity.distance);
+        }
+        return sum;
+    }, 0);
+
 
     // Dernière activité pratiquée (la plus récente)
-    const lastActivityDate = new Date(filteredSessions[0].date); // La première après le tri est la plus récente
+    const lastActivityDate = new Date(allUserActivityArray[filteredKeys[0]].date); // La première après le tri est la plus récente
+
+
 
     // Première activité pratiquée (la plus ancienne)
-    const firstActivityDate = new Date(filteredSessions[filteredSessions.length - 1].date); // La dernière après le tri est la plus ancienne
+    const lastIndex = filteredKeys.length - 1;
+    const firstActivityDate = new Date(allUserActivityArray[filteredKeys[lastIndex]].date); // La dernière après le tri est la plus ancienne
 
     return {
         totalSessions,
@@ -319,7 +349,7 @@ function getStats(activityList, days = null) {
 }
 
 
-function onTreateStatGraphic(activityList) {
+function onTreateStatGraphic(activityKeysList) {
 
     if (devMode === true){
         console.log("[STAT] Traitement des graphiques");
@@ -327,8 +357,8 @@ function onTreateStatGraphic(activityList) {
     };
         // extraction des années 
         let yearArray = [];
-        activityList.forEach(e=>{
-            const dateObject = new Date(e.date);
+        activityKeysList.forEach(key=>{
+            const dateObject = new Date(allUserActivityArray[key].date);
             const year = dateObject.getFullYear();
             if (!yearArray.includes(year)) {
                 yearArray.push(year);
@@ -357,7 +387,7 @@ function onTreateStatGraphic(activityList) {
         });
 
         // Lancement du comptage sur la première année du tableau
-        getActivityStatCountByMonth(activityList,yearArray[0]);
+        getActivityStatCountByMonth(activityKeysList,yearArray[0]);
 
 }
 
@@ -370,7 +400,7 @@ const monthStatNamesArray = [
     'july', 'august', 'september', 'october', 'november', 'december'
 ];
 
-function getActivityStatCountByMonth(activityList,yearTarget) {
+function getActivityStatCountByMonth(activityKeysList,yearTarget) {
 
 
     // Objet qui stocke les comptes des activité classé
@@ -393,9 +423,9 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
         totalDistanceYear = 0,
         totalDurationYear = 0;
 
-    activityList.forEach(e=>{
+    activityKeysList.forEach(key=>{
 
-        const dateObject = new Date(e.date);
+        const dateObject = new Date(allUserActivityArray[key].date);
         const year = dateObject.getFullYear();
         const month = dateObject.getMonth();
         const monthName = monthStatNamesArray[month];
@@ -409,7 +439,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
             // ancienne valeur
             let oldDistance = Number(countActivityByMonth[monthName].distance) || 0;
             // Valeur à ajouter
-            let newDistance = parseFloat(e.distance) ||0 ;
+            let newDistance = parseFloat(allUserActivityArray[key].distance) ||0 ;
             // addition
             let distanceToAdd = oldDistance + newDistance;
             distanceToAdd = Math.round(distanceToAdd * 10) / 10;//arrondi 1 décimale
@@ -422,7 +452,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
             let oldDuration = Number(countActivityByMonth[monthName].duration) || 0;
 
             // Valeur à ajouter
-            let newDuration = durationToMinutes(e.duration || "00:00:00");
+            let newDuration = durationToMinutes(allUserActivityArray[key].duration || "00:00:00");
 
 
             let durationToAdd = oldDuration + newDuration;
@@ -439,7 +469,7 @@ function getActivityStatCountByMonth(activityList,yearTarget) {
 
     if (devMode === true){
         
-        console.log("[STAT] longueur de la liste d'activité cible :" + activityList.length);
+        console.log("[STAT] longueur de la liste d'activité cible :" + activityKeysList.length);
         console.log("[STAT] Comptage répartition par mois selon l'année : " + yearTarget);
         console.log(countActivityByMonth);
         console.log("[STAT] Recherche du mois avec la valeur la plus haute");
@@ -572,13 +602,13 @@ function onChangeSelectorYearGraph(yearTarget){
 
 
     if (currentActivitySelected === "GENERAL") {
-        getActivityStatCountByMonth(statActivityNonPlannedArray,Number(yearTarget));
+        getActivityStatCountByMonth(statActivityNonPlannedKeys,Number(yearTarget));
     } else {
-        // Récupère uniquement les données concernant l'activité en question
-        let activitiesTargetData = statActivityNonPlannedArray.filter(e=>{
-            // Recupère toutes les activités concernés
-            return e.name === currentActivitySelected;
-        });
+        // Récupère uniquement les données concernant l'activité en question et non planifié
+        let activitiesTargetData = Object.entries(allUserActivityArray)
+            .filter(([key, value]) => value.isPlanned === false && value.name === currentActivitySelected)
+            .map(([key, value]) => key);
+
         getActivityStatCountByMonth(activitiesTargetData,Number(yearTarget));
     }    
 }
@@ -597,17 +627,16 @@ function onChangeSelectorYearGraph(yearTarget){
 function displayActivityStats(activityName) {
     if (devMode === true){console.log("[STAT] demande de stat pour " + activityName);};
 
-    // Récupère uniquement les données concernant l'activité en question
-    let activitiesTargetData = statActivityNonPlannedArray.filter(e=>{
-        // Recupère toutes les activités concernés
-        return e.name === activityName;
-    });
+    // Récupère uniquement les keys données concernant l'activité en question et non planifié
+    let specificActivitiesKeys = Object.entries(allUserActivityArray)
+    .filter(([key, value]) => value.isPlanned === false && value.name === activityName)
+    .map(([key, value]) => key);
 
 
-    // Récupérer les statistiques
-    const statsAllTime = getStats(activitiesTargetData);
-    const stats7Days = getStats(activitiesTargetData, 7);
-    const stats30Days = getStats(activitiesTargetData, 30);
+    // Récupérer les statistiques pour le résumé
+    const statsAllTime = getStats(specificActivitiesKeys);
+    const stats7Days = getStats(specificActivitiesKeys, 7);
+    const stats30Days = getStats(specificActivitiesKeys, 30);
 
     // Formater les dates des premières et dernières activités pratiquées
     const firstActivityDateFormatted = statsAllTime.firstActivityDate
@@ -672,15 +701,15 @@ function displayActivityStats(activityName) {
     `;
 
     // traitement des graphiques
-    onTreateStatGraphic(activitiesTargetData);
+    onTreateStatGraphic(specificActivitiesKeys);
 }
 
 
 
 
 // Fonction pour afficher les statistiques générales
-function displayGeneralStats(activityList) {
-    if (!activityList || activityList.length === 0) {
+function displayGeneralStats(nonPlannedActivitiesKeys) {
+    if (!Object.keys(nonPlannedActivitiesKeys) || Object.keys(nonPlannedActivitiesKeys).length === 0) {
         document.getElementById("stats").innerHTML = `
             <p>Bienvenue ! Commence à enregistrer tes activités pour découvrir tes statistiques ici. 🚀</p>
         `;
@@ -688,17 +717,42 @@ function displayGeneralStats(activityList) {
     }
 
     // Calculs nécessaires
-    const totalActivities = activityList.length;
-    const totalDuration = activityList.reduce((sum, activity) => 
-        sum + durationToMinutes(activity.duration || "00:00:00"), 0
-    );
-    const totalDistance = activityList.reduce((sum, activity) => 
-        sum + parseFloat(activity.distance || 0), 0
-    );
-    const firstActivityDate = new Date(Math.min(...activityList.map(a => new Date(a.date))));
+    const totalActivities = Object.keys(nonPlannedActivitiesKeys).length;
+    
+
+    const totalDuration = nonPlannedActivitiesKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.duration) {
+            return sum + durationToMinutes(activity.duration || "00:00:00");
+        }
+        return sum
+    },0);
+
+
+
+    const totalDistance = nonPlannedActivitiesKeys.reduce((sum, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity && activity.distance) {
+            return sum + parseFloat(activity.distance || 0);
+        }
+        return sum;
+    }, 0);
+    
+
+
+    const firstActivityDate = new Date(Math.min(
+        ...nonPlannedActivitiesKeys
+            .map(key => {
+                const activity = allUserActivityArray[key];
+                return activity?.date ? new Date(activity.date) : null;
+            })
+            .filter(date => date instanceof Date && !isNaN(date)) // on garde les dates valides
+    ));
+    
+
     const formattedDate = firstActivityDate.toLocaleDateString("fr-FR");
 
-    const favouriteActivityName =getMostPracticedActivity(activityList); // Activité la plus pratiquée
+    const favouriteActivityName = getMostPracticedActivity(nonPlannedActivitiesKeys); // Activité la plus pratiquée
 
 
 
@@ -717,34 +771,28 @@ function displayGeneralStats(activityList) {
         </section>
     `;
 
-
-
-    // traitement des graphiques
-    onTreateStatGraphic(activityList);
 }
 
 
 
 // Fonction de calcul de l'activité la plus pratiquée
-function getMostPracticedActivity(data) {
-
-    if (devMode === true){console.log(" [STAT] General : calcul de l'activité la plus pratiquée.");};
-
-
-    if (!Array.isArray(data) || data.length === 0) {
-        return null; // Retourne null si le tableau est vide ou invalide
+function getMostPracticedActivity(dataKeys) {
+    if (devMode === true) {
+        console.log(" [STAT] General : calcul de l'activité la plus pratiquée.");
     }
 
-    // Étape 1 : Compter les occurrences de chaque activité
-    const activityCounts = data.reduce((acc, obj) => {
+    if (!Array.isArray(dataKeys) || dataKeys.length === 0) {
+        return null;
+    }
 
-        if (obj.name) {
-            acc[obj.name] = (acc[obj.name] || 0) + 1; // Incrémente le compteur
+    const activityCounts = dataKeys.reduce((acc, key) => {
+        const activity = allUserActivityArray[key];
+        if (activity?.name) {
+            acc[activity.name] = (acc[activity.name] || 0) + 1;
         }
         return acc;
     }, {});
 
-    // Étape 2 : Trouver l'activité avec la valeur maximale
     let mostPracticed = null;
     let maxCount = 0;
 
@@ -755,11 +803,13 @@ function getMostPracticedActivity(data) {
         }
     }
 
-    if (devMode === true){console.log(`[STAT] Resultat : ${mostPracticed} avec ${maxCount} activités.` );};
-
+    if (devMode === true) {
+        console.log(`[STAT] Résultat : ${mostPracticed} avec ${maxCount} activités.`);
+    }
 
     return mostPracticed;
 }
+
 
 
 // Reset les éléments du graphique
@@ -769,7 +819,7 @@ function onResetStatGraph() {
     document.getElementById("selectStatGraphYear").innerHTML= "";
 
     // Vide le tableau de toutes les activités non planifié
-    statActivityNonPlannedArray = [];
+    statActivityNonPlannedKeys = [];
 
 
     monthStatNamesArray.forEach(e=>{

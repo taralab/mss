@@ -125,7 +125,7 @@ async function onOpenMenuSession(){
     getCounterListFromLocalStorage();
     getSessionStartTimeFromLocalStorage();
 
-    if (devMode === true){console.log(userCounterList)};
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // set l'heure d'initialisation de session dans le texte
     document.getElementById("customInfo").innerHTML = `<b>Début : ${sessionStartTime}<b>`;
@@ -303,7 +303,7 @@ function eventCreateCounter() {
 
 async function eventInsertNewCompteur() {
 
-    if (devMode === true){console.log(userCounterList)};
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // Sauvegarde en localStorage
     onUpdateCounterSessionInStorage();
@@ -571,7 +571,7 @@ async function onClickIncrementeCounter(idRef) {
     // compte serie
     spanCurrentSerieRef.innerHTML = userCounterList[idRef].currentSerie;
 
-    if (devMode === true){console.log(userCounterList);};
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // Si objectif atteind
     let isTargetReach = onCheckTargetReach(idRef);
@@ -663,7 +663,7 @@ async function onClickResetCounter(idRef) {
     // Sauvegarde en localStorage
     onUpdateCounterSessionInStorage();
 
-    if (devMode === true){console.log(userCounterList);};
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
     //retire la classe "reach" si necessaire pour le count target et le slash
     let counterTargetRef = document.getElementById(`spanSerieTarget_${idRef}`);
@@ -767,6 +767,8 @@ async function eventDeleteCounter(){
     // traitement display order pour les counters suivants
     onChangeDisplayOrderFromDelete(idCounterToDelete);
 
+
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // Affichage en cas d'aucun compteur
     if (Object.keys(userCounterList).length < 1) {
@@ -1228,7 +1230,18 @@ function onGetSessionDuration(heureDebut, heureFin) {
 
 
 
-function onClickMenuCreateSession() {    
+async function onClickMenuCreateSession() {    
+
+        // La première fois, récupère les templates dans la base
+        if (!isTemplateSessionLoadedFromBase) {
+            await onLoadTemplateSessionNameFromDB();
+            isTemplateSessionLoadedFromBase = true;
+            if (devMode === true){console.log("1er chargement des templates session depuis la base")};
+
+            // Récupère et tries les clés
+            onUpdateAndSortTemplateSessionKey();
+        }
+
     onGenerateSessionTable();
 
     // actualise la liste des modèles dans le tableau
@@ -1338,7 +1351,10 @@ function onGetTableSessionItem() {
 // Génération des options du selecteur de session
 function onGenerateModelSelectList() {
 
-     if (devMode === true){console.log("generation de la liste des modèles");};
+    if (devMode === true){
+        console.log("generation de la liste des modèles");
+        console.log(templateSessionKeys);
+    };
 
     // Referencement
     let parentRef = document.getElementById("selectSessionTableModelName");
@@ -1354,7 +1370,7 @@ function onGenerateModelSelectList() {
     parentRef.appendChild(defaultOption);
 
     // Pour chaque nom de model
-    Object.keys(templateSessionsNameList).forEach(key=>{
+    templateSessionKeys.forEach(key=>{
 
         // crée une option et l'insere
         let newOption = document.createElement("option");
@@ -1425,7 +1441,7 @@ function onGenerateMultipleCounter(newSessionList) {
     });
 
 
-    if (devMode === true){console.log(userCounterList)};
+    if (devMode === true){console.log("userCounterList", userCounterList)};
 
 
 }
