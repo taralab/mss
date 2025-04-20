@@ -757,7 +757,7 @@ const allRewardsObject = {
     },
     "RUGBY-A-1-SEANCE": {
         imgRef: "./Badges/Badge-RUGBY-A.webp",
-        title: "T'as plaqué qui ?",
+        title: "Qui aime se faire plaquer",
         activityName: "RUGBY",
         groupColor: "nuance-orange",
         text: "1 séance de rugby"

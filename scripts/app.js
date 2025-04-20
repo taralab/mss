@@ -354,6 +354,10 @@ async function firstActualisation() {
 
 
     // ACTIVITY
+
+    if (devMode === true) {
+        console.log("Loading allUserActivityArray :",allUserActivityArray);
+    };
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
 

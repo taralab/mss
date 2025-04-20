@@ -239,14 +239,6 @@ async function findActivityById(activityId) {
 
 
 
-// Fonction de recherche d'une activité dans AllUserActivityArray.
-function onSearchActivity(keyRef) {
-    if (devMode === true){console.log("Affichage de l'activité dans 'AllUserActivityArray' avec la key :  " + keyRef);};
-    return allUserActivityArray.find(activity => activity._id === keyRef);
-}
-
-
-
 
 // ------------------------------FIN fonction générale pour activity ----------------------------------
 
@@ -743,7 +735,7 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
 
     // Insère également dans l'array d'objet
     allUserActivityArray[newActivityToAdd._id] = newActivityToAdd;
-    if (devMode === true){console.log(allUserActivityArray);};
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
 
 
 
@@ -787,7 +779,7 @@ async function eventInsertActivityModification(dataToInsert) {
 
     // met à jour l'array d'objet
     allUserActivityArray[currentActivityEditorID] = activityUpdated;
-    if (devMode === true){console.log(allUserActivityArray);};
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
 
     // est ce que la derniere activité est planifié donc pas de check reward
     const isCheckRewardsRequiered = dataToInsert.isPlanned === false;
@@ -854,7 +846,7 @@ async function eventDeleteActivity(idToDelete) {
     // met à jour l'array d'objet
     delete allUserActivityArray[idToDelete];
 
-    if (devMode === true){console.log(allUserActivityArray);};
+    if (devMode === true){console.log("allUserActivityArray :",allUserActivityArray);};
 
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);

@@ -49,7 +49,7 @@ async function onLoadTemplateFromDB() {
             });
         
         if (devMode === true) {
-            console.log("[DATABASE] [TEMPLATE] Templates chargés :", userTemplateListItems);
+            console.log("[DATABASE] [TEMPLATE] Loading userTemplateListItems :", userTemplateListItems);
         }
     } catch (err) {
         console.error("[DATABASE] [TEMPLATE] Erreur lors du chargement:", err);
@@ -551,7 +551,7 @@ async function eventInsertNewTemplate(templateToInsertFormat) {
     // Insère en variable
     userTemplateListItems[templateAdded._id] = { activityName : templateAdded.activityName, title:templateAdded.title};
 
-    if (devMode=== true) {console.log(userTemplateListItems);};
+    if (devMode=== true) {console.log("userTemplateListItems :",userTemplateListItems);};
 
 
     // Actualise le tableau de clé des modèles
@@ -577,7 +577,7 @@ async function eventInsertTemplateModification(templateToInsertFormat) {
     //Modifie la variable
     userTemplateListItems[currentTemplateEditorID] = { activityName : templateModified.activityName, title:templateModified.title};
 
-    if (devMode=== true) {console.log(userTemplateListItems);};
+    if (devMode=== true) {console.log("userTemplateListItems :",userTemplateListItems);};
 
     // Actualise le tableau de clé des modèles
     onUpdateTemplateKeys();
@@ -683,7 +683,7 @@ async function eventDeleteTemplate(idToDelete) {
     //supprime de la variable
     delete userTemplateListItems[idToDelete];
 
-    if (devMode=== true) {console.log(userTemplateListItems);};
+    if (devMode === true) {console.log("userTemplateListItems :",userTemplateListItems);};
 
     //actualise le tableau des clés
     onUpdateTemplateKeys();

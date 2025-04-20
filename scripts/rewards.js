@@ -730,8 +730,7 @@ function onSearchSpecifyRewards(activityTargetName,filteredKeys) {
         break;
     }
 
-    if (devMode === true){console.log("[REWARDS] FIN de traitement des trophés par type d'activité. Résultat : ");};
-    if (devMode === true){console.log(rewardsEligibleArray);};
+    if (devMode === true){console.log("[REWARDS] FIN de traitement des trophés par type d'activité. Résultat : ",rewardsEligibleArray);};
 
 }
 
@@ -742,10 +741,8 @@ async function onAffectFinalRewardsToUser() {
     
     if (devMode === true){
         console.log("[REWARDS] Trouve les trophés réelle à affecter à l'USER ");
-        console.log("[REWARDS] User éligible à : ");
-        console.log(rewardsEligibleArray);
-        console.log("[REWARDS] déjà possédé par l'user : ");
-        console.log(userRewardsArray);
+        console.log("[REWARDS] User éligible à : ",rewardsEligibleArray);
+        console.log("[REWARDS] déjà possédé par l'user : ",userRewardsArray);
     };
 
     if (devMode === true){console.log("[REWARDS] ajout des récompenses à l'utilisateur ");};

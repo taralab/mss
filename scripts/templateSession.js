@@ -5,7 +5,7 @@ let templateSessionsNameList = {
     },
     templateSessionKeys = [],
     isTemplateSessionLoadedFromBase = false,//pour une premier chargement via la base de donnée
-    maxTemplateSession = 30,
+    maxTemplateSession = 20,
     templateSessionEditorMode = "", // le mode d'ouverture de l'éditeur (creation,modification)
     currentTemplateSessionID = "",
     currentTemplateSessionData;//pour comparer si ça a été modifié ou non
@@ -88,7 +88,7 @@ async function onLoadTemplateSessionNameFromDB() {
             });
 
         if (devMode === true) {
-            console.log("[DATABASE] [TEMPLATE] [SESSION] Templates chargés :", templateSessionsNameList);
+            console.log("[DATABASE] [TEMPLATE] [SESSION] loading templateSessionsNameList :", templateSessionsNameList);
         }
     } catch (err) {
         console.error("[DATABASE] [TEMPLATE] [SESSION] Erreur lors du chargement:", err);
@@ -106,7 +106,7 @@ function onUpdateAndSortTemplateSessionKey() {
 
     if (devMode === true) {
         console.log("actualisation et trie");
-        console.log(templateSessionsNameList[templateSessionKeys[0]].name);
+        console.log("templateSessionsNameList:",templateSessionsNameList);
         console.log(templateSessionKeys);
     };
 
@@ -231,7 +231,7 @@ async function eventUpdateTemplateSessionList() {
     onUpdateAndSortTemplateSessionKey();
 
 
-    if (devMode === true){console.log(templateSessionsNameList)};
+    if (devMode === true){console.log("templateSessionsNameList:",templateSessionsNameList);};
 
     // Traitement du bouton de limite de création
     gestionMaxTemplateSessionReach();
@@ -418,7 +418,7 @@ async function onClickSaveFromTemplateSessionEditor() {
             templateSessionsNameList[templateAdded._id] = {name: templateAdded.sessionName};
 
 
-        if (devMode === true) {console.log(templateSessionsNameList);};
+        if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
             // Notification
             onShowNotifyPopup(notifyTextArray.templateCreation);
@@ -429,7 +429,7 @@ async function onClickSaveFromTemplateSessionEditor() {
 
             // Modifie également à la variable
             templateSessionsNameList[currentTemplateSessionID] = {name: templateSessionTosave.sessionName};
-            if (devMode === true) {console.log(templateSessionsNameList);};
+            if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
             // Notification
             onShowNotifyPopup(notifyTextArray.templateModification);
@@ -508,7 +508,7 @@ async function eventDeleteTemplateSessionModel() {
     //supprime également dans la variable
     delete templateSessionsNameList[currentTemplateSessionID];
 
-    if (devMode === true) {console.log(templateSessionsNameList);};
+    if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
     // Notification
     onShowNotifyPopup(notifyTextArray.templateDeleted);
