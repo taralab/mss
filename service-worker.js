@@ -77,7 +77,9 @@ const ICONS = [
   `${basePath}Icons/Icon-nav-decrease.webp`,
   `${basePath}Icons/Icon-Session.webp`,
   `${basePath}Icons/Icon-Send.webp`,
-   `${basePath}Icons/Icon-Counter-Done.webp`
+  `${basePath}Icons/Icon-Counter-Done.webp`,
+  `${basePath}Icons/Icon-Close.webp`,
+  `${basePath}Icons/Icon-Search.webp`
 ];
 
 const IMAGES = [
