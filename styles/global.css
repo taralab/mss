@@ -2180,7 +2180,7 @@ div.divEditorTemplateSessionArea{
 
 
 
-/* Recherche */
+/*  --------------------------  Recherche ----------------------- */
 p.search-area{
     display: inline;
     text-align: right;
@@ -2191,6 +2191,7 @@ p.search-area{
 p.search-area  input{
     border-radius: 10px;
     border : none;
+    color: var(--colorMainTheme1);
 }
 
 

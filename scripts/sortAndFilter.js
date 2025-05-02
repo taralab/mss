@@ -1,3 +1,14 @@
+// Concept des filtre, tries et recherche.
+
+//L'affichage a lieu dans le sens suivants : 
+// Keys trouvé via le champ recherche (si vide passe à l'étape suivante)
+// puis récupère les keys selon le filtre en cours
+// puis passe au tries
+
+
+
+
+
 
 // Référencement des icones de tries
 
@@ -527,3 +538,15 @@ function onSortActivity(sortType, filteredDataKeys) {
 
 
 
+// RECHERCHE
+
+
+
+// Fonction de retrait des caractères spéciaux, accents etc.......
+function normalizeString(str) {
+    return str
+        .toLowerCase() // Convertir en minuscules
+        .normalize("NFD") // Normalisation Unicode pour décomposer les caractères accentués
+        .replace(/[\u0300-\u036f]/g, "") // Supprimer les marques diacritiques (accents)
+        .replace(/[^\w\s]/g, ''); // Enlever tous les caractères non alphanumériques et espaces
+}
