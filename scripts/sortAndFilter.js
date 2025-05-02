@@ -1,9 +1,10 @@
 // Concept des filtre, tries et recherche.
 
 //L'affichage a lieu dans le sens suivants : 
-// Keys trouvé via le champ recherche (si vide passe à l'étape suivante)
-// puis récupère les keys selon le filtre en cours
-// puis passe au tries
+
+// 1 puis récupère les keys selon le filtre en cours
+// 2 dans le filtre en cours recupère les keys sur les éléments recherchés
+// 3 puis passe au tries
 
 
 
@@ -359,7 +360,7 @@ function onFilterActivity(sortType,filterType,activityArray) {
 
         if (devMode === true){console.log(" [SORT FILTER] Demande de trie sur toutes les données");};
 
-        
+        //return à insérer ici ???
         onSortActivity(sortType,Object.keys(activityArray));
 
     } else if (filterType === "PLANNED"){
@@ -549,4 +550,39 @@ function normalizeString(str) {
         .normalize("NFD") // Normalisation Unicode pour décomposer les caractères accentués
         .replace(/[\u0300-\u036f]/g, "") // Supprimer les marques diacritiques (accents)
         .replace(/[^\w\s]/g, ''); // Enlever tous les caractères non alphanumériques et espaces
+}
+
+
+
+function eventUpdateActivityList() {
+    
+ 
+
+    // 1 récupère les keys selon le filtre en cours
+    let filteredDataKeys = onFilterActivity(filterType,allUserActivityArray);
+
+
+    // 2 si il y a un élément à rechercher,filtre sur les éléments récupérés par la recherche ou sinon sur tous les éléments
+    let userSearchResultKeys = [];
+    let sortedKeys = [];
+
+    if (document.getElementById("inputSearchActivity").value !="") {
+        userSearchResultKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+        ? onSearchDataInActivities(filteredDataKeys)
+        : onSearchDataInActivities(Object.keys(allUserActivityArray));
+
+        // 3 Puis lance le trie sur le resultat obtenue
+        sortedKeys = onSortActivity(sortType,userSearchResultKeys);
+    } else {
+
+        // 3  si pas d'élément à rechercher, lance le trie soit selon le filtre encours soit via toutes les data
+        sortedKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+        ? onSortActivity(sortType,filteredDataKeys)
+        : onSortActivity(sortType,Object.keys(allUserActivityArray));
+    }
+    
+
+    // 4 fonction d'affichage sur sortedKeys
+    // Ajoute uniquement les activités triées (par leurs clés)
+    onInsertActivityInList(sortedKeys);
 }
