@@ -344,11 +344,10 @@ function onCloseFakeSelectFilter(event){
 
 // Fonction de filtre de l'affichage des activité
 
-function onFilterActivity(sortType,filterType,activityArray) {
+function onFilterActivity(filterType) {
 
     if (devMode === true){
-        console.log("[SORT FILTER] fonction de filtre sur activité");
-        console.log("[SORT FILTER] type de trie = " + sortType + " type de filtre = " + filterType);
+        console.log("[SORT FILTER] fonction de filtre sur activité par " ,filterType);
     };
 
     let filteredKeys = [];
@@ -358,10 +357,9 @@ function onFilterActivity(sortType,filterType,activityArray) {
     if (filterType === defaultFilter) {
         // Insertion de tous les activités dans la liste
 
-        if (devMode === true){console.log(" [SORT FILTER] Demande de trie sur toutes les données");};
+        if (devMode === true){console.log(" [SORT FILTER] Trie par défaut donc retourne vide");};
 
-        //return à insérer ici ???
-        onSortActivity(sortType,Object.keys(activityArray));
+        return filteredKeys;
 
     } else if (filterType === "PLANNED"){
         if (devMode === true){console.log(" [SORT FILTER] Demande de filtre sur les activités planifiées");};
@@ -370,7 +368,7 @@ function onFilterActivity(sortType,filterType,activityArray) {
             .filter(([key, value]) => value.isPlanned === true)
             .map(([key, value]) => key);
 
-        onSortActivity(sortType,filteredKeys);
+        return filteredKeys;
 
     } else {
         filteredKeys = Object.entries(allUserActivityArray)
@@ -382,7 +380,7 @@ function onFilterActivity(sortType,filterType,activityArray) {
         // Lance le trie uniquement sur les éléments filtré
 
         console.log(filteredKeys);
-        onSortActivity(sortType,filteredKeys);
+        return filteredKeys;
 
     };
 
@@ -409,7 +407,10 @@ function onChangeSelectorFilter(value,idBtnRadioTarget){
     document.getElementById(idBtnRadioTarget).classList.add("selected");
 
     onCloseFakeSelectFilter();
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    
+
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
 };
 
@@ -480,8 +481,8 @@ function onUserChangeSortType(sortCategory) {
 
 
 
-
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
 
 };
@@ -533,18 +534,119 @@ function onSortActivity(sortType, filteredDataKeys) {
 
     onSetIconSort();
 
+    return sortedKeys;
+}
+
+
+
+function eventUpdateActivityList() {
+    console.log("Actualisation liste activités");
+ 
+
+    // 1 récupère les keys selon le filtre en cours
+    // si pas de filtre ne récupère rien
+    let filteredDataKeys = onFilterActivity(currentFilter,allUserActivityArray);
+    if (filteredDataKeys.length === 0) {
+        console.log("Aucune filtre en cours");
+    }else{
+        console.log("Un filtre en cours. Nombre de key trouvé : ", filteredDataKeys.length);
+    }
+    
+
+    // 2 si il y a un élément à rechercher,filtre sur les éléments récupérés par la recherche ou sinon sur tous les éléments
+    let userSearchResultKeys = [],
+        sortedKeys = [];
+
+    let searchActivityValue = document.getElementById("inputSearchActivity").value;
+    console.log("Valeur de l'INPUT recherche :" ,searchActivityValue);
+
+    if (searchActivityValue !="") {
+        console.log("Champ de recherche Remplit. lance la recherche pour :" ,searchActivityValue);
+        userSearchResultKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+            ? onSearchDataInActivities(filteredDataKeys,searchActivityValue)
+            : onSearchDataInActivities(Object.keys(allUserActivityArray),searchActivityValue
+        );
+
+        // 3 Puis lance le trie sur le resultat obtenue
+        sortedKeys = onSortActivity(currentSortType,userSearchResultKeys);
+    } else {
+        console.log("Champ de recherche vide. Passe directement au trie");
+        // 3  si pas d'élément à rechercher, lance le trie soit selon le filtre encours soit via toutes les data
+        sortedKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+        ? onSortActivity(currentSortType,filteredDataKeys)
+        : onSortActivity(currentSortType,Object.keys(allUserActivityArray));
+    }
+    
+
+    // 4 fonction d'affichage sur sortedKeys
     // Ajoute uniquement les activités triées (par leurs clés)
+
+    console.log("Lance insertion activité. Nbre de clé trouvé : ",sortedKeys);
     onInsertActivityInList(sortedKeys);
 }
 
 
 
+
+
+
+
+
 // RECHERCHE
 
+// Lorsque l'utilisateur tape un texte dans le champ de recherche
+let debounceSearchTimeout; 
+function onUserSetResearchText() {
+  clearTimeout(debounceSearchTimeout); // ← on efface l’ancien délai s’il existe
+
+  debounceSearchTimeout = setTimeout(() => {
+    eventUpdateActivityList();
+  }, 1000); // ← lancé que si aucun nouvel appel ne survient dans les 1000 ms
+}
+
+
+
+
+
+
+
+
+
+
+
+// Fonction de recherche
+function onSearchDataInActivities(filteredKeys,dataTosearch) {
+    
+    console.log("dataTosearch :" ,dataTosearch);
+    console.log(filteredKeys);
+
+    // récupère le texte de recherche normalisé
+    let textToFind = normalizeString(dataTosearch);
+
+    console.log("text à trouver : ", textToFind);
+
+    let keysFound = [];
+
+    //  2 pour chaque éléments convertie location et comment puis vérifie correspondance et récupère la key
+    filteredKeys.forEach(key =>{
+
+        const location = normalizeString(allUserActivityArray[key].location);
+        const comment = normalizeString(allUserActivityArray[key].comment);
+
+        if (location.includes(textToFind) || comment.includes(textToFind)){
+            keysFound.push(key)
+        }
+    });
+
+
+    // Retourne les keys 
+    return keysFound;
+}
 
 
 // Fonction de retrait des caractères spéciaux, accents etc.......
 function normalizeString(str) {
+
     return str
         .toLowerCase() // Convertir en minuscules
         .normalize("NFD") // Normalisation Unicode pour décomposer les caractères accentués
@@ -554,35 +656,3 @@ function normalizeString(str) {
 
 
 
-function eventUpdateActivityList() {
-    
- 
-
-    // 1 récupère les keys selon le filtre en cours
-    let filteredDataKeys = onFilterActivity(filterType,allUserActivityArray);
-
-
-    // 2 si il y a un élément à rechercher,filtre sur les éléments récupérés par la recherche ou sinon sur tous les éléments
-    let userSearchResultKeys = [];
-    let sortedKeys = [];
-
-    if (document.getElementById("inputSearchActivity").value !="") {
-        userSearchResultKeys = (filteredDataKeys && filteredDataKeys.length > 0)
-        ? onSearchDataInActivities(filteredDataKeys)
-        : onSearchDataInActivities(Object.keys(allUserActivityArray));
-
-        // 3 Puis lance le trie sur le resultat obtenue
-        sortedKeys = onSortActivity(sortType,userSearchResultKeys);
-    } else {
-
-        // 3  si pas d'élément à rechercher, lance le trie soit selon le filtre encours soit via toutes les data
-        sortedKeys = (filteredDataKeys && filteredDataKeys.length > 0)
-        ? onSortActivity(sortType,filteredDataKeys)
-        : onSortActivity(sortType,Object.keys(allUserActivityArray));
-    }
-    
-
-    // 4 fonction d'affichage sur sortedKeys
-    // Ajoute uniquement les activités triées (par leurs clés)
-    onInsertActivityInList(sortedKeys);
-}

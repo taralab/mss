@@ -751,8 +751,8 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
 
-    // Lancement de l'actualisation sur le filtre en cours
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
 
     // Si c'est une activité généré depuis les session, met fin à la fonction
@@ -793,8 +793,8 @@ async function eventInsertActivityModification(dataToInsert) {
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
 
-    // Lancement de l'actualisation sur le filtre en cours
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
     // Popup notification
     onShowNotifyPopup(notifyTextArray.modification);
@@ -851,8 +851,8 @@ async function eventDeleteActivity(idToDelete) {
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
 
-    // Lancement de l'actualisation sur le filtre en cours
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
     // Popup notification
     onShowNotifyPopup(notifyTextArray.delete);

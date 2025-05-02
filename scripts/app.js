@@ -323,9 +323,6 @@ async function firstActualisation() {
     }
     console.log("userInfo.ConditionAccepted : " + userInfo.conditionAccepted );
 
-    //PROFIL : set dans le html, le nom de l'utilisateur
-    // document.getElementById("customInfo").innerHTML = userInfo.pseudo;
-
     // FAVORIS
     onGenerateActivityOptionChoice("selectorCategoryChoice");
     onGenerateFakeOptionList("divFakeSelectOptList");
@@ -361,8 +358,8 @@ async function firstActualisation() {
     // Generation du trie dynamique
     onGenerateDynamiqueFilter(allUserActivityArray);
 
-    // Lancement de l'actualisation sur le filtre en cours
-    onFilterActivity(currentSortType,currentFilter,allUserActivityArray);
+    // Actualisation de l'affichage des activités
+    eventUpdateActivityList();
 
     // TEMPLATE
     onUpdateTemplateList(false);
