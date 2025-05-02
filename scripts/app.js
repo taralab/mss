@@ -324,7 +324,7 @@ async function firstActualisation() {
     console.log("userInfo.ConditionAccepted : " + userInfo.conditionAccepted );
 
     //PROFIL : set dans le html, le nom de l'utilisateur
-    document.getElementById("customInfo").innerHTML = userInfo.pseudo;
+    // document.getElementById("customInfo").innerHTML = userInfo.pseudo;
 
     // FAVORIS
     onGenerateActivityOptionChoice("selectorCategoryChoice");

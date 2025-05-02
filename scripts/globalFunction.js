@@ -604,15 +604,19 @@ function onDisplayUserFriendlyDate(date){
 
 
 
+// Gestion de l'affichage de l'information complémentaire des menus
+function onHideCustomInfo() {
+    document.getElementById("customInfo").style.display = "none";
+}
+
+function onDisplayCustomInfo() {
+    document.getElementById("customInfo").style.display = "inline";
+}
 
 
-
-
-
-
-let allDivHomeToDisplayNone = ["divMainBtnMenu","btnNewActivity","divFilterSort","divItemList"],
+let allDivHomeToDisplayNone = ["divMainBtnMenu","btnNewActivity","divFilterSort","divItemList","pSearchArea"],
     allDivHomeToDisplayBlock = ["btnNewActivity"],
-    allDivHomeToDisplayFlex = ["divMainBtnMenu","divFilterSort","divItemList"];
+    allDivHomeToDisplayFlex = ["divMainBtnMenu","divFilterSort","divItemList","pSearchArea"];
 
 
 
@@ -642,6 +646,7 @@ function onChangeMenu(menuTarget) {
             pMenuTitleRef.innerHTML = "Session";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnSession","divSession"],[],[],[],[]);
             onOpenMenuSession();
+            onDisplayCustomInfo();
         break;
         
         case "Stat":
@@ -808,6 +813,7 @@ function onLeaveMenu(menuTarget) {
         case "Session":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Session");};
             onChangeDisplay(["divSession","divBtnSession"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
+            onHideCustomInfo();
         break;
         
         case "Stat":

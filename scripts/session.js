@@ -1559,7 +1559,7 @@ function onSetSessionTableLineFromTemplate(templateData) {
 function onClickReturnFromSession() {
 
     // Affiche à nouveau le pseudo
-    document.getElementById("customInfo").innerHTML = userInfo.pseudo;
+    // document.getElementById("customInfo").innerHTML = userInfo.pseudo;
 
     //vide le tableau
     document.getElementById("bodyTableGenerateSession").innerHTML = "";

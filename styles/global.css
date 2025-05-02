@@ -327,11 +327,13 @@ p.app-title{
 }
 
 p.custom-info{
-    display: inline;
+    display: none;
     text-align: right;
     margin-right: 30px;
     color: white;
 }
+
+
 
 
 
@@ -1081,7 +1083,7 @@ div.buttonAcceptation{
     left: 0;
     right: 0;
     box-shadow: var(--boxShadow);
-    z-index: 999;
+    z-index: 10;
 
 }
 
@@ -2177,6 +2179,19 @@ div.divEditorTemplateSessionArea{
 
 
 
+
+/* Recherche */
+p.search-area{
+    display: inline;
+    text-align: right;
+    margin-right: 30px;
+    z-index: 11;
+}
+
+p.search-area  input{
+    border-radius: 10px;
+    border : none;
+}
 
 
 
