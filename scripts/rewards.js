@@ -194,6 +194,12 @@ function onOpenMenuRewards(){
     divRewardsListRef = document.getElementById("divRewardsList");
 
 
+
+    // affiche le nombre de trophé débloqué dans le menu contextuel
+    let textInfoToDisplay = `Obtenues : ${userRewardsArray.length}`;
+
+    document.getElementById("customInfo").innerHTML = textInfoToDisplay;
+
     // Prend les récompenses de l'utilisateur pour les afficher dans la liste
     onLoadUserRewardsList();
     

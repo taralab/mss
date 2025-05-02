@@ -664,7 +664,7 @@ function onChangeMenu(menuTarget) {
             if (document.getElementById("btnMenuRewards").classList.contains("rewardAvailable")) {
                 document.getElementById("btnMenuRewards").classList.remove("rewardAvailable");
             };
-
+            onDisplayCustomInfo();
             onOpenMenuRewards();
         break;
         case "NewActivity":
@@ -823,6 +823,7 @@ function onLeaveMenu(menuTarget) {
         case "Rewards":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Rewards");};
             onChangeDisplay(["divRewards","divBtnRewards"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
+            onHideCustomInfo();
         break;
         case "Activity":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Activity");};
