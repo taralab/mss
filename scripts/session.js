@@ -979,7 +979,17 @@ function onResetCounterEditor() {
 
 
 function onClickSendSessionToActivity() {
-    onGenerateFakeSelectSession();
+
+
+    // condition : Avoir au moins 1 compteur
+
+    if (Object.keys(userCounterList).length > 0) {
+        onGenerateFakeSelectSession();
+    }else{
+        alert("Vous n'avez aucun compteur à envoyer !");
+    }
+
+    
 }
 
 
