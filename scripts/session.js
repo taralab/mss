@@ -988,8 +988,6 @@ function onClickSendSessionToActivity() {
     }else{
         alert("Vous n'avez aucun compteur à envoyer !");
     }
-
-    
 }
 
 
