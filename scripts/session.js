@@ -403,6 +403,10 @@ async function eventSaveModifyCounter() {
     document.getElementById(`spanSerieTarget_${currentCounterEditorID}`).innerHTML = `/${counterData.serieTarget}`;
     document.getElementById(`inputRepIncrement_${currentCounterEditorID}`).value = counterData.repIncrement;
     
+    console.log("demande de vérification DONE");
+
+    // Met également à jour l'image DONE si nécessaire
+    onCheckTargetReach(currentCounterEditorID);
 
     // Sauvegarde en localStorage
     onUpdateCounterSessionInStorage();
@@ -600,15 +604,21 @@ async function onClickIncrementeCounter(idRef) {
 
 // Si objectif non égale à zero atteind
 function onCheckTargetReach(idRef) {
+
     let targetReach = false;
 
     if (userCounterList[idRef].serieTarget === 0) {
        return targetReach;
     } else if (userCounterList[idRef].currentSerie === userCounterList[idRef].serieTarget){
+
         targetReach = true;
         document.getElementById(`spanSerieTarget_${idRef}`).classList.add("target-reach");
         document.getElementById(`imgCounterTargetDone_${idRef}`).classList.add("counterTargetDone");
+    } else {
+        document.getElementById(`spanSerieTarget_${idRef}`).classList.remove("target-reach");
+        document.getElementById(`imgCounterTargetDone_${idRef}`).classList.remove("counterTargetDone");
     }
+
     return targetReach;
 }
 
