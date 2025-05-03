@@ -1,11 +1,3 @@
-// Concept des filtre, tries et recherche.
-
-//L'affichage a lieu dans le sens suivants : 
-
-// 1 puis récupère les keys selon le filtre en cours
-// 2 dans le filtre en cours recupère les keys sur les éléments recherchés
-// 3 puis passe au tries
-
 
 
 
@@ -86,7 +78,8 @@ function onSetIconSort() {
 //  variable et referencement
 let defaultFilter = "ALL",
     currentFilter = defaultFilter, // le type de filtre en cours
-    selectorRef = document.getElementById("selectorCategoryFilter");
+    selectorRef = document.getElementById("selectorCategoryFilter"),
+    debounceSearchDelay = 700;//delai avant de lancer la recherche(ms)
 
 
 
@@ -379,7 +372,6 @@ function onFilterActivity(filterType) {
         if (devMode === true){console.log("[SORT FILTER] Demande de trie sur les données filtré");};
         // Lance le trie uniquement sur les éléments filtré
 
-        console.log(filteredKeys);
         return filteredKeys;
 
     };
@@ -529,65 +521,13 @@ function onSortActivity(sortType, filteredDataKeys) {
     });
 
     if (devMode === true) {
-        console.log("[SORT FILTER] Clés triées :", sortedKeys);
+        console.log("[SORT FILTER] Nbre de Clés triées :", sortedKeys.length);
     }
 
     onSetIconSort();
 
     return sortedKeys;
 }
-
-
-
-function eventUpdateActivityList() {
-    console.log("Actualisation liste activités");
- 
-
-    // 1 récupère les keys selon le filtre en cours
-    // si pas de filtre ne récupère rien
-    let filteredDataKeys = onFilterActivity(currentFilter,allUserActivityArray);
-    if (filteredDataKeys.length === 0) {
-        console.log("Aucune filtre en cours");
-    }else{
-        console.log("Un filtre en cours. Nombre de key trouvé : ", filteredDataKeys.length);
-    }
-    
-
-    // 2 si il y a un élément à rechercher,filtre sur les éléments récupérés par la recherche ou sinon sur tous les éléments
-    let userSearchResultKeys = [],
-        sortedKeys = [];
-
-    let searchActivityValue = document.getElementById("inputSearchActivity").value;
-    console.log("Valeur de l'INPUT recherche :" ,searchActivityValue);
-
-    if (searchActivityValue !="") {
-        console.log("Champ de recherche Remplit. lance la recherche pour :" ,searchActivityValue);
-        userSearchResultKeys = (filteredDataKeys && filteredDataKeys.length > 0)
-            ? onSearchDataInActivities(filteredDataKeys,searchActivityValue)
-            : onSearchDataInActivities(Object.keys(allUserActivityArray),searchActivityValue
-        );
-
-        // 3 Puis lance le trie sur le resultat obtenue
-        sortedKeys = onSortActivity(currentSortType,userSearchResultKeys);
-    } else {
-        console.log("Champ de recherche vide. Passe directement au trie");
-        // 3  si pas d'élément à rechercher, lance le trie soit selon le filtre encours soit via toutes les data
-        sortedKeys = (filteredDataKeys && filteredDataKeys.length > 0)
-        ? onSortActivity(currentSortType,filteredDataKeys)
-        : onSortActivity(currentSortType,Object.keys(allUserActivityArray));
-    }
-    
-
-    // 4 fonction d'affichage sur sortedKeys
-    // Ajoute uniquement les activités triées (par leurs clés)
-
-    console.log("Lance insertion activité. Nbre de clé trouvé : ",sortedKeys);
-    onInsertActivityInList(sortedKeys);
-}
-
-
-
-
 
 
 
@@ -601,7 +541,7 @@ function onUserSetResearchText() {
 
   debounceSearchTimeout = setTimeout(() => {
     eventUpdateActivityList();
-  }, 1000); // ← lancé que si aucun nouvel appel ne survient dans les 1000 ms
+  }, debounceSearchDelay); // ← lancé que si aucun nouvel appel ne survient dans les 1000 ms
 }
 
 
@@ -617,13 +557,14 @@ function onUserSetResearchText() {
 // Fonction de recherche
 function onSearchDataInActivities(filteredKeys,dataTosearch) {
     
-    console.log("dataTosearch :" ,dataTosearch);
-    console.log(filteredKeys);
-
+    
     // récupère le texte de recherche normalisé
     let textToFind = normalizeString(dataTosearch);
 
-    console.log("text à trouver : ", textToFind);
+    if(devMode === true){
+        console.log("[SEARCH] text à trouver normalisé : ", textToFind);
+    }
+    
 
     let keysFound = [];
 
@@ -642,6 +583,9 @@ function onSearchDataInActivities(filteredKeys,dataTosearch) {
     // Retourne les keys 
     return keysFound;
 }
+
+
+
 
 
 // Fonction de retrait des caractères spéciaux, accents etc.......

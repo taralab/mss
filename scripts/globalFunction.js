@@ -754,6 +754,7 @@ function onChangeMenu(menuTarget) {
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Info");};
             pMenuTitleRef.innerHTML = "A propos";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnInfo","divInfo"],[],[],[],[]);
+            onDisplayCustomInfo();
             onOpenMenuInfo();
         break;
 
@@ -884,6 +885,7 @@ function onLeaveMenu(menuTarget) {
         case "Info":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Info");};
             onChangeDisplay(["divInfo","divBtnInfo"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
+            onHideCustomInfo();
         break;
 
 

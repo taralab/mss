@@ -1274,7 +1274,7 @@ div.statYears{
     transition: opacity 0.3s ease;
     left: 0;
     right: 0;
-    z-index: 1000;
+    z-index: 9;
 
 }
 

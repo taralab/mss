@@ -237,6 +237,70 @@ async function findActivityById(activityId) {
     }
 }
 
+// Sequence d'actualisation de la liste d'activité
+
+//L'affichage a lieu dans le sens suivants : 
+
+// 1 puis récupère les keys selon le filtre en cours
+// 2 dans le filtre en cours recupère les keys sur les éléments recherchés
+// 3 puis passe au tries
+
+
+
+
+
+
+function eventUpdateActivityList() {
+    if (devMode === true) {console.log("[ACTUALISATION]Actualisation liste activités");};
+ 
+
+    // 1 récupère les keys selon le filtre en cours
+    // si pas de filtre ne récupère rien
+    let filteredDataKeys = onFilterActivity(currentFilter,allUserActivityArray);
+
+    if (devMode === true) {
+        if (filteredDataKeys.length === 0) {
+            console.log("[ACTUALISATION] Aucune filtre en cours");
+        }else{
+            console.log(`[ACTUALISATION] Un filtre en cours : ${currentFilter}. Nombre de key pour le filtre trouvé : ${filteredDataKeys.length}`);
+        }
+    }
+
+   
+    
+
+    // 2 si il y a un élément à rechercher,filtre sur les éléments récupérés par la recherche ou sinon sur tous les éléments
+    let userSearchResultKeys = [],
+        sortedKeys = [];
+
+    let searchActivityValue = document.getElementById("inputSearchActivity").value;
+    if (devMode === true) {console.log("[ACTUALISATION] Valeur de l'INPUT recherche :" ,searchActivityValue);};
+
+    if (searchActivityValue !="") {
+        if (devMode === true) {console.log("[ACTUALISATION] Champ de recherche Remplit. lance la recherche pour :" ,searchActivityValue);};
+        userSearchResultKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+            ? onSearchDataInActivities(filteredDataKeys,searchActivityValue)
+            : onSearchDataInActivities(Object.keys(allUserActivityArray),searchActivityValue
+        );
+
+        // 3 Puis lance le trie sur le resultat obtenue
+        sortedKeys = onSortActivity(currentSortType,userSearchResultKeys);
+    } else {
+        if (devMode === true) {console.log("[ACTUALISATION] Champ de recherche vide. Passe directement au trie par : ", currentSortType);};
+        // 3  si pas d'élément à rechercher, lance le trie soit selon le filtre encours soit via toutes les data
+        sortedKeys = (filteredDataKeys && filteredDataKeys.length > 0)
+        ? onSortActivity(currentSortType,filteredDataKeys)
+        : onSortActivity(currentSortType,Object.keys(allUserActivityArray));
+    }
+    
+
+    // 4 fonction d'affichage sur sortedKeys
+    // Ajoute uniquement les activités triées (par leurs clés)
+
+    if (devMode === true) {console.log("[ACTUALISATION] Lance insertion activité. Nbre de clé trouvé : ",sortedKeys.length);};
+    onInsertActivityInList(sortedKeys);
+}
+
 
 
 
@@ -881,7 +945,11 @@ function onAnnulDeleteActivity(event) {
 
 
 
-// gestion du format des heures en passe par des inputs number
+
+
+
+
+
 
 
 

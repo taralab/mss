@@ -37,6 +37,12 @@
 function onOpenMenuInfo(){
     // Insert les conditions dynamique
     document.getElementById("divConditionDynamicTextInfo").innerHTML = conditionText;
+
+
+    // Récupère le numéro de version dans le HTML pour l'afficher dans info contextuel
+    let version = document.getElementById("pInfoVersion").innerHTML;
+    document.getElementById("customInfo").innerHTML = version;
+
 }
    
    
