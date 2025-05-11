@@ -1061,7 +1061,7 @@ async function onSendSessionToActivity(activityTarget) {
         distance : "",
         duration : sessionDuration,
         comment : sessionText,
-        divers:{},
+        createdAt : new Date().toISOString(),
         isPlanned : false
     };
 

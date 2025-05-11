@@ -308,8 +308,6 @@ async function initApp() {
 initApp().then(() => firstActualisation());
 
 async function firstActualisation() {
-
-
     // Set le devMode
 
     devMode = userSetting.devMode;
