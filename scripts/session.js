@@ -12,7 +12,7 @@ let userCounterList = {
     counterEditorMode, //creation ou modification
     currentCounterEditorID,//L'id du compteur en cours de modification
     popupSessionMode,//set le mode d'utilisation du popup (removeCounter,resetAllCounter,clearSession,deleteModel)
-    sessionStartTime = "00:00:00",//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
+    sessionStartTime = "--:--:--",//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
     sessionStorageName = "MSS_sessionCounterList",
     sessionStartTimeStorageName = "MSS_sessionStartTime";
 
@@ -111,7 +111,7 @@ function getCounterListFromLocalStorage() {
 
 
 function getSessionStartTimeFromLocalStorage() {
-    sessionStartTime = localStorage.getItem(sessionStartTimeStorageName) || "00:00:00";
+    sessionStartTime = localStorage.getItem(sessionStartTimeStorageName) || "--:--:--";
 }
 
 
@@ -128,7 +128,7 @@ async function onOpenMenuSession(){
     if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // set l'heure d'initialisation de session dans le texte
-    document.getElementById("customInfo").innerHTML = `<b>Début : ${sessionStartTime}<b>`;
+    document.getElementById("customInfo").innerHTML = `<b>Début à : ${sessionStartTime}<b>`;
 
     onDisplayCounter(userCounterList);
     // Gestion si max atteind
@@ -148,7 +148,7 @@ async function onOpenMenuSession(){
 //lorsque reset all ou génénère la session
 function onSetSessionStartTime() {
     sessionStartTime = onGetCurrentTimeAndSecond();
-    document.getElementById("customInfo").innerHTML = `<b>Début : ${sessionStartTime}<b>`;
+    document.getElementById("customInfo").innerHTML = `<b>Début à : ${sessionStartTime}<b>`;
 }
 
 
@@ -1219,7 +1219,8 @@ function onGetSessionDuration(heureDebut, heureFin) {
         return hh * 3600 + mm * 60 + ss;
     }
 
-    let secondesDebut = enSecondes(heureDebut),
+    // si heure de début n'est pas paramétré : met à 00:00:00
+    let secondesDebut = heureDebut != "--:--:--" ? enSecondes(heureDebut):enSecondes("00:00:00"),
         secondesFin = enSecondes(heureFin);
 
     // Gérer le cas où l'heure de fin est après minuit (jour suivant)
