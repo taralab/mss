@@ -22,6 +22,10 @@
 body{
     margin: 0;
     padding: 0;
+    background-image: url(../Icons/Background-texture.webp);
+    background-repeat: no-repeat; /* ou 'no-repeat' si tu veux l’utiliser une seule fois */
+    background-size:cover; /* ou 'cover' selon l’effet désiré */
+    background-position: center top; /* ou 'center center' */
     background-color: #f4f4f9;
     font-family: 'Arial', sans-serif;
 }
@@ -429,7 +433,7 @@ button.btn-sort-Selected{
     background-color: var(--colorLightGray); 
     padding: 10px 5px 10px 5px;
     border-radius: 10px;
-    /* box-shadow: var(--boxShadowMoins); */
+    box-shadow: var(--boxShadowMoins);
 }
 
 .item-planned {
