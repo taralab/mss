@@ -1816,6 +1816,7 @@ div.disabledEvent{
     padding: 0px 5px 10px 5px;
     border-radius: 10px;
     margin-bottom: 20px;
+    box-shadow: var(--boxShadow);
 }
 
 
