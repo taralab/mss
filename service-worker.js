@@ -28,7 +28,8 @@ const CRITICAL_ASSETS = [
   `${basePath}scripts/stat.js`,
   `${basePath}scripts/rewards.js`,
   `${basePath}scripts/session.js`,
-  `${basePath}scripts/templateSession.js`
+  `${basePath}scripts/templateSession.js`,
+  `${basePath}scripts/planning.js`
 ];
 
 // Fichiers à mettre en cache (non critiques : Cache First)
@@ -80,7 +81,8 @@ const ICONS = [
   `${basePath}Icons/Icon-Counter-Done.webp`,
   `${basePath}Icons/Icon-Close.webp`,
   `${basePath}Icons/Icon-Search.webp`,
-  `${basePath}Icons/Background-texture.webp`
+  `${basePath}Icons/Background-texture.webp`,
+  `${basePath}Icons/Icon-Agenda-Hebdo.webp`
 ];
 
 const IMAGES = [
