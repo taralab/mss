@@ -870,7 +870,6 @@ function onLeaveMenu(menuTarget) {
         case "MenuTemplateSession":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : MenuTemplateSession");};
             onChangeDisplay(["divMenuTemplateSession","divBtnMenuTemplateSession"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
-            pMenuTitleRef.innerHTML = "Session";
         break;
         case "TemplateSessionEditor":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : TemplateSessionEditor");};
