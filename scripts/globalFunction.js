@@ -648,6 +648,14 @@ function onChangeMenu(menuTarget) {
             onOpenMenuSession();
             onDisplayCustomInfo();
         break;
+
+        case "Planning":
+            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Counter");};
+            pMenuTitleRef.innerHTML = "Planning";
+            onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnPlanning","divPlanning"],[],[],[],[]);
+            onOpenMenuPlanning();
+            // onDisplayCustomInfo();
+        break;
         
         case "Stat":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Stat");};
@@ -814,6 +822,12 @@ function onLeaveMenu(menuTarget) {
         case "Session":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Session");};
             onChangeDisplay(["divSession","divBtnSession"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
+            onHideCustomInfo();
+        break;
+
+        case "Planning":
+            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Planning");};
+            onChangeDisplay(["divPlanning","divBtnPlanning"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
             onHideCustomInfo();
         break;
         

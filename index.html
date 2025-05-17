@@ -317,6 +317,19 @@
 
     <!-- ----------------------------------  FIN    DIV SESSION     ------------------------------------------------>
 
+    <!-- ----------------------------------      DIV #PLANNING        ------------------------------------------------>
+    <div id="divPlanning" class="new-interface">
+        <!-- Injection de la liste des compteurs -->
+    </div>
+
+    <!-- Menu principale modele de session -->
+    <div id="divBtnPlanning" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromPlanning()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button>  
+    </div>
+    <!-- ----------------------------------  FIN    DIV #PLANNING     ------------------------------------------------>
 
     <!-- ----------------------------------      DIV MENU TEMPLATE SESSION        ------------------------------------------------>
     <div id="divMenuTemplateSession" class="new-interface">
@@ -1242,7 +1255,7 @@
     <button class="btnFlottant newActivity" onclick="onChangeMenu('NewActivity')" id="btnNewActivity"><img src="./Icons/Icon-New.webp" alt="Icone"></button>
     <button class="btnFlottant new-from-template" onclick="onChangeMenu('TemplateChoice')" id="btnNewFromTemplate"><img src="./Icons/Icon-From-Modele.webp" alt="Icone"></button>
     <div id="divMainBtnMenu" class="main-menu">
-        <button class="btn-menu" onclick="onChangeMenu('Agenda')">
+        <button class="btn-menu" onclick="onChangeMenu('Planning')">
             <img src="./Icons/Icon-Agenda-Hebdo.webp" alt="Icone">
             <span>Planning</span>
         </button>
@@ -1290,6 +1303,7 @@
     <script src="./scripts/activitySystem.js?v=1.7.6"></script>
     <script src="./scripts/templateSession.js?v=1.7.6"></script>
     <script src="./scripts/session.js?v=1.7.6"></script>
+    <script src="./scripts/planning.js?v=1.7.6"></script>
     <script src="./scripts/info.js?v=1.7.6"></script>
     <script src="./scripts/stat.js?v=1.7.6"></script>
     <script src="./scripts/rewardData.js?v=1.7.6"></script>
