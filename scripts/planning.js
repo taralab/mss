@@ -1,12 +1,12 @@
 
 // Initialisation des variables
 let userPlanningArray = {
-    "lundi" : ["MUSCULATION"],
-    "mardi" : ["MUSCULATION"],
+    "lundi" : ["MUSCULATION","ETIREMENT"],
+    "mardi" : ["C-A-P"],
     "mercredi" : ["MUSCULATION"],
-    "jeudi" : ["C-A-P","VELO","MUSCULATION"],
-    "vendredi" : ["MUSCULATION"],
-    "samedi" : ["MUSCULATION"],
+    "jeudi" : ["VELO","ETIREMENT"],
+    "vendredi" : ["NATATION"],
+    "samedi" : ["RENFORCEMENT"],
     "dimanche" : []
 }
 

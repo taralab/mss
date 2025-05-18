@@ -651,7 +651,7 @@ function onChangeMenu(menuTarget) {
 
         case "Planning":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Counter");};
-            pMenuTitleRef.innerHTML = "Planning";
+            pMenuTitleRef.innerHTML = "Planning hebdomadaire";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnPlanning","divPlanning"],[],[],[],[]);
             onOpenMenuPlanning();
             // onDisplayCustomInfo();
