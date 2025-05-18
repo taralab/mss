@@ -123,7 +123,8 @@ const IMAGES = [
   `${basePath}images/icon-skate.webp`,
   `${basePath}images/icon-renforcement.webp`,
   `${basePath}images/icon-athletisme.webp`,
-  `${basePath}images/icon-gymnastique.webp`
+  `${basePath}images/icon-gymnastique.webp`,
+  `${basePath}images/icon-repos.webp`
 ];
 
 const BADGES = [
