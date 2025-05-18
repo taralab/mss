@@ -2232,6 +2232,15 @@ div.planning-menu{
     flex-direction: column;
     justify-content: flex-start;
     box-sizing: border-box;
+
+}
+
+div.planning-today {
+    border: solid 2px var(--colorMainTheme1);
+}
+
+div.planning-today > p {
+    color: var(--colorMainTheme1);
 }
 
 /* DIMANCHE = toute la ligne */
