@@ -650,13 +650,19 @@ function onChangeMenu(menuTarget) {
         break;
 
         case "Planning":
-            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Counter");};
+            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Planning Hebdomadaire");};
             pMenuTitleRef.innerHTML = "Planning hebdomadaire";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnPlanning","divPlanning"],[],[],[],[]);
             onOpenMenuPlanning();
             // onDisplayCustomInfo();
         break;
-        
+        case "PlanningEditor":
+            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Planning editor");};
+            onChangeDisplay(["divBtnPlanning","divPlanning"],[],["divBtnPlanningEditor","divPlanningEditor"],[],[],[],[]);
+        break;
+
+
+
         case "Stat":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Stat");};
             pMenuTitleRef.innerHTML = "Statistiques";
@@ -830,6 +836,10 @@ function onLeaveMenu(menuTarget) {
             onChangeDisplay(["divPlanning","divBtnPlanning"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
             onHideCustomInfo();
         break;
+        case "PlanningEditor":
+            if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Planning Editor");};
+            onChangeDisplay(["divPlanningEditor","divBtnPlanningEditor"],[],["divPlanning","divBtnPlanning"],[],[],[],[]);
+        break;
         
         case "Stat":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Stat");};
@@ -900,6 +910,7 @@ function onLeaveMenu(menuTarget) {
             onChangeDisplay(["divInfo","divBtnInfo"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
             onHideCustomInfo();
         break;
+
 
 
         default:

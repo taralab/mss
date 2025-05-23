@@ -320,43 +320,43 @@
     <!-- ----------------------------------      DIV #PLANNING        ------------------------------------------------>
     <div id="divPlanning" class="planning-menu">
         <div class="planning-grid">
-            <div id="divPlanning_lundi">
+            <div id="divPlanning_lundi" onclick="onEditPlanning('lundi')">
                 <p>LUNDI</p>
                 <div id="divPlanningContent_lundi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_mardi">
+            <div  id="divPlanning_mardi" onclick="onEditPlanning('mardi')">
                 <p>MARDI</p>
                 <div id="divPlanningContent_mardi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_mercredi">
+            <div  id="divPlanning_mercredi" onclick="onEditPlanning('mercredi')">
                 <p>MERCREDI</p>
                 <div id="divPlanningContent_mercredi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_jeudi">
+            <div  id="divPlanning_jeudi" onclick="onEditPlanning('jeudi')">
                 <p>JEUDI</p>
                 <div id="divPlanningContent_jeudi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_vendredi">
+            <div  id="divPlanning_vendredi" onclick="onEditPlanning('vendredi')">
                 <p>VENDREDI</p>
                 <div id="divPlanningContent_vendredi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_samedi">
+            <div  id="divPlanning_samedi" onclick="onEditPlanning('samedi')">
                 <p>SAMEDI</p>
                 <div id="divPlanningContent_samedi" class="planning-content">
                     <!-- injection -->
                 </div>
             </div>
-            <div  id="divPlanning_dimanche" class="dimanche">
+            <div  id="divPlanning_dimanche" class="dimanche" onclick="onEditPlanning('dimanche')">
                 <p>DIMANCHE</p>
                 <div id="divPlanningContent_dimanche" class="planning-content">
                     <!-- injection -->
@@ -372,6 +372,30 @@
             <span>Retour</span>
         </button>  
     </div>
+
+    <!-- Popup planning editor -->
+    <div id="divPlanningEditor" class="new-interface">
+        <p>Activités pour Lundi</p>
+        <div id="divPlanningActivityList">
+            <!-- Injection de la liste -->
+        </div>
+        <button>Ajouter une activité</button>
+        <button>Valider</button>
+
+    </div>
+    <!-- Menu principale modele de session -->
+    <div id="divBtnPlanningEditor" class="button-editor">
+        <button class="btn-menu" onclick="onClickReturnFromPlanningEditor()">
+            <img src="./Icons/Icon-Return-cancel.webp" alt="Icone">
+            <span>Retour</span>
+        </button> 
+        <button class="btn-menu" onclick="onClickSaveFromPlanningEditor()">
+            <img src="./Icons/Icon-Valider.webp" alt="Icone">
+            <span>Sauver</span>
+        </button> 
+    </div>
+
+
     <!-- ----------------------------------  FIN    DIV #PLANNING     ------------------------------------------------>
 
     <!-- ----------------------------------      DIV MENU TEMPLATE SESSION        ------------------------------------------------>

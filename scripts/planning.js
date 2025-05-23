@@ -82,6 +82,25 @@ function onSetPlanningItems(){
 
 
 
+// ------------------- EDITION journalier ---------------
+
+// Click sur un jour
+function onEditPlanning(dayTarget) {
+    onChangeMenu("PlanningEditor");
+
+    // Lance la fonction de remplissage des items du jours selectionné
+}
+
+
+function onClickReturnFromPlanningEditor(){
+
+    onLeaveMenu("PlanningEditor");
+
+};
+
+
+
+
 
 
 
