@@ -142,6 +142,10 @@ function onEditPlanning(keyTarget) {
 
 // remplit l'editeur de planning avec les éléments du jour sélectionné
 function onSetPlanningDayEditor(keyTarget) {
+
+    // Traiment du titre
+    document.getElementById("pPlanningEditorTitle").innerHTML = `Activités pour ${keyTarget}`;
+
     // Réference le container parent
 
     let day = keyTarget,
