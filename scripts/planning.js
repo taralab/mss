@@ -19,7 +19,53 @@ dayReferences = [
     "samedi"
 ];
 
+// CLASS d'un container d'activité
+class EditorActivityItem{
+    constructor(id,imgRef,activityName,parentRef){
+        this.id = id;
+        this.imgRef = imgRef;
+        this.activityName = activityName;
+        this.parentRef = parentRef;
 
+        // Conteneur principal
+        this.element = document.createElement("div");
+        this.element.classList.add("editor-activity-item-content");
+
+        
+        this.render();
+    };
+
+    render(){
+        this.element.innerHTML = `
+            <img src="${this.imgRef}" alt="">
+            <p>${this.activityName}</p>
+            <button><img src="./Icons/Icon-Delete-color.webp" alt=""></button>        
+        `;
+
+    // Insertion dans le parent
+    this.parentRef.appendChild(this.element);
+    }
+
+};
+
+
+//class du bouton "ajouter une activité"
+class ButtonPlanningAddActivity{
+    constructor(parentRef){
+        this.parentRef = parentRef;
+        this.element = document.createElement("button");
+
+        this.render();
+    }
+
+    render(){
+        this.element.innerHTML = `
+            <p class="planningEditorPlus">+</p> Ajouter une activité
+        `;
+        this.parentRef.appendChild(this.element);
+
+    }
+}
 
 
 
@@ -85,11 +131,51 @@ function onSetPlanningItems(){
 // ------------------- EDITION journalier ---------------
 
 // Click sur un jour
-function onEditPlanning(dayTarget) {
+function onEditPlanning(keyTarget) {
     onChangeMenu("PlanningEditor");
 
     // Lance la fonction de remplissage des items du jours selectionné
+    onSetPlanningDayEditor(keyTarget);
 }
+
+
+
+// remplit l'editeur de planning avec les éléments du jour sélectionné
+function onSetPlanningDayEditor(keyTarget) {
+    // Réference le container parent
+
+    let day = keyTarget,
+    parentRef = document.getElementById("divPlanningActivityList");
+    parentRef.innerHTML = "";
+
+    if (userPlanningArray[day].length > 0) {
+        // pour chaque élément du jour
+        userPlanningArray[day].forEach(activity => {
+            let imgRef = activityChoiceArray[activity].imgRef;
+            new EditorActivityItem("5",imgRef,activity,parentRef);
+        });
+
+
+
+    }else{
+        // Aucune activité de jour
+        parentRef.innerHTML = "Aucune activité programmée !";
+    }
+
+    new ButtonPlanningAddActivity(parentRef);
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 
 function onClickReturnFromPlanningEditor(){
