@@ -2292,25 +2292,73 @@ div.planning-today > p {
 /* ------ #PLANNING EDITOR */
 
 
-div.planning-editor{
-    position: absolute;
-    top : 100px;
-    display: flex;
-    align-items: flex-start;
-    width: 70%;
-    flex-direction: column;
-    background-color: rgb(255, 225, 225);
-    border-radius: 10px;
-    padding: 10px;
-    margin-left: 50px;margin-right: 50px;
-    text-align: center;
-}
 
-div.planning-editor > p{
+
+
+p.planning-editor-title{
     font-weight: bold;
     font-size: 24px;
     color: #555;
+    text-align: center;
 }
+
+
+div.planning-editor{
+    display: flex;
+    align-items: flex-start;
+    width: 100%;
+    flex-direction: column;
+    border-radius: 10px;
+    padding-top: 10px;padding-bottom: 10px;
+    text-align: center;
+    gap: 20px;
+    background-color: white;
+}
+
+
+/* Bouton ajouter activité */
+div.planning-editor > button {
+    height: 50px; width: 250px;
+    background-color: white;
+    border: solid 1px var(--colorMainTheme1);
+    border-radius: 10px;
+    font-weight: bold;color: var(--colorMainTheme1);
+    font-size: 18px;
+    margin: auto;
+}
+p.planningEditorPlus{
+    color: var(--colorMainTheme1);
+    display: inline;
+    font-weight: bold;
+    font-size: 24px;
+}
+
+/* Container d'une activité */
+div.editor-activity-item-content{
+    width: 95%;
+    display: flex; 
+    align-items: center;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+div.editor-activity-item-content > p{
+    font-weight: bold;
+    color: #555;
+    font-size: 18px;
+    text-align: left;
+    padding-left: 10px;
+}
+
+
+/* Bouton suppression */
+div.editor-activity-item-content > button{
+    background: none;
+    border: none;
+    width: 50px;
+    height: 50px;
+}
+
 
 
 div.dev{
