@@ -180,13 +180,15 @@ div.new-interface p {
 
 div.new-interface select {
     width: calc(100% - 20px); /* 100% moins 10px de padding de chaque côté */
-    border: none;
-    border-bottom: solid 1px var(--colorMainTheme1);
+    border: solid 1px rgb(179, 193, 201);
+    border-radius: 10px;
+    color: #555;
     background-color: var(--colorLightGray);
-    height: 25px;
+    height: 35px;
     padding: 0 10px; /* Ajoute un padding intérieur comme les autres champs */
     box-sizing: border-box; /* Assure que les dimensions incluent le padding et les bordures */
     margin-left: 10px;
+    font-size: 18px;
 }
 
 
@@ -212,18 +214,21 @@ img.activity{
 
 input:not([type="checkbox"]), textarea {
     width: calc(100% - 20px); /* 100% moins les 10px de padding gauche et droite */
-    height: 25px;
+    height: 35px;
     padding: 0 10px; /* Ajoute un padding intérieur de 10px */
     margin-left: 10px;
-    border: none;
-    border-bottom: solid 1px var(--colorMainTheme1);
+    border: solid 1px rgb(179, 193, 201);
+    border-radius: 10px;
     background-color: var(--colorLightGray);
     box-sizing: border-box; /* Inclus padding et bordures dans les dimensions */
+    font-size: 18px;
+    color: #555;
 }
 
 
 /* Les input number */
 div.number-container {
+    margin-top: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -238,8 +243,8 @@ div.number-container {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    border: solid 1px rgb(179, 193, 201);
+    border-radius: 10px;
     outline: none;
     background: white;
     color: #555;
@@ -272,6 +277,12 @@ span.chrono-separator {
     font-size: 22px;
     font-weight: bold;
     color: #555;
+}
+
+span.input-number-symbol{
+    font-size: 24px;
+    font-weight: bolder;
+    color: var(--colorMainTheme1);
 }
 
 /* fin des input number */
@@ -2195,6 +2206,7 @@ p.search-area{
 
 p.search-area  input{
     border-radius: 10px;
+    height: 25px; font-size: 16px;
     border : none;
     color: var(--colorMainTheme1);
 }
