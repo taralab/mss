@@ -12,7 +12,7 @@ let userTemplateListItems = {
 
 
 // Reférencement
-let imgTemplateEditorPreviewRef = document.getElementById("imgTemplateEditorPreview"),
+let imgTemplateEditorPreviewRef = document.getElementById("imgEditorActivityPreview"),
     pTemplateEditorInfoRef = document.getElementById("pTemplateEditorInfo"),
     selectorTemplateCategoryChoiceRef = document.getElementById("selectorTemplateCategoryChoice"),
     inputTemplateIsPlannedRef = document.getElementById("inputTemplateIsPlanned"),

@@ -614,6 +614,16 @@ function onDisplayCustomInfo() {
 }
 
 
+// Gestion d'info complémentaire pour editeur d'activité (image de l'activité)
+function onHideImgActivityPreview() {
+    document.getElementById("pImgActivityPreviousArea").style.display = "none";
+}
+
+function onDisplayImgActivityPreview() {
+    document.getElementById("pImgActivityPreviousArea").style.display = "inline";
+}
+
+
 let allDivHomeToDisplayNone = ["divMainBtnMenu","btnNewActivity","divFilterSort","divItemList","pSearchArea"],
     allDivHomeToDisplayBlock = ["btnNewActivity"],
     allDivHomeToDisplayFlex = ["divMainBtnMenu","divFilterSort","divItemList","pSearchArea"];
@@ -686,6 +696,7 @@ function onChangeMenu(menuTarget) {
             pMenuTitleRef.innerHTML = "Créer une activité";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnActivity","divActivityEditor"],[],[],["btnDeleteActivity"],[]);
             onOpenNewActivity();
+            onDisplayImgActivityPreview();
         break;
         case "NewActivityFromTemplate":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : NewActivityFromTemplate");};
@@ -696,6 +707,7 @@ function onChangeMenu(menuTarget) {
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : EditActivity");};
             pMenuTitleRef.innerHTML = "Editer une activité";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnActivity","divActivityEditor"],[],[],[],["btnDeleteActivity"]);
+            onDisplayImgActivityPreview();
         break;
         case "TemplateChoice":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : TemplateChoice");};
@@ -735,11 +747,13 @@ function onChangeMenu(menuTarget) {
             pMenuTitleRef.innerHTML = "Création de modèle";
             onChangeDisplay(["divBtnGestTemplate","divGestTemplate"],[],["divBtnTemplateEditor","divTemplateEditor"],[],[],["btnDeleteTemplate"],[]);
             onClickBtnCreateTemplate();
+            onDisplayImgActivityPreview();
         break;
         case "ModifyTemplate":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : TemplateEditor");};
             pMenuTitleRef.innerHTML = "Modification de modèle";
             onChangeDisplay(["divBtnGestTemplate","divGestTemplate"],[],["divBtnTemplateEditor","divTemplateEditor"],[],[],[],["btnDeleteTemplate"]);
+            onDisplayImgActivityPreview();
         break;
         case "MenuTemplateSession":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : MenuTemplateSession");};
@@ -857,6 +871,7 @@ function onLeaveMenu(menuTarget) {
             onResetBtnRadio();
             onChangeDisplay(["divActivityEditor","divBtnActivity"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],["divActivityEditor","divBtnActivity"],[],[]);
             onLockDivDoubleClick(["divActivityEditor","divBtnActivity"]);//retire la sécurité double click
+            onHideImgActivityPreview();
         break;
 
         // Condition utilisateur
@@ -892,6 +907,7 @@ function onLeaveMenu(menuTarget) {
             onUnlockDivDoubleClick(["divBtnTemplateEditor","divTemplateEditor"]);//retire la sécurité double click
             pMenuTitleRef.innerHTML = "Gestion des modèles";
             onResetBtnRadio();
+            onHideImgActivityPreview();
         break;
         case "MenuTemplateSession":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : MenuTemplateSession");};

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="shortcut icon" href="./Icons/MSS-Logo.ico" type="image/x-icon">
-    <link rel="stylesheet" href="./styles/global.css?v=1.7.10">
+    <link rel="stylesheet" href="./styles/global.css?v=1.7.11">
     <link rel="manifest" href="manifest.json">
     <title>Mon Suivi Sportif</title>
 </head>
@@ -22,6 +22,9 @@
             </p>
             <p id="pSearchArea" class="search-area">
                 <input type="text" id="inputSearchActivity" maxlength="40" oninput="onUserSetResearchText()" placeholder="Recherche...">
+            </p>
+            <p class="custom-info-img-activity-area" id="pImgActivityPreviousArea">
+                <img id="imgEditorActivityPreview" src="./images/icon-athletisme.webp" alt="">
             </p>
         </div>
 
@@ -68,7 +71,7 @@
         <div id="divActivityEditor" class="new-interface">
            
             <div class="activityPreview">
-                <img id="imgEditorActivityPreview" src="./images/icon-cap.webp" alt="" srcset="" class="activityPreview">
+                <!-- <img id="imgEditorActivityPreview" src="./images/icon-cap.webp" alt="" srcset="" class="activityPreview"> -->
                 <p id="pEditorActivityPreviewPlannedIcon">🗓️ Cette activité est planifiée.</p>  
                               
             </div>
@@ -796,10 +799,8 @@
 
         <div id="divTemplateEditor" class="new-interface">
            
-            <div class="activityPreview">
-                <img id="imgTemplateEditorPreview" src="./images/icon-cap.webp" alt="" srcset="" class="activityPreview">
-                <p id="pTemplateEditorInfo">📄Modèle d'activité :</p>  
-                              
+            <div class="activityPreview">  
+                <p id="pTemplateEditorInfo">📄Modèle d'activité :</p>                   
             </div>
 
             <p class="activity-editor">
@@ -1208,7 +1209,7 @@
         <div class="release-licence">
             <p class="release-licence">Une application pour gérer vos activités physiques.</p>
             <p class="release-licence">Optimisée pour Google Chrome.</p>
-            <p class="release-licence" id="pInfoVersion"><strong>Version : </strong>1.7.10</p>
+            <p class="release-licence" id="pInfoVersion"><strong>Version : </strong>1.7.11</p>
             <p class="release-licence"><strong>Développement/Conception :</strong> Emmanuel TARACONAT.</p>
             <p class="release-licence"><strong>Collaboration :</strong> Morgane C. <i>Merci pour tes idées et ton enthousiasme tout au long du projet.</i></p>
             <p class="release-licence"><strong>Licence :</strong><a href="https://creativecommons.org/licenses/by-nc/4.0/"  target="_blank">CC BY-NC 4.0</a>.</p>
@@ -1364,24 +1365,24 @@
 
 </div>
     <script src="./scripts/pouchdb.min.js?v=9.0.0"></script>
-    <script src="./scripts/globalFunction.js?v=1.7.10"></script>
-    <script src="./scripts/setting.js?v=1.7.10"></script>
-    <script src="./scripts/notify.js?v=1.7.10"></script>
-    <script src="./scripts/profil.js?v=1.7.10"></script>
-    <script src="./scripts/favoris.js?v=1.7.10"></script>
-    <script src="./scripts/sortAndFilter.js?v=1.7.10"></script>
-    <script src="./scripts/activityList.js?v=1.7.10"></script>
-    <script src="./scripts/activitySystem.js?v=1.7.10"></script>
-    <script src="./scripts/templateSession.js?v=1.7.10"></script>
-    <script src="./scripts/session.js?v=1.7.10"></script>
-    <script src="./scripts/planning.js?v=1.7.10"></script>
-    <script src="./scripts/info.js?v=1.7.10"></script>
-    <script src="./scripts/stat.js?v=1.7.10"></script>
-    <script src="./scripts/rewardData.js?v=1.7.10"></script>
-    <script src="./scripts/rewards.js?v=1.7.10"></script>
-    <script src="./scripts/gestData.js?v=1.7.10"></script>
-    <script src="./scripts/template.js?v=1.7.10"></script>
-    <script src="./scripts/app.js?v=1.7.10"></script>
+    <script src="./scripts/globalFunction.js?v=1.7.11"></script>
+    <script src="./scripts/setting.js?v=1.7.11"></script>
+    <script src="./scripts/notify.js?v=1.7.11"></script>
+    <script src="./scripts/profil.js?v=1.7.11"></script>
+    <script src="./scripts/favoris.js?v=1.7.11"></script>
+    <script src="./scripts/sortAndFilter.js?v=1.7.11"></script>
+    <script src="./scripts/activityList.js?v=1.7.11"></script>
+    <script src="./scripts/activitySystem.js?v=1.7.11"></script>
+    <script src="./scripts/templateSession.js?v=1.7.11"></script>
+    <script src="./scripts/session.js?v=1.7.11"></script>
+    <script src="./scripts/planning.js?v=1.7.11"></script>
+    <script src="./scripts/info.js?v=1.7.11"></script>
+    <script src="./scripts/stat.js?v=1.7.11"></script>
+    <script src="./scripts/rewardData.js?v=1.7.11"></script>
+    <script src="./scripts/rewards.js?v=1.7.11"></script>
+    <script src="./scripts/gestData.js?v=1.7.11"></script>
+    <script src="./scripts/template.js?v=1.7.11"></script>
+    <script src="./scripts/app.js?v=1.7.11"></script>
 
 
     <!-- ENREGISTREMENT DU SERVICE WORKER -->
