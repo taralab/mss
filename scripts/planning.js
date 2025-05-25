@@ -1,14 +1,17 @@
 
 // Initialisation des variables
-let userPlanningArray = {
-    "lundi" : ["MUSCULATION","ETIREMENT"],
-    "mardi" : ["C-A-P"],
-    "mercredi" : ["MUSCULATION"],
-    "jeudi" : ["VELO","ETIREMENT"],
-    "vendredi" : ["NATATION"],
-    "samedi" : ["RENFORCEMENT"],
+
+let defaultPlanningArray = {
+    "lundi" : [],
+    "mardi" : [],
+    "mercredi" : [],
+    "jeudi" : [],
+    "vendredi" : [],
+    "samedi" : [],
     "dimanche" : []
-},
+}
+
+let userPlanningArray = {},
 dayReferences = [
     "dimanche",
     "lundi",
@@ -19,7 +22,23 @@ dayReferences = [
     "samedi"
 ],
 tempPlanningEditorDayItems = [],//temporaire le temps de des manipulations avant enregistrement
-currentPlanningDayKey = "";
+currentPlanningDayKey = "",
+isUserPlanningLoadedFromBase = false;
+
+
+
+
+
+
+
+
+
+// ***************************** CLASS ********************************
+
+
+
+
+
 
 // CLASS d'un container d'activité journalier
 class EditorActivityItem{
@@ -73,7 +92,49 @@ class ButtonPlanningAddActivity{
 
 
 
-function onOpenMenuPlanning(){
+
+// ************************************ BdD *****************************************
+
+async function onLoadUserPlanningFromDB() {
+    userPlanningArray = {}; // Initialisation en objet
+
+    try {
+        const planning = await db.get(planningStoreName).catch(() => null);
+        if (planning) {
+            userPlanningArray = planning.userPlanning;
+        }
+        if (devMode === true) {
+            console.log("[DATABASE] [PLANNING] loading templateSessionsNameList :", userPlanningArray);
+        }
+    } catch (err) {
+        console.error("[DATABASE] [PLANNING] Erreur lors du chargement:", err);
+    }
+}
+
+
+
+
+
+
+// ******************************** FIN BDD **************************************
+
+
+
+
+
+
+
+async function onOpenMenuPlanning(){
+
+        // La première fois, récupère les templates dans la base
+    if (!isUserPlanningLoadedFromBase) {
+        await onLoadUserPlanningFromDB();
+        isUserPlanningLoadedFromBase = true;
+        if (devMode === true){console.log("[PLANNING] 1er chargement des depuis la base")};
+    }
+
+
+
     onSetPlanningItems();
 };
 

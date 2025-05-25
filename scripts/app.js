@@ -81,7 +81,8 @@ let dbName = `MSS_db`,
     settingStoreName = "Setting",
     templateStoreName = "Template",
     favorisStoreName = "Favoris",
-    templateSessionStoreName = "TemplateSession";
+    templateSessionStoreName = "TemplateSession",
+    planningStoreName ="Planning";
     
 
 
@@ -233,6 +234,7 @@ async function onCreateDBStore() {
         }  
     });
     await createStore(rewardsStoreName, { type: rewardsStoreName, rewards: [] });
+    await createStore(planningStoreName, { type: planningStoreName, userPlanning : defaultPlanningArray});
 
 }
 
