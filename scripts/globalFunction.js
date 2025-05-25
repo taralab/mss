@@ -840,6 +840,7 @@ function onLeaveMenu(menuTarget) {
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Planning Editor");};
             onChangeDisplay(["divPlanningEditor","divBtnPlanningEditor"],[],["divPlanning","divBtnPlanning"],[],[],[],[]);
             pMenuTitleRef.innerHTML = "Planning hebdomadaire";
+            document.getElementById("divPlanningActivityChoiceList").innerHtml = "";
         break;
         
         case "Stat":

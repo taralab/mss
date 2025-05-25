@@ -58,7 +58,10 @@ class ButtonPlanningAddActivity{
     constructor(parentRef){
         this.parentRef = parentRef;
         this.element = document.createElement("button");
-
+        this.element.onclick = () => {
+            // Affiche la liste des choix
+            document.getElementById("divPlanningActivityChoice").style.display = "flex";            
+        }
         this.render();
     }
 
@@ -146,6 +149,9 @@ function onSetPlanningItems(){
 function onEditPlanning(keyTarget) {
     onChangeMenu("PlanningEditor");
 
+    // Génère déjà la liste des activités à choisir
+    onGenerateFakePlanningActivityList("divPlanningActivityChoiceList");
+
 
     // Traitement du titre
     let title = onSetFirstLetterUppercase(keyTarget);
@@ -227,6 +233,164 @@ function eventSavePlanningDayModification() {
 
 
 }
+
+
+// Génération de la liste de selection des activités
+
+function onGenerateFakePlanningActivityList(idParentTarget) {
+     let parentTargetRef = document.getElementById(idParentTarget);
+
+    // Traite d'abord les favoris
+    if (devMode === true){
+        console.log("[FAKE SELECTOR]Lancement de la generation des choix des activités");
+    };
+
+    parentTargetRef.innerHTML = "";
+    let firstFavorisName = "C-A-P"; // Utilisé pour que la première activité favorite, et l'activité identique dans le reste de la liste ai le meme bouton radio
+
+
+    if (devMode === true){console.log(" [FAKE SELECTOR] ajout des favoris si présent = " + userFavoris.length);};
+    userFavoris.sort();
+
+    userFavoris.forEach((e,index)=>{
+
+        // Creation
+        let newContainer = document.createElement("div");
+        newContainer.classList.add("fake-opt-item-container");
+        newContainer.onclick = function (event){
+            event.stopPropagation();
+            eventAddActivityInPlanningDay(e);
+
+        }
+    
+        // Style sans border botton pour le dernier
+        if (index === (userFavoris.length - 1)) {
+            newContainer.classList.add("fake-opt-item-last-favourite");
+        }
+        
+        let newFavoriteSymbol = document.createElement("span");
+        newFavoriteSymbol.innerHTML = "*";
+        newFavoriteSymbol.classList.add("favouriteSymbol");
+
+
+        let newImg = document.createElement("img");
+        newImg.classList.add("fake-opt-item");
+        newImg.src = activityChoiceArray[e].imgRef;
+    
+        let newTitle = document.createElement("span");
+        newTitle.innerHTML = activityChoiceArray[e].displayName;
+        newTitle.classList.add("fake-opt-item","fake-opt-item-favoris");
+    
+    
+        // Bouton radio fake pour simuler le selecteur
+        let newBtnRadioFake = document.createElement("div");
+        newBtnRadioFake.classList.add("radio-button-fake");
+        newBtnRadioFake.id = "btnRadio-fav-" + e;
+    
+
+        // Effet bouton plein pour le premier favoris
+        if (index === 0) {
+            newBtnRadioFake.classList.add("selected");
+            firstFavorisName = e;
+        }
+    
+        // Insertion
+        newContainer.appendChild(newFavoriteSymbol);
+        newContainer.appendChild(newImg);
+        newContainer.appendChild(newTitle);
+        newContainer.appendChild(newBtnRadioFake);
+    
+        parentTargetRef.appendChild(newContainer);
+    });
+
+
+    if (devMode === true){console.log(" [FAKE SELECTOR] ajout du reste des types d'activités")};
+
+    // Puis toutes les types d'activités
+    let activitySortedKey = Object.keys(activityChoiceArray);
+    activitySortedKey.sort();
+
+
+    activitySortedKey.forEach((e,index)=>{
+
+        // Creation
+        let newContainer = document.createElement("div");
+        newContainer.classList.add("fake-opt-item-container");
+        newContainer.onclick = function (event){
+            event.stopPropagation();
+            eventAddActivityInPlanningDay(e);
+
+        }
+    
+        // Style sans border botton pour le dernier
+        if (index === (activitySortedKey.length - 1)) {
+            newContainer.classList.add("fake-opt-item-last-container");
+        }
+      
+        let newImg = document.createElement("img");
+        newImg.classList.add("fake-opt-item");
+        newImg.src = activityChoiceArray[e].imgRef;
+    
+        let newTitle = document.createElement("span");
+        newTitle.innerHTML = activityChoiceArray[e].displayName;
+        newTitle.classList.add("fake-opt-item");
+    
+    
+        // Bouton radio fake pour simuler le selecteur
+        let newBtnRadioFake = document.createElement("div");
+        newBtnRadioFake.classList.add("radio-button-fake");
+        newBtnRadioFake.id = "btnRadio-"+e;
+
+        // Effet bouton plein pour l'activité identique au premier favoris
+        if (e === firstFavorisName) {
+            newBtnRadioFake.classList.add("selected");
+        }
+    
+        // Insertion
+    
+        newContainer.appendChild(newImg);
+        newContainer.appendChild(newTitle);
+        newContainer.appendChild(newBtnRadioFake);
+    
+        parentTargetRef.appendChild(newContainer);
+    });
+
+
+
+}
+
+
+// Ajout d'une activité à la liste
+function eventAddActivityInPlanningDay(activityToAdd) {
+
+    //control de doublon
+    if (tempPlanningEditorDayItems.includes(activityToAdd)) {
+        alert("Activité déjà existante !");
+        return;
+    }
+
+    //ajout de l'activité à l'array temporaire
+    tempPlanningEditorDayItems.push(activityToAdd);
+
+    // fermeture du popup
+    onClosePlanningActivityChoice();
+
+    //actualisation de la journée
+    onUpdatePlanningDayEditor(currentPlanningDayKey,tempPlanningEditorDayItems);
+}
+
+
+
+// Fermeture des choix d'activité
+function onClosePlanningActivityChoice() {
+    document.getElementById("divPlanningActivityChoice").style.display = "none";
+}
+
+
+
+
+
+
 
 
 function onClickReturnFromPlanningEditor(){
