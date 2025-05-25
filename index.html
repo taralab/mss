@@ -376,15 +376,19 @@
     <!-- Popup planning editor -->
     <div id="divPlanningEditor" class="new-interface">
         <p id="pPlanningEditorTitle" class="planning-editor-title">Activités pour Lundi</p>
-        <div id="divPlanningActivityList" class="planning-editor">
-            <!-- Injection de la liste -->
-             <div class="editor-activity-item-content">
-                <img src="./images/icon-badminton.webp" alt="">
-                <p>BADMINTON</p>
-                <button><img src="./Icons/Icon-Delete-color.webp" alt=""></button>
-             </div>
-
-            <button><p class="planningEditorPlus">+</p> Ajouter une activité</button>
+        <div class="planning-editor">
+            <div id="divPlanningActivityList" class="planning-editor-item-area">
+                <!-- Injection de la liste -->
+                <!-- <div class="editor-activity-item-content">
+                    <img src="./images/icon-badminton.webp" alt="">
+                    <p>BADMINTON</p>
+                    <button><img src="./Icons/Icon-Delete-color.webp" alt=""></button>
+                </div> -->
+            </div>
+            
+            <label for="">Commentaire :</label>
+            <input type="text">
+            <button onclick="onOpenPlanningActivityChoice()"><p class="planningEditorPlus">+</p> Ajouter une activité</button>
         </div>
         
 

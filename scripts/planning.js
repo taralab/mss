@@ -69,29 +69,6 @@ class EditorActivityItem{
 };
 
 
-//class du bouton "ajouter une activité"
-class ButtonPlanningAddActivity{
-    constructor(parentRef){
-        this.parentRef = parentRef;
-        this.element = document.createElement("button");
-        this.element.onclick = () => {
-            // Affiche la liste des choix
-            document.getElementById("divPlanningActivityChoice").style.display = "flex";            
-        }
-        this.render();
-    }
-
-    render(){
-        this.element.innerHTML = `
-            <p class="planningEditorPlus">+</p> Ajouter une activité
-        `;
-        this.parentRef.appendChild(this.element);
-
-    }
-}
-
-
-
 
 // ************************************ BdD *****************************************
 
@@ -181,13 +158,10 @@ function onSetPlanningItems(){
             newImg.src = "./images/icon-repos.webp";
             parentActivityAreaRef.appendChild(newImg);
         }
+    });
 
 
-
-    })
-
-
-}
+};
 
 
 
@@ -247,8 +221,6 @@ function onUpdatePlanningDayEditor(keyTarget,activities) {
         // Aucune activité de jour
         parentRef.innerHTML = "Aucune activité programmée !";
     }
-
-    new ButtonPlanningAddActivity(parentRef);
 
 }
 
@@ -441,6 +413,12 @@ function eventAddActivityInPlanningDay(activityToAdd) {
     onUpdatePlanningDayEditor(currentPlanningDayKey,tempPlanningEditorDayItems);
 }
 
+
+
+//Ouverture des choix d'activité
+function onOpenPlanningActivityChoice() {
+    document.getElementById("divPlanningActivityChoice").style.display = "flex"; 
+}
 
 
 // Fermeture des choix d'activité
