@@ -2267,10 +2267,16 @@ div.planning-today > p {
     grid-column: 1 / -1;
 }
 
-.planning-grid p {
+p.planning-day-title {
     margin: 0 0 10px;
     font-weight: bold;
     color: #555;
+}
+
+p.planning-day-comment{
+    color: #555;
+   font-size: 14px;
+    margin: 10px 0 0;
 }
 
 /* Contenu injecté dynamiquement */
@@ -2325,6 +2331,7 @@ div.planning-editor > button {
     font-weight: bold;color: var(--colorMainTheme1);
     font-size: 18px;
     margin: auto;
+    margin-top: 20px;margin-bottom: 20px;
 }
 p.planningEditorPlus{
     color: var(--colorMainTheme1);
@@ -2353,6 +2360,8 @@ div.editor-activity-item-content > p{
     text-align: left;
     padding-left: 10px;
 }
+
+
 
 
 /* Bouton suppression */

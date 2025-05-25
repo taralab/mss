@@ -321,46 +321,53 @@
     <div id="divPlanning" class="planning-menu">
         <div class="planning-grid">
             <div id="divPlanning_lundi" onclick="onEditPlanning('lundi')">
-                <p>LUNDI</p>
+                <p class="planning-day-title">LUNDI</p>
                 <div id="divPlanningContent_lundi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_lundi" class="planning-day-comment"></p>
             </div>
             <div  id="divPlanning_mardi" onclick="onEditPlanning('mardi')">
-                <p>MARDI</p>
+                <p class="planning-day-title">MARDI</p>
                 <div id="divPlanningContent_mardi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_mardi" class="planning-day-comment"></p>
             </div>
-            <div  id="divPlanning_mercredi" onclick="onEditPlanning('mercredi')">
-                <p>MERCREDI</p>
+            <div id="divPlanning_mercredi" onclick="onEditPlanning('mercredi')">
+                <p class="planning-day-title">MERCREDI</p>
                 <div id="divPlanningContent_mercredi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_mercredi" class="planning-day-comment"></p>
             </div>
             <div  id="divPlanning_jeudi" onclick="onEditPlanning('jeudi')">
-                <p>JEUDI</p>
+                <p class="planning-day-title">JEUDI</p>
                 <div id="divPlanningContent_jeudi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_jeudi" class="planning-day-comment"></p>
             </div>
             <div  id="divPlanning_vendredi" onclick="onEditPlanning('vendredi')">
-                <p>VENDREDI</p>
+                <p class="planning-day-title">VENDREDI</p>
                 <div id="divPlanningContent_vendredi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_vendredi" class="planning-day-comment"></p>
             </div>
             <div  id="divPlanning_samedi" onclick="onEditPlanning('samedi')">
-                <p>SAMEDI</p>
+                <p class="planning-day-title">SAMEDI</p>
                 <div id="divPlanningContent_samedi" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_samedi" class="planning-day-comment"></p>
             </div>
             <div  id="divPlanning_dimanche" class="dimanche" onclick="onEditPlanning('dimanche')">
-                <p>DIMANCHE</p>
+                <p class="planning-day-title">DIMANCHE</p>
                 <div id="divPlanningContent_dimanche" class="planning-content">
                     <!-- injection -->
                 </div>
+                <p id="pPlanningComment_dimanche" class="planning-day-comment"></p>
             </div>
         </div>
     </div>
@@ -386,9 +393,12 @@
                 </div> -->
             </div>
             
-            <label for="">Commentaire :</label>
-            <input type="text">
+            <!-- Ajouter -->
             <button onclick="onOpenPlanningActivityChoice()"><p class="planningEditorPlus">+</p> Ajouter une activité</button>
+
+            <!-- Commentaire -->
+            <label for="">Commentaire :</label>
+            <input type="text" id="inputPlanningEditorComment" maxlength="40">
         </div>
         
 

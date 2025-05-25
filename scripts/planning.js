@@ -2,13 +2,13 @@
 // Initialisation des variables
 
 let defaultPlanningArray = {
-    "lundi" : [],
-    "mardi" : [],
-    "mercredi" : [],
-    "jeudi" : [],
-    "vendredi" : [],
-    "samedi" : [],
-    "dimanche" : []
+    "lundi" : {activityList : [], comment:""},
+    "mardi" : {activityList : [], comment:""},
+    "mercredi" : {activityList : [], comment:""},
+    "jeudi" : {activityList : [], comment:""},
+    "vendredi" : {activityList : [], comment:""},
+    "samedi" : {activityList : [], comment:""},
+    "dimanche" : {activityList : [], comment:""}
 }
 
 let userPlanningArray = {},
@@ -103,7 +103,7 @@ async function onLoadUserPlanningFromDB() {
 
 async function onOpenMenuPlanning(){
 
-        // La première fois, récupère les templates dans la base
+    // La première fois, récupère les templates dans la base
     if (!isUserPlanningLoadedFromBase) {
         await onLoadUserPlanningFromDB();
         isUserPlanningLoadedFromBase = true;
@@ -142,9 +142,9 @@ function onSetPlanningItems(){
         let parentActivityAreaRef = document.getElementById(`divPlanningContent_${key}`);
         parentActivityAreaRef.innerHTML = "";
 
-        if (userPlanningArray[key].length > 0) {
+        if (userPlanningArray[key].activityList.length > 0) {
             // pour chaque activité du jour concernée
-            userPlanningArray[key].forEach(activity => {
+            userPlanningArray[key].activityList.forEach(activity => {
                 // crée une image
                 let newImg = document.createElement("img");
                 newImg.src = activityChoiceArray[activity].imgRef;
@@ -158,7 +158,12 @@ function onSetPlanningItems(){
             newImg.src = "./images/icon-repos.webp";
             parentActivityAreaRef.appendChild(newImg);
         }
+
+        // Insertion du commentaire
+        document.getElementById(`pPlanningComment_${key}`).innerHTML = userPlanningArray[key].comment;
     });
+
+
 
 
 };
@@ -190,10 +195,11 @@ function onEditPlanning(keyTarget) {
     document.getElementById("pPlanningEditorTitle").innerHTML = `Activités pour ${title}`;
 
     // stock les activités du jour séléctionné dans variable temporaire pour manipulation
-    tempPlanningEditorDayItems = [...userPlanningArray[keyTarget]],
+    tempPlanningEditorDayItems = [...userPlanningArray[keyTarget].activityList],
     currentPlanningDayKey = keyTarget;
 
-
+    // Set le commentaire du jour
+    document.getElementById("inputPlanningEditorComment").value = userPlanningArray[keyTarget].comment;
 
     // Lance la fonction de remplissage des items du jours selectionné
     onUpdatePlanningDayEditor(currentPlanningDayKey,tempPlanningEditorDayItems);
@@ -249,7 +255,8 @@ function onClickSaveFromPlanningDayEditor() {
 // sauvegarde des modifications d'une journée
 async function eventSavePlanningDayModification() {
     // Actualise le tableau
-    userPlanningArray[currentPlanningDayKey] = [...tempPlanningEditorDayItems]
+    userPlanningArray[currentPlanningDayKey].activityList = [...tempPlanningEditorDayItems]
+    userPlanningArray[currentPlanningDayKey].comment = document.getElementById("inputPlanningEditorComment").value;
 
     // quitte le menu
     onLeaveMenu("PlanningEditor");
