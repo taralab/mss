@@ -275,14 +275,18 @@ function onClickSaveFromPlanningDayEditor() {
 
 
 // sauvegarde des modifications d'une journée
-function eventSavePlanningDayModification() {
+async function eventSavePlanningDayModification() {
     // Actualise le tableau
-    userPlanningArray[currentPlanningDayKey] = [...tempPlanningEditorDayItems];
-
-    // Actualise la base de donnée
+    userPlanningArray[currentPlanningDayKey] = [...tempPlanningEditorDayItems]
 
     // quitte le menu
     onLeaveMenu("PlanningEditor");
+
+    // Actualise la base de donnée
+    await updateDocumentInDB(planningStoreName, (doc) => {
+        doc.userPlanning = userPlanningArray;
+        return doc;
+    });
 
     // actualise le planning hebdomadaire
     onSetPlanningItems();
