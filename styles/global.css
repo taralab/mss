@@ -48,8 +48,8 @@ img.logo{
 
 
 
-/* Style des boutons */
-button.btn-menu {
+/* Style des boutons main menu*/
+button.btn-main-menu {
     display: flex;
     flex-direction: column; /* Place l'image au dessus du texte */
     align-items: center;
@@ -64,26 +64,43 @@ button.btn-menu {
 }
 
 /* Ajustement des images */
-button.btn-menu img {
+button.btn-main-menu img {
     width: 20px;
     height: 20px;
     margin-bottom: 3px; /* Espace entre l'image et le texte */
 }
 
 /* Ajustement du texte */
-button.btn-menu span {
+button.btn-main-menu span {
     font-size: 12px;
     font-weight: bold;
     color: var(--colorMainTheme1);
 }
 
 /* Spécifique texte bouton menu blanc */
-button.btn-menu span.textWhite{
+button.btn-main-menu span.textWhite{
     color: white;
 }
 
 
+/* Les boutons des interfaces */
+button.btn-menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 90px;
+    height: 40px; /* Taille augmentée pour plus d'équilibre */
+    border: none;
+    border-radius: 20px;
+    padding: 5px;
+    background: none;
+    margin-left: 10px;margin-right: 10px;
+}
 
+button.return{
+    border: solid 1px var(--colorMainTheme1);
+}
 
 
 
@@ -1940,9 +1957,9 @@ input.compteur {
     width: 60px;
     height: 30px;
     text-align: center;
-    font-size: 12px;
-    border: 2px solid #ccc;
-    border-radius: 5px;
+    font-size: 18px;
+    border: solid 1px rgb(179, 193, 201);
+    border-radius: 10px;
     outline: none;
     background: white;
     color: #555;
