@@ -702,6 +702,7 @@ function onChangeMenu(menuTarget) {
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : NewActivityFromTemplate");};
             pMenuTitleRef.innerHTML = "Créer une activité";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnActivity","divActivityEditor"],[],[],["btnDeleteActivity"],[]);
+            onDisplayImgActivityPreview(); 
         break;
         case "EditActivity":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : EditActivity");};
