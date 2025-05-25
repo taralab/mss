@@ -17,12 +17,14 @@ dayReferences = [
     "jeudi",
     "vendredi",
     "samedi"
-];
+],
+tempPlanningEditorDayItems = [],//temporaire le temps de des manipulations avant enregistrement
+currentPlanningDayKey = "";
 
-// CLASS d'un container d'activité
+// CLASS d'un container d'activité journalier
 class EditorActivityItem{
-    constructor(id,imgRef,activityName,parentRef){
-        this.id = id;
+    constructor(dayKey,imgRef,activityName,parentRef){
+        this.dayKey = dayKey;
         this.imgRef = imgRef;
         this.activityName = activityName;
         this.parentRef = parentRef;
@@ -30,7 +32,9 @@ class EditorActivityItem{
         // Conteneur principal
         this.element = document.createElement("div");
         this.element.classList.add("editor-activity-item-content");
-
+        this.element.onclick = () =>{
+            onRemoveActivityInPlanningEditor(this.dayKey,activityName);
+        };
         
         this.render();
     };
@@ -128,23 +132,39 @@ function onSetPlanningItems(){
 
 
 
-// ------------------- EDITION journalier ---------------
+// -------------------    #EDITION journalier ---------------
+
+//La manipulation d'une journée se fait dans un array temporaire
+//ensuite lorsque l'utilisateur enregistre, le nouvel état est stocké dans la base et le vrai array
+
+
+
+
+
 
 // Click sur un jour
 function onEditPlanning(keyTarget) {
     onChangeMenu("PlanningEditor");
 
+
+    // Traitement du titre
+    let title = onSetFirstLetterUppercase(keyTarget);
+    document.getElementById("pPlanningEditorTitle").innerHTML = `Activités pour ${title}`;
+
+    // stock les activités du jour séléctionné dans variable temporaire pour manipulation
+    tempPlanningEditorDayItems = [...userPlanningArray[keyTarget]],
+    currentPlanningDayKey = keyTarget;
+
+
+
     // Lance la fonction de remplissage des items du jours selectionné
-    onSetPlanningDayEditor(keyTarget);
+    onUpdatePlanningDayEditor(currentPlanningDayKey,tempPlanningEditorDayItems);
 }
 
 
 
 // remplit l'editeur de planning avec les éléments du jour sélectionné
-function onSetPlanningDayEditor(keyTarget) {
-
-    // Traiment du titre
-    document.getElementById("pPlanningEditorTitle").innerHTML = `Activités pour ${keyTarget}`;
+function onUpdatePlanningDayEditor(keyTarget,activities) {
 
     // Réference le container parent
 
@@ -152,14 +172,12 @@ function onSetPlanningDayEditor(keyTarget) {
     parentRef = document.getElementById("divPlanningActivityList");
     parentRef.innerHTML = "";
 
-    if (userPlanningArray[day].length > 0) {
+    if (activities.length > 0) {
         // pour chaque élément du jour
-        userPlanningArray[day].forEach(activity => {
+        activities.forEach(activity => {
             let imgRef = activityChoiceArray[activity].imgRef;
-            new EditorActivityItem("5",imgRef,activity,parentRef);
+            new EditorActivityItem(day,imgRef,activity,parentRef);
         });
-
-
 
     }else{
         // Aucune activité de jour
@@ -172,14 +190,43 @@ function onSetPlanningDayEditor(keyTarget) {
 
 
 
+// Suppression d'une activité dans une journée
+function onRemoveActivityInPlanningEditor(dayKey,activityToRemove) {
+    
+    //Retire l'éléménet de l'array temporaire
+    let indexToRemove = tempPlanningEditorDayItems.indexOf(activityToRemove);
+    tempPlanningEditorDayItems.splice(indexToRemove,1);
+
+    // Réactualise l'affichage
+    onUpdatePlanningDayEditor(dayKey,tempPlanningEditorDayItems);
+
+
+}
 
 
 
+function onClickSaveFromPlanningDayEditor() {
+    eventSavePlanningDayModification();
+}
 
 
+// sauvegarde des modifications d'une journée
+function eventSavePlanningDayModification() {
+    // Actualise le tableau
+    userPlanningArray[currentPlanningDayKey] = [...tempPlanningEditorDayItems];
+
+    // Actualise la base de donnée
+
+    // quitte le menu
+    onLeaveMenu("PlanningEditor");
+
+    // actualise le planning hebdomadaire
+    onSetPlanningItems();
+
+    //popup Notification
 
 
-
+}
 
 
 function onClickReturnFromPlanningEditor(){
@@ -190,6 +237,9 @@ function onClickReturnFromPlanningEditor(){
 
 
 
+
+
+// -------------------    #EDITION journalier FIN ---------------
 
 
 
