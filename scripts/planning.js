@@ -32,9 +32,6 @@ class EditorActivityItem{
         // Conteneur principal
         this.element = document.createElement("div");
         this.element.classList.add("editor-activity-item-content");
-        this.element.onclick = () =>{
-            onRemoveActivityInPlanningEditor(this.dayKey,activityName);
-        };
         
         this.render();
     };
@@ -43,7 +40,7 @@ class EditorActivityItem{
         this.element.innerHTML = `
             <img src="${this.imgRef}" alt="">
             <p>${this.activityName}</p>
-            <button><img src="./Icons/Icon-Delete-color.webp" alt=""></button>        
+            <button onclick="onRemoveActivityInPlanningEditor('${this.activityName}')"><img src="./Icons/Icon-Delete-color.webp" alt=""></button>        
         `;
 
     // Insertion dans le parent
@@ -197,14 +194,14 @@ function onUpdatePlanningDayEditor(keyTarget,activities) {
 
 
 // Suppression d'une activité dans une journée
-function onRemoveActivityInPlanningEditor(dayKey,activityToRemove) {
+function onRemoveActivityInPlanningEditor(activityToRemove) {
     
     //Retire l'éléménet de l'array temporaire
     let indexToRemove = tempPlanningEditorDayItems.indexOf(activityToRemove);
     tempPlanningEditorDayItems.splice(indexToRemove,1);
 
     // Réactualise l'affichage
-    onUpdatePlanningDayEditor(dayKey,tempPlanningEditorDayItems);
+    onUpdatePlanningDayEditor(currentPlanningDayKey,tempPlanningEditorDayItems);
 
 
 }
