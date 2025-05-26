@@ -16,6 +16,7 @@
     --themeGradientPink : linear-gradient(#ff5780,#fc97b0);
     --themePinkDark: #ff5780;
     --themePinkLight: #ffa8be;
+    --inputSize:16px;
 }
 
 
@@ -90,7 +91,7 @@ button.btn-menu {
     justify-content: center;
     text-align: center;
     width: 90px;
-    height: 40px; /* Taille augmentée pour plus d'équilibre */
+    height: 40px; 
     border: none;
     border-radius: 20px;
     padding: 5px;
@@ -205,7 +206,7 @@ div.new-interface select {
     padding: 0 10px; /* Ajoute un padding intérieur comme les autres champs */
     box-sizing: border-box; /* Assure que les dimensions incluent le padding et les bordures */
     margin-left: 10px;
-    font-size: 18px;
+    font-size: var(--inputSize);
 }
 
 
@@ -238,7 +239,7 @@ input:not([type="checkbox"]), textarea {
     border-radius: 10px;
     background-color: var(--colorLightGray);
     box-sizing: border-box; /* Inclus padding et bordures dans les dimensions */
-    font-size: 18px;
+    font-size: var(--inputSize);
     color: #555;
 }
 
