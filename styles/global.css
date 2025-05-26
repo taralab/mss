@@ -16,7 +16,7 @@
     --themeGradientPink : linear-gradient(#ff5780,#fc97b0);
     --themePinkDark: #ff5780;
     --themePinkLight: #ffa8be;
-    --inputSize:16px;
+    --inputSize: 16px;
 }
 
 
@@ -50,7 +50,7 @@ img.logo{
 
 
 /* Style des boutons main menu*/
-button.btn-main-menu {
+button.btn-menu {
     display: flex;
     flex-direction: column; /* Place l'image au dessus du texte */
     align-items: center;
@@ -65,44 +65,38 @@ button.btn-main-menu {
 }
 
 /* Ajustement des images */
-button.btn-main-menu img {
+button.btn-menu img {
     width: 20px;
     height: 20px;
     margin-bottom: 3px; /* Espace entre l'image et le texte */
 }
 
 /* Ajustement du texte */
-button.btn-main-menu span {
+button.btn-menu span {
     font-size: 12px;
     font-weight: bold;
     color: var(--colorMainTheme1);
 }
 
 /* Spécifique texte bouton menu blanc */
-button.btn-main-menu span.textWhite{
+button.btn-menu span.textWhite{
     color: white;
 }
 
 
-/* Les boutons des interfaces */
-button.btn-menu {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    width: 90px;
-    height: 40px; 
-    border: none;
-    border-radius: 20px;
-    padding: 5px;
-    background: none;
-    margin-left: 10px;margin-right: 10px;
-}
+
 
 button.return{
-    border: solid 1px var(--colorMainTheme1);
+    /* border: solid 1px var(--colorMainTheme1);   */
+}
+button.delete > span{
+    color: var(--colorMainTheme6);
 }
 
+button.btnFocus{
+    /* background-color: var(--colorMainTheme1); */
+    /* border: solid 1px var(--colorMainTheme1); */
+}
 
 
 /* Les boutons des menu contenant du texte */
@@ -117,9 +111,6 @@ button.btn-menu-text{
     font-weight: bold;
 }
 
-button.delete{
-    background: var(--themeGradientPink);
-}
 
 
 div.confirmationDelete{
@@ -587,9 +578,6 @@ p.item-data-comment-expand{
 
 /* Bouton New Items */
 
-button.btnFocus{
-    background-color: var(--colorMainTheme1);
-}
 
 button.btnFlottant{
     background: linear-gradient(rgba(38,160,184,0.8), rgba(64,204,205,0.8));
