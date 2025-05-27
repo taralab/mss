@@ -141,14 +141,6 @@ async function deleteTemplateSession(templateKey) {
 
 
 
-// Gestion si le nombre maximal de modèle de session atteints
-function gestionMaxTemplateSessionReach() {
-    // Gestion bouton new compteur
-    document.getElementById("btnCreateTemplateSession").disabled = templateSessionKeys.length >= maxTemplateSession ? true : false;
-}
-
-
-
 // Recherche de template de session par son id/key
 async function findTemplateSessionById(templateId) {
     try {
@@ -233,9 +225,6 @@ async function eventUpdateTemplateSessionList() {
 
     if (devMode === true){console.log("templateSessionsNameList:",templateSessionsNameList);};
 
-    // Traitement du bouton de limite de création
-    gestionMaxTemplateSessionReach();
-
     // Affiche la liste des modèles de sessions
     onSetTemplateSessionNameList();
 }
@@ -253,6 +242,10 @@ function onSetTemplateSessionNameList() {
     //Affichage si aucun modèle de session
     if (templateSessionKeys.length === 0 ) {
        parentRef.innerHTML = "Aucun modèle à afficher !";
+
+        // Insertion du bouton ajouter
+        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), false,parentRef);
+
        return;
     }
 
@@ -264,6 +257,12 @@ function onSetTemplateSessionNameList() {
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (Object.keys(templateSessionsNameList).length - 1)) {
+
+            // Insertion du bouton ajouter et traitement état désactivation
+            let btnIsDisabled = templateSessionKeys.length >= maxTemplateSession;
+            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), btnIsDisabled, parentRef);
+
+            // Ligne de cloture
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = `ℹ️ Vous pouvez créer jusqu'à ${maxTemplateSession} modèles.`;

@@ -85,9 +85,7 @@ button.btn-menu span.textWhite{
 
 
 
-button.return{
-    /* border: solid 1px var(--colorMainTheme1);   */
-}
+
 button.delete > span{
     color: var(--colorMainTheme6);
 }

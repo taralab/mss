@@ -6,7 +6,7 @@ let userTemplateListItems = {
     currentTemplateEditorID = "",
     templateAvailable = false,
     currentTemplateInView = {},
-    maxTemplate = 2;
+    maxTemplate = 20;
 
 
 
