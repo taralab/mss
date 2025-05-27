@@ -5,7 +5,7 @@ const basePath = serviceWorkerUrl.replace(/service-worker\.js$/, '');
 console.log(`[SERVICE WORKER] : BasePath = ${basePath}`);
 
 // Nom de la version du cache
-const CACHE_VERSION = "V1.7.16"; // Incrémente la version à chaque mise à jour
+const CACHE_VERSION = "V1.7.17"; // Incrémente la version à chaque mise à jour
 const STATIC_CACHE = `static-${CACHE_VERSION}`;
 
 // Les js et css (fichiers critiques : Network First)
@@ -49,25 +49,20 @@ const ICONS = [
   `${basePath}Icons/Icon-Download.webp`,
   `${basePath}Icons/Icon-Favoris.webp`,
   `${basePath}Icons/Icon-Favoris-Sel.webp`,
-  `${basePath}Icons/Icon-Info.webp`,
   `${basePath}Icons/Icon-New.webp`,
-  `${basePath}Icons/Icon-Profil.webp`,
   `${basePath}Icons/Icon-Return-cancel.webp`,
   `${basePath}Icons/Icon-Setting.webp`,
   `${basePath}Icons/Icon-Stat.webp`,
   `${basePath}Icons/Icon-Trophy.webp`,
   `${basePath}Icons/Icon-Upload.webp`,
-  `${basePath}Icons/Icon-Valider.webp`,
   `${basePath}Icons/Logo_MSS-192.png`,
   `${basePath}Icons/Logo_MSS-512.png`,
   `${basePath}Icons/MSS-Logo.ico`,
   `${basePath}Icons/notifyBadge48.png`,
   `${basePath}Icons/notifyRewardsColor192.png`,
   `${basePath}Icons/MSS_Prod-QR-code.webp`,
-  `${basePath}Icons/Icon-Favoris-Menu.webp`,
   `${basePath}Icons/Icon-wait.webp`,
   `${basePath}Icons/Icon-Plus.webp`,
-  `${basePath}Icons/Icon-Set-Template.webp`,
   `${basePath}Icons/badge-locked.webp`,
   `${basePath}Icons/Icon-Share.webp`,
   `${basePath}Icons/RewardShareBackground.webp`,
@@ -77,13 +72,11 @@ const ICONS = [
   `${basePath}Icons/Icon-nav-increase.webp`,
   `${basePath}Icons/Icon-nav-decrease.webp`,
   `${basePath}Icons/Icon-Session.webp`,
-  `${basePath}Icons/Icon-Send.webp`,
   `${basePath}Icons/Icon-Counter-Done.webp`,
-  `${basePath}Icons/Icon-Close.webp`,
-  `${basePath}Icons/Icon-Search.webp`,
   `${basePath}Icons/Background-texture.webp`,
   `${basePath}Icons/Icon-Agenda-Hebdo.webp`,
-  `${basePath}Icons/Icon-Plus-color.webp`
+  `${basePath}Icons/Icon-Plus-color.webp`,
+  `${basePath}Icons/Icon-Accepter-blanc.webp`
 ];
 
 const IMAGES = [
