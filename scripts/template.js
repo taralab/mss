@@ -6,7 +6,7 @@ let userTemplateListItems = {
     currentTemplateEditorID = "",
     templateAvailable = false,
     currentTemplateInView = {},
-    maxTemplate = 30;
+    maxTemplate = 2;
 
 
 
@@ -61,7 +61,7 @@ async function onLoadTemplateFromDB() {
 function onUpdateTemplateKeys() {
 
      // Si des éléments sont présent traitement des keys et trie
-     if (userTemplateListItems) {
+    if (userTemplateListItems) {
         // Traitement des clés
         userTemplateListKeys = Object.keys(userTemplateListItems);
 
@@ -82,12 +82,8 @@ function onUpdateTemplateKeys() {
             console.log(userTemplateListKeys);
         }
 
-        
-        //gère l'affichage du bouton de création new template selon si le max atteind
-        document.getElementById("btnCreateTemplate").disabled = userTemplateListKeys.length >= maxTemplate ? true : false;
     }else{
-        //si pas de modèle, le bouton de création est disponible
-        document.getElementById("btnCreateTemplate").disabled = false;
+
     }
 }
 
@@ -268,9 +264,13 @@ function onCreateTemplateMenuList(templateKeysList) {
     divTemplateListMenuRef.innerHTML = "";
 
 
-    // Affichage en cas d'aucune modèle
+    // Affichage en cas d'aucun modèle
     if (templateKeysList.length < 1) {
         divTemplateListMenuRef.innerHTML = "Aucun modèle à afficher !";
+
+        // Insertion du bouton ajouter
+        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), false,divTemplateListMenuRef);
+
         return
     }
 
@@ -303,6 +303,12 @@ function onCreateTemplateMenuList(templateKeysList) {
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (userTemplateListKeys.length - 1)) {
+
+            // Insertion du bouton ajouter et desactivation si quota atteind
+            let isButtonDisabled = userTemplateListKeys.length >= maxTemplate;
+
+            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), isButtonDisabled, divTemplateListMenuRef);
+
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = "ℹ️ Créez jusqu'à 30 modèles d'activités.";

@@ -2363,7 +2363,7 @@ div.planning-editor{
 
 
 /* Bouton ajouter activité */
-div.planning-editor > button {
+button.dynamic-button-add {
     height: 40px; width: 200px;
     background-color: var(--colorMainTheme1);
     border: solid 2px var(--colorMainTheme1);

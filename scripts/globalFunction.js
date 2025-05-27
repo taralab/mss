@@ -32,6 +32,27 @@ function onUnlockDivDoubleClick(divTargetArray) {
 }
 
 
+// Bouton dynamique "ajouter quelquechose"
+class Button_add {
+    constructor(texte, onClick, isDisabled = false, parent = document.body) {
+        this.bouton = document.createElement("button");
+        this.bouton.className = "dynamic-button-add";
+        this.bouton.disabled = isDisabled;
+        this.bouton.onclick = onClick;
+
+        // Ajout du contenu HTML
+        const p = document.createElement("p");
+        p.className = "planningEditorPlus";
+        p.textContent = "+";
+
+        this.bouton.appendChild(p);
+        this.bouton.append(` ${texte}`);
+
+        // Insertion dans le DOM
+        parent.appendChild(this.bouton);
+    }
+}
+
 
 
 
