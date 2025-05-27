@@ -59,7 +59,6 @@ button.btn-menu {
     width: 70px;
     height: 50px; /* Taille augmentée pour plus d'équilibre */
     border: none;
-    border-radius: 5px;
     padding: 5px;
     background: none;
 }
@@ -94,8 +93,11 @@ button.delete > span{
 }
 
 button.btnFocus{
-    /* background-color: var(--colorMainTheme1); */
-    /* border: solid 1px var(--colorMainTheme1); */
+    background-color: var(--colorMainTheme1);
+    width: 100px;
+    color: white;
+    font-size: 18px;
+    border-radius: 10px;
 }
 
 
@@ -2362,11 +2364,11 @@ div.planning-editor{
 
 /* Bouton ajouter activité */
 div.planning-editor > button {
-    height: 50px; width: 250px;
+    height: 40px; width: 200px;
     background-color: var(--colorMainTheme1);
-    border: solid 1px var(--colorMainTheme1);
+    border: solid 2px var(--colorMainTheme1);
     border-radius: 10px;
-    font-weight: bold;;
+    /* font-weight: bold; */
     font-size: 18px;
     margin: auto;
     margin-top: 20px;margin-bottom: 20px;
