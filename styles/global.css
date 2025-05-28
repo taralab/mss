@@ -17,6 +17,7 @@
     --themePinkDark: #ff5780;
     --themePinkLight: #ffa8be;
     --inputSize: 16px;
+    --inputBorder : solid 1px rgb(179, 193, 201);
 }
 
 
@@ -189,7 +190,7 @@ div.new-interface p {
 
 div.new-interface select {
     width: calc(100% - 20px); /* 100% moins 10px de padding de chaque côté */
-    border: solid 1px rgb(179, 193, 201);
+    border: var(--inputBorder);
     border-radius: 10px;
     color: #555;
     background-color: var(--colorLightGray);
@@ -226,7 +227,7 @@ input:not([type="checkbox"]), textarea {
     height: 35px;
     padding: 0 10px; /* Ajoute un padding intérieur de 10px */
     margin-left: 10px;
-    border: solid 1px rgb(179, 193, 201);
+    border: var(--inputBorder);
     border-radius: 10px;
     background-color: var(--colorLightGray);
     box-sizing: border-box; /* Inclus padding et bordures dans les dimensions */
@@ -252,7 +253,7 @@ div.number-container {
     text-align: center;
     font-size: 18px;
     font-weight: bold;
-    border: solid 1px rgb(179, 193, 201);
+    border: var(--inputBorder);
     border-radius: 10px;
     outline: none;
     background: white;
@@ -1947,7 +1948,7 @@ input.compteur {
     height: 30px;
     text-align: center;
     font-size: 18px;
-    border: solid 1px rgb(179, 193, 201);
+    border: var(--inputBorder);
     border-radius: 10px;
     outline: none;
     background: white;
@@ -2133,7 +2134,7 @@ input.numberGenSession {
     height: 30px;
     text-align: center;
     font-size: 12px;
-    border: 2px solid #ccc;
+    border: var(--inputBorder);
     border-radius: 5px;
     outline: none;
     background: white;
@@ -2174,7 +2175,15 @@ input.gen-session-col-rep{
 
 select.gen-session-col-color{
     width: 80px;
-    border-radius: 5px;
+    border: var(--inputBorder);
+    border-radius: 10px;
+    color: #555;
+    background-color: var(--colorLightGray);
+    height: 35px;
+    padding: 0 10px; /* Ajoute un padding intérieur comme les autres champs */
+    box-sizing: border-box; /* Assure que les dimensions incluent le padding et les bordures */
+    margin-left: 10px;
+    font-size: var(--inputSize);
 }
 
 
@@ -2182,9 +2191,12 @@ select.gen-session-col-color{
 
 select.chooseTemplateSession{
     padding: 10px; margin-bottom: 10px;
-    border-radius: 5px; font-weight: bold;
+    border-radius: 10px; font-weight: bold;
     text-align: center; font-size: 16px; 
     margin-left: 10px;margin-right: 10px;
+    border: solid 1px var(--colorMainTheme1);
+    background-color: var(--colorMainTheme1);
+    color: white;
 }
 
 /* ------------------------------------ FIN Génération session ----------------------------------*/
@@ -2362,7 +2374,7 @@ div.planning-editor{
 
 /* Bouton ajouter activité */
 button.dynamic-button-add {
-    height: 40px; width: 200px;
+    height: 50px; width: 200px;
     background-color: var(--colorMainTheme1);
     border: solid 2px var(--colorMainTheme1);
     border-radius: 10px;
