@@ -311,7 +311,7 @@ function onCreateTemplateMenuList(templateKeysList) {
 
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
-            newClotureList.innerHTML = "ℹ️ Créez jusqu'à 30 modèles d'activités.";
+            newClotureList.innerHTML = "ℹ️ Créez jusqu'à 20 modèles d'activités.";
             divTemplateListMenuRef.appendChild(newClotureList);
         }
     });

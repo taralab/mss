@@ -1870,6 +1870,7 @@ p.compteur-name{
     font-weight: bold;
     text-align: center;
     text-transform: uppercase;
+    max-width: 250px;
 }
 
 
@@ -2374,7 +2375,7 @@ div.planning-editor{
 
 /* Bouton ajouter activité */
 button.dynamic-button-add {
-    height: 50px; width: 200px;
+    height: 45px; width: 200px;
     background-color: var(--colorMainTheme1);
     border: solid 2px var(--colorMainTheme1);
     border-radius: 10px;
