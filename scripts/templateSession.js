@@ -318,6 +318,10 @@ function onClickBtnCreateTemplateSession(){
 // Sequence d'ouverture de l'editeur de modele de session selon le mode choisi(creation ou modification)
 
 async function eventOpenTemplateSessionEditor(mode){
+
+    // Enlève la notification de champ obligatoire si présent
+    document.getElementById("inputTemplateSessionName").classList.remove("fieldRequired");
+
     // Enregistre le mode d'ouverture
     templateSessionEditorMode = mode;
 
@@ -383,12 +387,22 @@ function onSetTemplateSessionTableLine(templateData) {
     }); 
     
     
-    
-    
 }
 
 
 async function onClickSaveFromTemplateSessionEditor() {
+
+    // Controle titre obligatoire
+    let inputTemplateSessionNameRef = document.getElementById("inputTemplateSessionName");
+    let isTemplateTitleSet  = onCheckEmptyField(inputTemplateSessionNameRef);
+
+    // Si condition non remplit, met fin à la fonction
+    if (isTemplateTitleSet) {
+        if (devMode === true){console.log("[ TEMPLATE SESSION ] Champ obligatoire non remplis");};
+
+        return
+    }
+
 
     // Masque le popup
     onLeaveMenu("TemplateSessionEditor");
@@ -397,7 +411,7 @@ async function onClickSaveFromTemplateSessionEditor() {
     let newCounterList = onGetTableTemplateSessionItem();
 
     // Récupère le nom du modele
-    let templateSessionName = document.getElementById("inputTemplateSessionName").value;
+    let templateSessionName = inputTemplateSessionNameRef.value;
 
     let templateSessionTosave = {
         sessionName: templateSessionName,
@@ -443,8 +457,6 @@ async function onClickSaveFromTemplateSessionEditor() {
     eventUpdateTemplateSessionList();
     
 }
-
-
 
 
 

@@ -489,13 +489,22 @@ function onSetFirstLetterUppercase(e) {
 
 
 // detection des champs vides obligatoires
-function onCheckEmptyField(e) {
-    if (e === "") {
+function onCheckEmptyField(inputRef) {
+    if (inputRef.value === "") {
         if (devMode === true){console.log("Champ vide obligatoire détecté !");};
+        inputRef.classList.add("fieldRequired");
     };
-    return e === ""? true :false;
+    return inputRef.value === ""? true :false;
 };
 
+// retrait de l'indication de champ obligatoire si activé, lorsque l'utilisateur
+//  modifie quelque chose dans le champ input
+function onRemoveFieldRequired(targetRef) { 
+    if (targetRef.classList.contains("fieldRequired")) {
+        targetRef.classList.remove("fieldRequired");
+    }
+    
+}
 
 
 

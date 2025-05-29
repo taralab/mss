@@ -439,16 +439,6 @@ function onChangeTemplatePlanned(checkBoxValue) {
 
 
 
-// retrait de l'indication de champ obligatoire si activé, lorsque l'utilisateur
-//  modifie quelque chose dans le champ Titre
-function onInputTemplateTitleChange() {
-
-    if (inputTemplateTitleRef.classList.contains("fieldRequired")) {
-        inputTemplateTitleRef.classList.remove("fieldRequired");
-    }
-}
-
-
 
 function onClickSaveFromTemplateEditor(){
     onLockDivDoubleClick(["divBtnTemplateEditor","divTemplateEditor"]);
@@ -470,12 +460,11 @@ function onFormatTemplate() {
 
     // Verification des champs requis
     if (devMode === true){console.log("[TEMPLATE] controle des champs requis");};
-    let emptyField = onCheckEmptyField(inputTemplateTitleRef.value);
+    let emptyField = onCheckEmptyField(inputTemplateTitleRef);
 
     if (emptyField === true) {
         if (devMode === true){console.log("[TEMPLATE] Champ obligatoire non remplis");};
 
-        inputTemplateTitleRef.classList.add("fieldRequired");
         onUnlockDivDoubleClick(["divBtnTemplateEditor","divTemplateEditor"]);
         return
     };

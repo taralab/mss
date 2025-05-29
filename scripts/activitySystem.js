@@ -678,12 +678,11 @@ function onFormatActivity() {
 
     // Verification des champs requis
     if (devMode === true){console.log("[ NEW ACTIVITE ] controle des champs requis");};
-    let emptyField = onCheckEmptyField(inputDateRef.value);
+    let emptyField = onCheckEmptyField(inputDateRef);
 
     if (emptyField === true) {
         if (devMode === true){console.log("[ NEW ACTIVITE ] Champ obligatoire non remplis");};
 
-        inputDateRef.classList.add("fieldRequired");
         onUnlockDivDoubleClick(["divActivityEditor","divBtnActivity"]);//retire la sécurité du clic
         return
     };
@@ -772,20 +771,6 @@ function onCheckIfModifiedRequired(activityToInsertFormat) {
 }
 
 
-
-
-
-
-
-// retrait de l'indication de champ obligatoire si activé, lorsque l'utilisateur
-//  modifie quelque chose dans le champ date
-function onInputDateChange() {
-
-    if (inputDateRef.classList.contains("fieldRequired")) {
-        inputDateRef.classList.remove("fieldRequired");
-    }
-    
-}
 
 
 
