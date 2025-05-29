@@ -1217,6 +1217,7 @@ div.stat-months {
     max-width: calc(100% - 20px);
     padding-left: 10px;
     padding-right: 10px;
+    padding-bottom: 10px;
     overflow-x: auto; /* Ajout du scroll horizontal */
     white-space: nowrap; /* Empêche les éléments de passer à la ligne */
 }
@@ -2410,7 +2411,8 @@ div.planning-editor{
 
 /* Bouton ajouter activité */
 button.dynamic-button-add {
-    height: 45px; width: 200px;
+    height: 45px; min-height: 45px;
+    width: 200px;
     background-color: var(--colorMainTheme1);
     border: solid 2px var(--colorMainTheme1);
     border-radius: 10px;
