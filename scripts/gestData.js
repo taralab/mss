@@ -346,6 +346,13 @@ async function importBdD(dataToImport) {
                 counterList : e.counterList
             }
             await onInsertNewTemplateSessionInDB(newtemplateSession);
+
+        //PLANNING
+        } else if (e.type === planningStoreName){
+           await updateDocumentInDB(planningStoreName, (doc) => {
+                doc.userPlanning = e.userPlanning;
+                return doc;
+            });
         }
 
 
