@@ -1,5 +1,6 @@
 // Referencement
-let selectorStatRef = document.getElementById("selectorStat");
+let selectorStatRef = document.getElementById("selectorStat"),
+    imgStatActivityPreviewRef = document.getElementById("imgEditorActivityPreview");
 
 // Array qui va contenir toutes les keys des activités non planifiées
 let statActivityNonPlannedKeys = [];
@@ -637,6 +638,9 @@ function onChangeSelectorYearGraph(yearTarget){
 function displayActivityStats(activityName) {
     if (devMode === true){console.log("[STAT] demande de stat pour " + activityName);};
 
+    //image previsualisation
+    imgStatActivityPreviewRef.src = activityChoiceArray[activityName].imgRef;
+
     // Récupère uniquement les keys données concernant l'activité en question et non planifié
     let specificActivitiesKeys = Object.entries(allUserActivityArray)
     .filter(([key, value]) => value.isPlanned === false && value.name === activityName)
@@ -719,6 +723,10 @@ function displayActivityStats(activityName) {
 
 // Fonction pour afficher les statistiques générales
 function displayGeneralStats(nonPlannedActivitiesKeys) {
+    // l'image de prévisualisation 
+    imgStatActivityPreviewRef.src = "./images/icon-All.webp";
+    
+
     if (!Object.keys(nonPlannedActivitiesKeys) || Object.keys(nonPlannedActivitiesKeys).length === 0) {
         document.getElementById("stats").innerHTML = `
             <p>Bienvenue ! Commence à enregistrer tes activités pour découvrir tes statistiques ici. 🚀</p>

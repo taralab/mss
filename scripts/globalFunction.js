@@ -699,6 +699,7 @@ function onChangeMenu(menuTarget) {
             pMenuTitleRef.innerHTML = "Statistiques";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnStat","divStat"],[],[],[],[]);
             onOpenMenuStat();
+            onDisplayImgActivityPreview();
         break;
         case "Rewards":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : Rewards");};
@@ -882,6 +883,7 @@ function onLeaveMenu(menuTarget) {
         case "Stat":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Stat");};
             onChangeDisplay(["divStat","divBtnStat"],allDivHomeToDisplayBlock,allDivHomeToDisplayFlex,[],[],[],[]);
+            onHideImgActivityPreview();
         break;
         case "Rewards":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : Rewards");};
