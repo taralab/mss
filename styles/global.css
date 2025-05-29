@@ -1212,7 +1212,7 @@ div.stat-months {
     display: flex;
     justify-content: space-between;
     margin-top: 20px;
-    gap: 20px;
+    gap: 10px;
     width: calc(100% - 20px);
     max-width: calc(100% - 20px);
     padding-left: 10px;
@@ -1226,6 +1226,7 @@ div.stat-month {
     display: flex;
     flex-direction: column; 
     align-items: center;
+    min-width: 40px;
 }
 
 .stat-month span {
