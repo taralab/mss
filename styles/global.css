@@ -12,8 +12,8 @@
     --boxShadow : 0 2px 5px rgba(0, 0, 0, 0.1);
     --boxShadowMoins : 0 2px 5px rgba(0, 0, 0, 0.03);
     --boxShadowPlus : 0 2px 5px rgba(0, 0, 0, 0.2);
-    --themeGradientBlue : linear-gradient(#26a0b8, #40cccd);
-    --themeGradientPink : linear-gradient(#ff5780,#fc97b0);
+    --themeGradientBlue : linear-gradient(#26a0b8, #47dbdb);
+    --themeGradientPink : linear-gradient(#ff5780,#feaec2);
     --themeGradientGray : linear-gradient(#929292,#d5d5d5 );
     --themePinkDark: #ff5780;
     --themePinkLight: #ffa8be;
@@ -310,10 +310,11 @@ label{
 select.conditionUtilisation{
     margin-left: 10px;
     width: 95%;
-    border: none;
-    border-bottom: solid 1px var(--colorMainTheme1);
     background-color: var(--colorLightGray);
-    height: 25px;
+    height: 35px;
+    font-size: 18px;
+    border: var(--inputBorder);
+    border-radius: 10px;
 }
 
 textarea:focus, input:focus, select:focus{
@@ -961,6 +962,7 @@ button.deleteConfirmBdD{
     width: 70px;
     height: 70px;
     color: white;
+    border-radius: 10px;
 }
 
 div.confirmationDeleteBdD p{
@@ -1193,15 +1195,15 @@ h3.stat{
     justify-content: baseline;
 }
 h3.stat-title-activity{
-    color: var(--colorMainTheme6);
+    color: #666;
 }
 
 h3.stat-title-duration{
-    color: var(--colorMainTheme1);
+    color: var(--colorMainTheme6);
 }
 
 h3.stat-title-distance{
-    color: #666;
+    color: var(--colorMainTheme1);
 }
 
 
@@ -1231,13 +1233,19 @@ div.stat-month {
     color: #555;
 }
 
-span.StatHigherValue{
+span.StatHigherValueActivity{
     font-weight: bolder;
-    /* color: var(--colorMainTheme1); */
+    color: #666;
 }
 
-
-
+span.StatHigherValueDuration{
+    font-weight: bolder;
+    color: var(--colorMainTheme6);
+}
+span.StatHigherValueDistance{
+    font-weight: bolder;
+    color: var(--colorMainTheme1);
+}
 
 /* Vertical Progress Bar */
 .stat-progress-bar {
@@ -1263,15 +1271,15 @@ span.StatHigherValue{
 
 /* Les couleurs des graphiques de stat */
 .stat-pb-activities::before{
-    background:var(--themeGradientPink);
+    background:var(--themeGradientGray);
 }
 
 .stat-pb-duration::before{
-    background:var(--themeGradientBlue);
+    background:var(--themeGradientPink);
 }
 
 .stat-pb-distance::before{
-    background:var(--themeGradientGray);
+    background:var(--themeGradientBlue);
 }
 
 

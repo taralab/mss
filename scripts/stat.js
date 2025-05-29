@@ -519,17 +519,27 @@ function onSetResumeByYear(count,distance,hour) {
 function onSetGraphicItems(activityCount,higherCountValue,higherDistanceValue,higherDurationValue) {
 
 
-    // Retire toutes les classes "StatHigherValue" pour ceux qui les ont
+    // Retire toutes les classes "StatHigherValueXXXX" pour ceux qui les ont
     // Pour rechercher dans les enfants d'un parent spécifique
     let parent = document.getElementById("divStat");
 
 
-    // Retire les class StatHigherValue
-    let elementToRemoveClass = parent.querySelectorAll(".StatHigherValue");
+    // Retire les class StatHigherValueXXX
+    let statActivityToRemoveClass = parent.querySelectorAll(".StatHigherValueActivity"),
+        statDurationToRemoveClass = parent.querySelectorAll(".StatHigherValueDuration"),
+        statDistanceToRemoveClass = parent.querySelectorAll(".StatHigherValueDistance");
 
-    elementToRemoveClass.forEach(e=>{
-       e.classList.remove("StatHigherValue");
+    statActivityToRemoveClass.forEach(e=>{
+       e.classList.remove("StatHigherValueActivity");
     });
+    statDurationToRemoveClass.forEach(e=>{
+       e.classList.remove("StatHigherValueDuration");
+    });
+    statDistanceToRemoveClass.forEach(e=>{
+       e.classList.remove("StatHigherValueDistance");
+    });
+
+
 
 
     if (devMode === true){
@@ -547,8 +557,8 @@ function onSetGraphicItems(activityCount,higherCountValue,higherDistanceValue,hi
 
         // Traitement valeur la plus élevée (mise en gras)
         if (activityCount[e].count === higherCountValue) {
-            document.getElementById(`spanGraphCountMonthName-${e}`).classList.add("StatHigherValue");
-            document.getElementById(`stat-number-${e}`).classList.add("StatHigherValue");
+            document.getElementById(`spanGraphCountMonthName-${e}`).classList.add("StatHigherValueActivity");
+            document.getElementById(`stat-number-${e}`).classList.add("StatHigherValueActivity");
         }
 
     });
@@ -560,8 +570,8 @@ function onSetGraphicItems(activityCount,higherCountValue,higherDistanceValue,hi
 
         // Traitement valeur la plus élevée (mise en gras)
         if (activityCount[e].distance === higherDistanceValue) {
-            document.getElementById(`spanGraphDistanceMonthName-${e}`).classList.add("StatHigherValue");
-            document.getElementById(`stat-distance-${e}`).classList.add("StatHigherValue");
+            document.getElementById(`spanGraphDistanceMonthName-${e}`).classList.add("StatHigherValueDistance");
+            document.getElementById(`stat-distance-${e}`).classList.add("StatHigherValueDistance");
         }
     });
 
@@ -573,8 +583,8 @@ function onSetGraphicItems(activityCount,higherCountValue,higherDistanceValue,hi
 
         // Traitement valeur la plus élevée (mise en gras)
         if (activityCount[e].duration === higherDurationValue) {
-            document.getElementById(`spanGraphDurationMonthName-${e}`).classList.add("StatHigherValue");
-            document.getElementById(`stat-duration-${e}`).classList.add("StatHigherValue");
+            document.getElementById(`spanGraphDurationMonthName-${e}`).classList.add("StatHigherValueDuration");
+            document.getElementById(`stat-duration-${e}`).classList.add("StatHigherValueDuration");
         }
     });
 
