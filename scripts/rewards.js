@@ -309,7 +309,7 @@ function onLoadUserRewardsList() {
             new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divSpecialRewardsListRef);   
         });
     }else{
-        divSpecialRewardsListRef.innerHTML = "Aucune récompense spéciale obtenue !";
+        divSpecialRewardsListRef.innerHTML = "😅 Rien de spécial... pour l’instant !";
     }
 
 

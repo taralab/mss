@@ -76,8 +76,7 @@ const ICONS = [
   `${basePath}Icons/Background-texture.webp`,
   `${basePath}Icons/Icon-Agenda-Hebdo.webp`,
   `${basePath}Icons/Icon-Plus-color.webp`,
-  `${basePath}Icons/Icon-Accepter-blanc.webp`,
-  `${basePath}Icons/Icon-Favoris-White.webp`
+  `${basePath}Icons/Icon-Accepter-blanc.webp`
 ];
 
 const IMAGES = [
