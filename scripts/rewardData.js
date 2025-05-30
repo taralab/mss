@@ -1057,3 +1057,35 @@ const allRewardsObject = {
         text: "100 séances de yoga"
     }
 };
+
+
+
+
+
+// Cet objet contient tous les spécials event de tous les temps
+// Ne jamais retirer un special event sinon l'utilisateur ne pourra plus accéder à sa récompense.
+const allSpecialEventsRewardsObject = {
+    "GRAND-RAID-2025-FINISH":{
+        imgRef :"./BadgesSpecial/Badge-special-GR2025_F.webp",
+        title : "GRAND RAID 2025 !",
+        text: "A terminé le Grand Raid Réunion 2025.",
+    },
+    "GRAND-RAID-2025-TRY":{
+        imgRef :"./BadgesSpecial/Badge-special-GR2025_T.webp",
+        title : "GR 2025 Participant!",
+        text: "A participé au Grand Raid Réunion 2025.",
+    }
+};
+
+// code de débloquage avec les key des trophés débloqués
+// Cette array n'est remplit que s'il y a des spécial events en cours
+//elle référence la code de déverrouillage et les noms des récompenses associées (key allSpecialsEventsRewardsObject).
+const specialEventKey = {
+    GR974_2025_T: [
+        "GRAND-RAID-2025-TRY",
+    ],
+    GR974_2025_F: [
+        "GRAND-RAID-2025-TRY",
+        "GRAND-RAID-2025-FINISH"
+    ]
+};

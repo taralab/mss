@@ -20,8 +20,53 @@ divRewardsListRef;
 
 
 
-// ---------------------------------------- BDD -------------------------------------------
+// ---------------------------------------- CLASS  -------------------------------------------
 
+
+
+class RewardCardEnabled{
+    constructor(rewardKey,rewardTitle,imgRef,isNewReward,parentRef){
+        this.rewardKey = rewardKey;
+        this.rewardTitle = rewardTitle;
+        this.imgRef = imgRef;
+        this.isNewReward = isNewReward;
+        this.parentRef = parentRef;
+
+
+
+        // Conteneur principal
+        this.element = document.createElement("div");
+        this.element.classList.add("reward-card", "unlocked");
+        // Si nouveau reward, ajoute une classe
+        if (this.isNewReward) {
+            this.element.classList.add("newRewards");
+        };
+
+        this.element.onclick = (event) => {
+            // si c'est un new reward, enleve la class newRewards lorsque clique dessus
+            if (event.currentTarget.classList.contains("newRewards")) {
+                event.currentTarget.classList.remove("newRewards");
+            }
+            // affiche en plein écran
+            onDisplayRewardsFullScreen(this.rewardKey);
+        };
+
+        // Fonction de rendu
+        this.render();
+    }
+
+    render(){
+        this.element.innerHTML = `
+            <img class="rewardCardEnable" src="${this.imgRef}" loading="lazy">
+            <p class="reward-title">${this.rewardTitle}</p>
+        `;
+        // Insertion dans le parent
+        this.parentRef.appendChild(this.element);
+    }
+
+
+
+}
 
 
 
@@ -220,56 +265,10 @@ function onLoadUserRewardsList() {
 
     userRewardsArray.sort();
 
-
     userRewardsArray.forEach(e=>{
-
-        // la div contenant un reward
-        let newDivRewardCard = document.createElement("div");
-        newDivRewardCard.onclick = function (event) {
-            // si c'est un new reward, enleve la class newRewards lorsque clique dessus
-            if (event.currentTarget.classList.contains("newRewards")) {
-                event.currentTarget.classList.remove("newRewards");
-            }
-
-
-            // affiche en plein écran
-            onDisplayRewardsFullScreen(e);
-        };
-
-        // Ajouter des classes de base
-        newDivRewardCard.classList.add("reward-card", "unlocked");
-
-        // Ajouter une classe supplémentaire si c'est un nouveau reward
-        if (newRewardsToSee.includes(e)) {
-            newDivRewardCard.classList.add("newRewards");
-        }
-
-
-        // IMAGES
-        let newImg = document.createElement("img");
-  
-        newImg.classList.add("rewardCardEnable");
-        newImg.src = allRewardsObject[e].imgRef;
-        newImg.loading = "lazy";
-
-
-
-        // TEXT
-
-        let newPRewardTitle = document.createElement("p");
-        newPRewardTitle.classList.add("reward-title");
-        newPRewardTitle.innerHTML = allRewardsObject[e].title;
-
-        // Insertion
-
-        newDivRewardCard.appendChild(newImg);
-        newDivRewardCard.appendChild(newPRewardTitle);
-        // newDivRewardCard.appendChild(newPRewardCondition);
-
-
-        divRewardsListRef.appendChild(newDivRewardCard);
-    });
-
+        let isNewReward = newRewardsToSee.includes(e);
+        new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divRewardsListRef);
+    });  
 
 
     // le reste des rewards non possédé
