@@ -71,6 +71,40 @@ class RewardCardEnabled{
 
 
 
+class RewardCardLocked{
+    constructor(rewardKey,rewardTitle,condition,parentRef){
+        this.rewardKey = rewardKey;
+        this.rewardTitle = rewardTitle;
+        this.condition = condition;
+        this.parentRef = parentRef;
+
+        // Conteneur principal
+        this.element = document.createElement("div");
+        this.element.classList.add("reward-card", "locked");
+
+        this.element.onclick = () => {
+            onClickRewardLocked(this.element);
+        };
+
+        // Fonction de rendu
+        this.render();
+    }
+
+    render(){
+        this.element.innerHTML = `
+            <img class="rewardCardDisable" src="./Icons/badge-locked.webp" loading="lazy">
+            <p class="reward-title">${this.rewardTitle}</p>
+            <p class="reward-condition">${this.condition}</p></div>
+        `;
+        // Insertion dans le parent
+        this.parentRef.appendChild(this.element);
+    }
+
+
+}
+
+
+
 
 
 
@@ -281,37 +315,7 @@ function onLoadUserRewardsList() {
         let isPossessed = userRewardsArray.includes(key);
 
         if (!isPossessed) {
-            // la div contenant un reward
-            let newDivRewardCard = document.createElement("div");
-            newDivRewardCard.classList.add("reward-card", "locked");
-            newDivRewardCard.onclick = function (){
-                onClickRewardLocked(this);
-            };
-
-
-            // Création des images
-            let newImg = document.createElement("img");
-            newImg.classList.add("rewardCardDisable");
-            newImg.src = "./Icons/badge-locked.webp";
-            newImg.loading = "lazy";
-
-            // TEXT
-            let newPRewardTitle = document.createElement("p");
-            newPRewardTitle.classList.add("reward-title");
-            newPRewardTitle.innerHTML = allRewardsObject[key].title;
-
-            let newPRewardCondition = document.createElement("p");
-            newPRewardCondition.classList.add("reward-condition");
-            newPRewardCondition.innerHTML = allRewardsObject[key].text;
-
-
-
-            // Insertion
-            newDivRewardCard.appendChild(newImg);
-            newDivRewardCard.appendChild(newPRewardTitle);
-            newDivRewardCard.appendChild(newPRewardCondition);
-
-            divRewardsListRef.appendChild(newDivRewardCard);
+            new RewardCardLocked(key,allRewardsObject[key].title,allRewardsObject[key].text,divRewardsListRef);
         }
 
     });
