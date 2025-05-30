@@ -1,6 +1,7 @@
 
 // Les trophes possédés par l'utilisateur
 let userRewardsArray = [],
+    userSpecialRewardsArray = ["ATHLETISME-D-100-SEANCES","BASKETBALL-B-10-SEANCES"  ],
     rewardsEligibleArray = [], //stockes les trophés auxquels l'utilisateur est éligible 
     newRewardsToSee = [],//les nouveaux trophé obtenu. Vidé lorsque l'utilisateur quitte le menu récompense
     rewardAllActivityNonPlannedKeys = [], // tableau qui contient les clé des activités non planifiées
@@ -11,7 +12,8 @@ let userRewardsArray = [],
 let imgRewardsFullScreenRef,
 pRewardsFullScreenTitleRef,
 pRewardsFullScreenTextRef,
-divRewardsListRef;
+divRewardsListRef,
+divSpecialRewardsListRef;
 
 
 
@@ -271,11 +273,12 @@ function onOpenMenuRewards(){
     pRewardsFullScreenTextRef = document.getElementById("pRewardsFullScreenText");
     pRewardsFullScreenTitleRef = document.getElementById("pRewardsFullScreenTitle");
     divRewardsListRef = document.getElementById("divRewardsList");
+    divSpecialRewardsListRef = document.getElementById("divSpecialRewardsList");
 
 
 
     // affiche le nombre de trophé débloqué dans le menu contextuel
-    let textInfoToDisplay = `Obtenues : ${userRewardsArray.length} / ${Object.keys(allRewardsObject).length}`;
+    let textInfoToDisplay = `Standards : ${userRewardsArray.length} / ${Object.keys(allRewardsObject).length}`;
 
     document.getElementById("customInfo").innerHTML = textInfoToDisplay;
 
@@ -292,11 +295,22 @@ function onOpenMenuRewards(){
 function onLoadUserRewardsList() {
 
     divRewardsListRef.innerHTML = "";
+    divSpecialRewardsListRef.innerHTML = "";
 
     if (devMode === true){console.log("[REWARDS] Création de la liste des récompenses");};
 
-    // Les Rewards que possède déjà l'utilisateur 
+    // traitement special reward
+    // si au moins 1 sinon passe à la suite
+    // TEST
+    userSpecialRewardsArray.sort();
+    userSpecialRewardsArray.forEach(e=>{
+        let isNewReward = newRewardsToSee.includes(e);
+        new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divSpecialRewardsListRef);   
+    });
+ //TEST
 
+
+    // Les Rewards que possède déjà l'utilisateur 
     userRewardsArray.sort();
 
     userRewardsArray.forEach(e=>{
@@ -317,7 +331,6 @@ function onLoadUserRewardsList() {
         if (!isPossessed) {
             new RewardCardLocked(key,allRewardsObject[key].title,allRewardsObject[key].text,divRewardsListRef);
         }
-
     });
 
 };
@@ -782,8 +795,6 @@ async function onAffectFinalRewardsToUser() {
         if (devMode === true){console.log(`[REWARDS] [EVENT] Aucun traitement necessaire`);};
     }
 
-
-
 }
 
 
@@ -992,9 +1003,12 @@ function onResetRewardsMenu() {
     imgRewardsFullScreenRef= "";
     pRewardsFullScreenTextRef = "";
     pRewardsFullScreenTitleRef = "";
-    divRewardsListRef = "";
-
     divRewardsListRef.innerHTML = "";
+    divSpecialRewardsListRef.innerHTML = "";
+
+    divRewardsListRef = "";
+    divSpecialRewardsListRef = "";
+
 
 
     newRewardsToSee = [];

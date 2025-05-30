@@ -5,7 +5,7 @@ const envPath = window.location.pathname; // exemple: "/mss/index.html"
 const envBaseFolder = envPath.split('/')[1]; // "mss"
 
 if (envBaseFolder !== "mss") {
-    document.getElementById("divHeader").classList.add("header-dev");
+    // document.getElementById("divHeader").classList.add("header-dev");
     console.log("configuration style dev");
 }
 
@@ -78,6 +78,7 @@ let dbName = `MSS_db`,
     activityStoreName = "ActivityList",
     profilStoreName = "Profil",
     rewardsStoreName = "Recompenses",
+    specialRewardsStoreName = "Special-Recompense",
     settingStoreName = "Setting",
     templateStoreName = "Template",
     favorisStoreName = "Favoris",
@@ -234,6 +235,9 @@ async function onCreateDBStore() {
         }  
     });
     await createStore(rewardsStoreName, { type: rewardsStoreName, rewards: [] });
+
+    await createStore(specialRewardsStoreName, { type: specialRewardsStoreName, specialRewards: [] });
+    
     await createStore(planningStoreName, { type: planningStoreName, userPlanning : defaultPlanningArray});
 
 }
@@ -256,6 +260,11 @@ async function onLoadStores() {
         const rewards = await db.get(rewardsStoreName).catch(() => null);
         if (rewards) {
             userRewardsArray = rewards.rewards;
+        }
+
+        const specialRewards = await db.get(specialRewardsStoreName).catch(() => null);
+        if (specialRewards) {
+            userSpecialRewardsArray = specialRewards.specialRewards;
         }
 
         const favoris = await db.get(favorisStoreName).catch(() => null);

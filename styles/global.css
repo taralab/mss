@@ -1310,9 +1310,35 @@ div.statYears{
 /* ---------------------------------------- RECOMPENSES ------------------------------ */
 
 
+/* div séparateur des catégories de reward */
+div.reward-category{
+    min-width: 100%;
+    font-size: 18px;
+    margin-bottom: 20px;
+    color: white;
+    font-weight: bold;
+    min-height: 35px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    border-radius: 8px;
+}
 
+div.reward-category > img{
+    margin-left: 10px;
+}
 
+div.reward-category.special{
+    background: var(--themeGradientPink);
+}
 
+div.reward-category.standard{
+    background: var(--themeGradientGray);
+}
+
+div.reward-category.standard > span{
+    margin-left: 10px;
+}
 
 
 
@@ -1389,6 +1415,7 @@ div.reward-card {
     text-align: center;
     padding: 10px;
     transition: transform 0.3s, box-shadow 0.3s;
+    max-width: 110px; 
 }
 
 div.reward-card.unlocked {
