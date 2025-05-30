@@ -301,13 +301,19 @@ function onLoadUserRewardsList() {
 
     // traitement special reward
     // si au moins 1 sinon passe à la suite
-    // TEST
-    userSpecialRewardsArray.sort();
-    userSpecialRewardsArray.forEach(e=>{
-        let isNewReward = newRewardsToSee.includes(e);
-        new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divSpecialRewardsListRef);   
-    });
- //TEST
+    
+    if (userSpecialRewardsArray.length > 0) {
+        userSpecialRewardsArray.sort();
+        userSpecialRewardsArray.forEach(e=>{
+            let isNewReward = newRewardsToSee.includes(e);
+            new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divSpecialRewardsListRef);   
+        });
+    }else{
+        divSpecialRewardsListRef.innerHTML = "Aucune récompense spéciale obtenue !";
+    }
+
+
+
 
 
     // Les Rewards que possède déjà l'utilisateur 

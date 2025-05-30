@@ -1334,6 +1334,7 @@ div.reward-category.special{
 
 div.reward-category.standard{
     background: var(--themeGradientGray);
+    margin-top: 20px;
 }
 
 div.reward-category.standard > span{

@@ -1062,6 +1062,12 @@ const allRewardsObject = {
 
 
 
+// *    *   *   *   *   *   *   * SPECIAL EVENTS *    *   *   *   *   
+
+
+
+
+
 // Cet objet contient tous les spécials event de tous les temps
 // Ne jamais retirer un special event sinon l'utilisateur ne pourra plus accéder à sa récompense.
 const allSpecialEventsRewardsObject = {
