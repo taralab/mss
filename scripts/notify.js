@@ -137,7 +137,7 @@ const eventFirstMobileNotify = async (rewardsKeysArray) => {
 
 
 
-
+//Boucle de traitement des notifications mobiles REWARDS
 function onTraiteMobileNotify() {
     // index zero de la file d'attente
     let rewardKey = rewardsKeyArrayToNotifyCue[0];
