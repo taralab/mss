@@ -142,8 +142,25 @@ function onTraiteMobileNotify() {
     // index zero de la file d'attente
     let rewardKey = rewardsKeyArrayToNotifyCue[0];
 
-    sendRewardMobileNotify(allRewardsObject[rewardKey].activityName, allRewardsObject[rewardKey].title);
 
+
+    //Je m'assure que le reward existe dans un des deux objets
+    if (Object.keys(allRewardsObject).includes(rewardKey) || Object.keys(allSpecialEventsRewardsObject).includes(rewardKey)){
+        console.log("reward existant");
+    }else{
+        alert("ERREUR REWARDS : ",rewardKey);
+        return
+    }
+
+    // Recherche dans quel objet se trouve la récompense (standard ou spécial)
+    let isStandartReward = Object.keys(allRewardsObject).includes(rewardKey);
+    if (isStandartReward) {
+        sendRewardMobileNotify(allRewardsObject[rewardKey].activityName, allRewardsObject[rewardKey].title);
+    }else{
+        sendRewardMobileNotify("SPECIAL EVENT", allSpecialEventsRewardsObject[rewardKey].title);
+    }
+
+    
     // Retire l'index zero de la file d'attente
     rewardsKeyArrayToNotifyCue.shift();
 

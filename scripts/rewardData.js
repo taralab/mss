@@ -1072,14 +1072,14 @@ const allRewardsObject = {
 // Ne jamais retirer un special event sinon l'utilisateur ne pourra plus accéder à sa récompense.
 const allSpecialEventsRewardsObject = {
     "GRAND-RAID-2025-FINISH":{
-        imgRef :"./BadgesSpecial/Badge-special-GR2025_F.webp",
+        imgRef :"./Badges-special/Badge-special-GR974_2025_F.webp",
         title : "GRAND RAID 2025 !",
-        text: "A terminé le Grand Raid Réunion 2025.",
+        text: "terminé le Grand Raid Réunion 2025.",
     },
     "GRAND-RAID-2025-TRY":{
-        imgRef :"./BadgesSpecial/Badge-special-GR2025_T.webp",
+        imgRef :"./Badges-special/Badge-special-GR974_2025_P.webp",
         title : "GR 2025 Participant!",
-        text: "A participé au Grand Raid Réunion 2025.",
+        text: "participé au Grand Raid Réunion 2025.",
     }
 };
 

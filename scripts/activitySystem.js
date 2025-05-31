@@ -793,7 +793,7 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
     if (devMode === true){console.log("[REWARDS] Valeur de planification derniere activité  " + isCheckRewardsRequiered);};
 
     if (isCheckRewardsRequiered) {
-        onCheckReward(dataToInsert.name);
+        onCheckReward(dataToInsert.name,dataToInsert.comment);
     }
     
 
@@ -835,7 +835,7 @@ async function eventInsertActivityModification(dataToInsert) {
     if (devMode === true){console.log("[REWARDS] Valeur de planification derniere activité  " + isCheckRewardsRequiered);};
 
     if (isCheckRewardsRequiered) {
-        onCheckReward(dataToInsert.name);
+        onCheckReward(dataToInsert.name,dataToInsert.comment);
     }
     
 

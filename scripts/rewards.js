@@ -1,12 +1,13 @@
 
 // Les trophes possédés par l'utilisateur
 let userRewardsArray = [],
-    userSpecialRewardsArray = ["ATHLETISME-D-100-SEANCES","BASKETBALL-B-10-SEANCES"  ],
+    userSpecialRewardsArray = [],
     rewardsEligibleArray = [], //stockes les trophés auxquels l'utilisateur est éligible 
+    specialRewardsEligibleArray = [],//les trophes special event auxquels l'utilisateur est éligible
     newRewardsToSee = [],//les nouveaux trophé obtenu. Vidé lorsque l'utilisateur quitte le menu récompense
     rewardAllActivityNonPlannedKeys = [], // tableau qui contient les clé des activités non planifiées
-    currentRewardOnFullScreen = "";
-
+    currentRewardOnFullScreen = "",
+    imgShareMode = "";//pour les paramètre du partage "standard" ou "special"
 
 // Reference 
 let imgRewardsFullScreenRef,
@@ -25,13 +26,13 @@ divSpecialRewardsListRef;
 // ---------------------------------------- CLASS  -------------------------------------------
 
 
-
 class RewardCardEnabled{
-    constructor(rewardKey,rewardTitle,imgRef,isNewReward,parentRef){
+    constructor(rewardKey,rewardTitle,imgRef,isNewReward,shareMode,parentRef){
         this.rewardKey = rewardKey;
         this.rewardTitle = rewardTitle;
         this.imgRef = imgRef;
         this.isNewReward = isNewReward;
+        this.shareMode = shareMode;
         this.parentRef = parentRef;
 
 
@@ -50,7 +51,7 @@ class RewardCardEnabled{
                 event.currentTarget.classList.remove("newRewards");
             }
             // affiche en plein écran
-            onDisplayRewardsFullScreen(this.rewardKey);
+            onDisplayRewardsFullScreen(this.rewardKey,shareMode);
         };
 
         // Fonction de rendu
@@ -69,7 +70,6 @@ class RewardCardEnabled{
 
 
 }
-
 
 
 
@@ -306,7 +306,7 @@ function onLoadUserRewardsList() {
         userSpecialRewardsArray.sort();
         userSpecialRewardsArray.forEach(e=>{
             let isNewReward = newRewardsToSee.includes(e);
-            new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divSpecialRewardsListRef);   
+            new RewardCardEnabled(e,allSpecialEventsRewardsObject[e].title,allSpecialEventsRewardsObject[e].imgRef,isNewReward,"special",divSpecialRewardsListRef);   
         });
     }else{
         divSpecialRewardsListRef.innerHTML = "😅 Rien de spécial... pour l’instant !";
@@ -321,7 +321,7 @@ function onLoadUserRewardsList() {
 
     userRewardsArray.forEach(e=>{
         let isNewReward = newRewardsToSee.includes(e);
-        new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,divRewardsListRef);
+        new RewardCardEnabled(e,allRewardsObject[e].title,allRewardsObject[e].imgRef,isNewReward,"standard",divRewardsListRef);
     });  
 
 
@@ -351,16 +351,39 @@ function onLoadUserRewardsList() {
 
 
 // Affiche en grand la récompense
-function onDisplayRewardsFullScreen(rewardName) {
-    if (devMode === true){console.log("[REWARDS]  demande de visualisation de récompense : " + rewardName);};
+function onDisplayRewardsFullScreen(rewardName,shareMode) {
+    imgShareMode = shareMode;//Set le mode de partage
+
+    if (devMode === true){
+        console.log("[REWARDS]  demande de visualisation de récompense : " + rewardName)
+        console.log("mode de partage: ",imgShareMode);
+        ;};
     currentRewardOnFullScreen = rewardName;
 
-    // set les éléments et affiche
+
+    // Recherche dans les object standard et sinon dans les spécials events
+
+
+    // STANDARD REWARDS
+    if (Object.keys(allRewardsObject).includes(rewardName)) {
+        // set les éléments et affiche
         imgRewardsFullScreenRef.src = allRewardsObject[rewardName].imgRef;
 
         pRewardsFullScreenTitleRef.innerHTML = allRewardsObject[rewardName].title;
 
         pRewardsFullScreenTextRef.innerHTML = `Tu as pratiqué ${allRewardsObject[rewardName].text}.`;
+
+        // SPECIAL REWARDS
+    }else if (Object.keys(allSpecialEventsRewardsObject).includes(rewardName)){
+        // set les éléments et affiche
+        imgRewardsFullScreenRef.src = allSpecialEventsRewardsObject[rewardName].imgRef;
+
+        pRewardsFullScreenTitleRef.innerHTML = allSpecialEventsRewardsObject[rewardName].title;
+
+        pRewardsFullScreenTextRef.innerHTML = `Tu as ${allSpecialEventsRewardsObject[rewardName].text}.`;
+    }else{
+        console.log("erreur display REWARDS no found",rewardName);
+    }
 
     document.getElementById("divFullScreenRewards").classList.add("show");
 
@@ -413,7 +436,13 @@ async function shareImage(event) {
 
     // Charger l'image principale (512x512)
     const mainImage = new Image();
-    mainImage.src = allRewardsObject[currentRewardOnFullScreen].imgRef; // Image du reward
+    if (imgShareMode === "standard") {
+        mainImage.src = allRewardsObject[currentRewardOnFullScreen].imgRef; // Image du reward standard
+    }else{
+        mainImage.src = allSpecialEventsRewardsObject[currentRewardOnFullScreen].imgRef; // Image du reward special
+    }
+
+    
     
     background.onload = function() {
         canvas.width = 600; // Largeur fixe
@@ -439,7 +468,11 @@ async function shareImage(event) {
             // La description sous l'image
             ctx.font = "italic 22px Arial, sans-serif";
             ctx.fillStyle = "#004a9f";
-            ctx.fillText(`A pratiqué ${allRewardsObject[currentRewardOnFullScreen].text}.`, canvas.width / 2, yPos + 550); // Juste sous l'image
+            if (imgShareMode === "standard") {
+                ctx.fillText(`A pratiqué ${allRewardsObject[currentRewardOnFullScreen].text}.`, canvas.width / 2, yPos + 550); // Juste sous l'image
+            }else{
+                ctx.fillText(`A ${allSpecialEventsRewardsObject[currentRewardOnFullScreen].text}.`, canvas.width / 2, yPos + 550); // Juste sous l'image
+            }
 
             // Convertir le canvas en fichier et partager
             canvas.toBlob(blob => {
@@ -471,8 +504,9 @@ async function shareImage(event) {
 
 
 
-function onCheckReward(currentActivitySavedName) {
-
+function onCheckReward(currentActivitySavedName,currentActivityComment) {
+    //le nom permet de rechercher selon le type d'activité
+    //le commentaire permet de rechercher les évènements spéciaux via le code inclue dans le commentaire
     onInitRewardsVariable();
 
     onSearchGeneralRewards(currentActivitySavedName);
@@ -497,15 +531,57 @@ function onCheckReward(currentActivitySavedName) {
 
 
 
-    // Traite les trophés définitifs à affecter à l'utilisateur
-    onAffectFinalRewardsToUser();
+    // SPECIAL EVENTS
+
+    // control si des events sont en cours sinon , passe directement à l'affectation des récompenses
+    if (Object.keys(specialEventKey).length > 0) {
+        if (devMode === true){console.log("[REWARD] [SPECIAL-EVENT] présence d'un event. controle en cours");};
+
+        // control le code du special event
+        onSearchSpecialEventCode(currentActivityComment);
+
+        // Traite les trophés définitifs à affecter à l'utilisateur
+        onAffectFinalRewardsToUser();
+    }else{
+        // Traite les trophés définitifs à affecter à l'utilisateur
+        onAffectFinalRewardsToUser();
+    }
+
 }
+
+function onSearchSpecialEventCode(currentActivityComment){
+    let tempEligibleSpecialReward = [];
+    // Pour chaque key de special event
+    Object.keys(specialEventKey).forEach(key =>{
+        // Recherche le code dans le texte et si contient
+        if(currentActivityComment.includes(key)){
+            console.log(" [REWARD] [SPECIAL-EVENT] code correspondant : ",key);
+            //ajoute le contenu des recompenses dans le tableau temporaire
+            specialEventKey[key].forEach(item=>{
+                tempEligibleSpecialReward.push(item);
+            });
+        };
+    });
+
+    // Puis ne garde que ce que l'utilisateur n'a pas déjà
+    tempEligibleSpecialReward.forEach(e=>{
+        if (!userSpecialRewardsArray.includes(e)) {
+            specialRewardsEligibleArray.push(e);
+        }else{
+            if (devMode === true){console.log("[REWARD] [SPECIAL-EVENT] L'utilisateur possede déjà cette récompense");};
+        };
+    });
+
+    if (devMode === true){console.log("[REWARD] [SPECIAL-EVENT] spacialRewardsEligibleArray :", specialRewardsEligibleArray);};
+
+};
 
 
 
 function onInitRewardsVariable() {
     // Reset la variable
     rewardsEligibleArray = [];
+    specialRewardsEligibleArray = [];
     rewardAllActivityNonPlannedKeys = [];
 
     //filtre sur les clées des activités accomplits
@@ -779,6 +855,11 @@ async function onAffectFinalRewardsToUser() {
         userRewardsArray.push(e);
     });
 
+    // Ajout des special event dans le tableau de l'utilisateur
+    specialRewardsEligibleArray.forEach(e=>{
+        userSpecialRewardsArray.push(e);
+    });
+
     if (devMode === true){
         console.log("[REWARDS] toutes les récompenses utilisateur : ");
         console.log(userRewardsArray.sort());
@@ -786,17 +867,29 @@ async function onAffectFinalRewardsToUser() {
 
 
     // Lance l'event reward obtenu si besoin
-    if (rewardsEligibleArray.length >=1) {
-        // Insertion dans la base de donnée
+    if (rewardsEligibleArray.length >= 1 || specialRewardsEligibleArray.length >= 1) {
+
+
+        // Insertion reward standard dans la base de donnée
         await updateDocumentInDB(rewardsStoreName, (doc) => {
             doc.rewards = userRewardsArray;
             return doc;
         });
 
+        // Insertion special rewards dans la base de donnée
+        await updateDocumentInDB(specialRewardsStoreName, (doc) => {
+            doc.specialRewards = userSpecialRewardsArray;
+            return doc;
+        });
+
+
+        //fusion de toutes les récompenses (standard et special) pour notification
+        let allEligibleRewards = [...rewardsEligibleArray, ...specialRewardsEligibleArray];
+
         // Recompense in APP
-        rewardsEvent(rewardsEligibleArray);
+        rewardsEvent(allEligibleRewards);
         // Recompense in MOBILE
-        onReceiveNotifyMobileEvent(rewardsEligibleArray);
+        onReceiveNotifyMobileEvent(allEligibleRewards);
     }else{
         if (devMode === true){console.log(`[REWARDS] [EVENT] Aucun traitement necessaire`);};
     }
