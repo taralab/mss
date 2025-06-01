@@ -747,7 +747,7 @@ div.main-menu{
     position: fixed;
     justify-content: center;
     align-items: center;
-    padding: 100px 20px 100px 20px;
+    padding: 100px;
     box-sizing: border-box;
     z-index: 12;
     background: rgba(0, 0, 0, 0.5);
@@ -759,30 +759,32 @@ div.main-menu{
     padding: 20px;
     border-radius: 12px;
     width: 100%;
-    max-width: 400px;
+    /* max-width: 400px; */
     display: grid;
     gap: 12px;
-    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
-    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* clé du responsive */
+    justify-items: center;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
 
 
 
-button.btn-menu-sup{
+button.btn-menu-sup {
     display: flex;
-    flex-direction: column; /* Place l'image au dessus du texte */
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     text-align: center;
-    width: 80px;
-    height: 80px; 
-    /* border: solid 1px #f5f5f5; */
+    width: 100%;
+    max-width: 100px;
+    aspect-ratio: 1 / 1;
     border: none;
     border-radius: 10px;
-    padding: 5px;
+    padding: 10px;
     background: none;
     color: var(--colorMainTheme1);
     font-weight: bold;
+    box-sizing: border-box;
 }
 
 
