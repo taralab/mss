@@ -836,6 +836,22 @@ function onClickMainMenuSup(){
         document.getElementById("btnNewFromTemplate").style.display = "none";
         if (devMode === true){console.log("HIDE : btnNewFromTemplate");};
     }
+
+
+    // Appliquer l'animation aux boutons du menu supplémentaire
+    const divMenuSup = document.getElementById('divMainMenuSup');
+    const buttons = divMenuSup.querySelectorAll('.btn-menu-sup');
+
+    buttons.forEach((btn, index) => {
+        btn.classList.remove('animate-in'); // Nettoyage si réouverture
+        btn.style.opacity = '0';
+        btn.style.transform = 'translateY(10px)';
+
+        setTimeout(() => {
+            btn.classList.add('animate-in');
+        }, index * 50);
+    });
+
 };
 
 
