@@ -759,13 +759,15 @@ div.main-menu{
     padding: 20px;
     border-radius: 12px;
     width: 100%;
-    /* max-width: 400px; */
+    min-width: 300px;
+    max-width: 400px;
     display: grid;
     gap: 12px;
-    grid-template-columns: repeat(auto-fit, minmax(100px, 1fr)); /* clé du responsive */
+    grid-template-columns: repeat(3, 1fr);
     justify-items: center;
     box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
 
 
 
