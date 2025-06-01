@@ -735,7 +735,7 @@ div.main-menu{
     align-items: center;
     padding: 100px 20px 100px 20px;
     box-sizing: border-box;
-    z-index: 2;
+    z-index: 12;
     background: rgba(0, 0, 0, 0.5);
 }
 
