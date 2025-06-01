@@ -731,39 +731,45 @@ div.main-menu{
     height: 100vh;
     display: none;
     position: fixed;
+    justify-content: center;
+    align-items: center;
+    padding: 100px 20px 100px 20px;
+    box-sizing: border-box;
     z-index: 2;
+    background: rgba(0, 0, 0, 0.5);
 }
 
 
 .main-menu-sup-button-area {
-    position: fixed;
-    bottom: 70px;
-    right: 20px;
-    display: flex; /* Utilisation de flexbox */
-    flex-direction: column; /* Les éléments sont disposés verticalement */
-    align-items: center; /* Centrer les boutons horizontalement */
-    padding: 10px;
-    background-color: var(--colorLightGray);
-    border-radius: 8px; 
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Ombre subtile autour de la div */
-    width: auto; /* La div s'ajustera à la taille des boutons */
-    max-width: 200px; /* Limiter la largeur de la div si nécessaire */
+    background: white;
+    padding: 20px;
+    border-radius: 12px;
+    width: 100%;
+    max-width: 400px;
+    display: grid;
+    gap: 12px;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    box-shadow: 0 4px 10px rgba(0,0,0,0.2);
 }
 
-.main-menu-sup button {
-    width: 100%; 
-    padding: 10px; 
-    margin-bottom: 10px;
-    color: var(--colorMainTheme1);
-    background-color: var(--colorLightGray);
-    text-align: left;
+
+
+button.btn-menu-sup{
+    display: flex;
+    flex-direction: column; /* Place l'image au dessus du texte */
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    width: 80px;
+    height: 80px; 
+    /* border: solid 1px #f5f5f5; */
     border: none;
-    border-bottom: solid 1px rgb(75, 75, 75);
-    cursor: pointer;
-    font-size: 0.9rem; /*Taille du texte*/
-    transition: background-color 0.3s ease; /* Transition pour un effet de survol fluide */
+    border-radius: 10px;
+    padding: 5px;
+    background: none;
+    color: var(--colorMainTheme1);
+    font-weight: bold;
 }
-
 
 
 

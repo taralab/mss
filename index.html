@@ -1375,7 +1375,7 @@
             <span>Trophées</span>
         </button>
         <button class="btn-menu" onclick="onClickMainMenuSup()">
-            <img src="./Icons/Icon-Autres.webp" alt="Icone">
+            <img src="./Icons/Icon-Menu-Plus.webp" alt="Icone">
             <span>Plus</span>
         </button>
     </div>
@@ -1383,13 +1383,34 @@
     <!-- DIV main menu supplémentaire -->
     <div id="divMainMenuSup" class="main-menu-sup" onclick="onAnnulMenuSup(event)">
         <div class="main-menu-sup-button-area">
-            <button onclick="onClickMenuSup(event,'Profil')">Profil</button>
-            <button onclick="onClickMenuSup(event,'Favoris')">Favoris</button>
-            <button onclick="onClickMenuSup(event,'GestTemplate')">Modèles d'activité</button>
-            <button onclick="onClickMenuSup(event,'MenuTemplateSession')">Modèles de session</button>
-            <button onclick="onClickMenuSup(event,'Setting')">Paramètres</button>
-            <button onclick="onClickMenuSup(event,'GestData')">Gestion des données</button>
-            <button onclick="onClickMenuSup(event,'Info')">A propos</button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Profil')">
+                <img src="./Icons/Icon-Profil.webp" alt="Icone">
+                <span>Profil</span>
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Favoris')">
+                <img src="./Icons/Icon-Favoris-Sel.webp" alt="Icone">
+                <span>Favoris</span>   
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'GestTemplate')">
+                <img src="./Icons/Icon-Template-Menu.webp" alt="Icone">
+                <span>Modèles Activité</span>               
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'MenuTemplateSession')">
+                <img src="./Icons/Icon-Template-Menu.webp" alt="Icone">
+                <span>Modèles Session</span>
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Setting')">
+                <img src="./Icons/Icon-Setting.webp" alt="Icone">
+                <span>Paramètres</span>
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'GestData')">
+                <img src="./Icons/Icon-DataBase.webp" alt="Icone">
+                <span>Données</span>
+            </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Info')">
+                <img src="./Icons/Icon-Info.webp" alt="Icone">
+                <span>A propos</span>                
+            </button>
         </div>
     </div>
     <!------------------------------------- FIN DIV Main Menu ------------------------------------------------------>
