@@ -1354,12 +1354,12 @@ div.reward-category > img{
 }
 
 div.reward-category.special{
-    border-bottom: solid 1px var(--colorMainTheme6);
+    border-bottom: solid 2px var(--colorMainTheme6);
     color: var(--colorMainTheme6);
 }
 
 div.reward-category.standard{
-    border-bottom: solid 1px var(--colorMainTheme1);
+    border-bottom: solid 2px var(--colorMainTheme1);
     color: var(--colorMainTheme1);
     margin-top: 20px;
 }
