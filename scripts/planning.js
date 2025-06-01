@@ -271,6 +271,7 @@ async function eventSavePlanningDayModification() {
     onSetPlanningItems();
 
     //popup Notification
+    onShowNotifyPopup(notifyTextArray.planningModified);
 
 
 }

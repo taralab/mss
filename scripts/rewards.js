@@ -544,6 +544,8 @@ function onCheckReward(currentActivitySavedName,currentActivityComment) {
         onAffectFinalRewardsToUser();
     }else{
         // Traite les trophés définitifs à affecter à l'utilisateur
+        if (devMode === true){console.log("[REWARD] [SPECIAL-EVENT] Aucun event en cours");};
+
         onAffectFinalRewardsToUser();
     }
 
@@ -891,7 +893,7 @@ async function onAffectFinalRewardsToUser() {
         // Recompense in MOBILE
         onReceiveNotifyMobileEvent(allEligibleRewards);
     }else{
-        if (devMode === true){console.log(`[REWARDS] [EVENT] Aucun traitement necessaire`);};
+        if (devMode === true){console.log(`[REWARDS] Aucun traitement necessaire`);};
     }
 
 }

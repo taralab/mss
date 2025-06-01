@@ -17,7 +17,8 @@ let notifyTextArray = {
     counterTargetReach : "Compteur validé !",
     sessionReset : "Session réinitialisée !",
     activityGenerated : "Activité généré !",
-    inputIncrementEmpty : "Valeur manquante !"
+    inputIncrementEmpty : "Valeur manquante !",
+    planningModified : "Planning modifié !"
 };
 
 
@@ -26,7 +27,7 @@ let notifyTextArray = {
 
 let animationDuration = 1000;//durée de l'animation
 
-// Popup de notification de suppression
+// Popup de notification 
 function onShowNotifyPopup(textTarget) {
 
     let popup = document.getElementById("popupNotify");
@@ -146,9 +147,9 @@ function onTraiteMobileNotify() {
 
     //Je m'assure que le reward existe dans un des deux objets
     if (Object.keys(allRewardsObject).includes(rewardKey) || Object.keys(allSpecialEventsRewardsObject).includes(rewardKey)){
-        console.log("reward existant");
+        if (devMode === true){console.log("[NOTIFY] [MOBILE] [REWARD] reward existant");};
     }else{
-        alert("ERREUR REWARDS : ",rewardKey);
+        console.error("ERREUR REWARDS : ",rewardKey);
         return
     }
 
@@ -157,8 +158,8 @@ function onTraiteMobileNotify() {
     if (isStandartReward) {
         sendRewardMobileNotify(allRewardsObject[rewardKey].activityName, allRewardsObject[rewardKey].title);
     }else{
-        sendRewardMobileNotify("SPECIAL EVENT", allSpecialEventsRewardsObject[rewardKey].title);
-    }
+        sendRewardMobileNotify("⭐ SPECIAL EVENT ⭐", allSpecialEventsRewardsObject[rewardKey].title);
+    };
 
     
     // Retire l'index zero de la file d'attente

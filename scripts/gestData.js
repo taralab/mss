@@ -291,6 +291,13 @@ async function importBdD(dataToImport) {
             return doc;
         });
 
+        //SPECIAL REWARDS
+        }else if (e.type === specialRewardsStoreName){
+           await updateDocumentInDB(specialRewardsStoreName, (doc) => {
+            doc.specialRewards = e.specialRewards;
+            return doc;
+        });
+
         //SETTING
         }else if (e.type === settingStoreName){
             let settingToUpdate = {};
