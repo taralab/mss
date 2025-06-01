@@ -790,6 +790,9 @@ button.btn-menu-sup {
 }
 
 
+button.btn-menu-sup > img{
+    margin-bottom: 5px;
+}
 
 
 

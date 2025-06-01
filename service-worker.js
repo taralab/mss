@@ -81,7 +81,9 @@ const ICONS = [
   `${basePath}Icons/Icon-Info.webp`,
   `${basePath}Icons/Icon-Menu-Plus.webp`,
   `${basePath}Icons/Icon-Profil.webp`,
-  `${basePath}Icons/Icon-Template-Menu.webp`
+  `${basePath}Icons/Icon-Template-Menu.webp`,
+  `${basePath}Icons/Icon-Setting-Menu.webp`,
+  `${basePath}Icons/Icon-Send.webp`
 ];
 
 const IMAGES = [

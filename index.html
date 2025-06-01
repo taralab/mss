@@ -317,8 +317,14 @@
     <!-- Menu SUP SESSION -->
     <div id="divSessionMenuSup" class="main-menu-sup" onclick="onAnnulSessionMenuSup(event)">
         <div class="main-menu-sup-button-area">
-            <button onclick="onChooseSessionMenuSup(event,'generateSession')">Générer une session</button>
-            <button onclick="onChooseSessionMenuSup(event,'sendToActivity')">Envoyer vers une activité</button>
+            <button class="btn-menu-sup" onclick="onChooseSessionMenuSup(event,'generateSession')">
+                <img src="./Icons/Icon-Session.webp" alt="" srcset="">
+                <span>Générer une session</span>
+            </button>
+            <button class="btn-menu-sup" onclick="onChooseSessionMenuSup(event,'sendToActivity')">
+                <img src="./Icons/Icon-Send.webp" alt="" srcset="">
+                <span>Envoyer vers activité</span>
+            </button>
         </div>
     </div>
 
@@ -1392,10 +1398,6 @@
                 <img src="./Icons/Icon-Profil.webp" alt="Icone">
                 <span>Profil</span>
             </button>
-            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Favoris')">
-                <img src="./Icons/Icon-Favoris-Sel.webp" alt="Icone">
-                <span>Favoris</span>   
-            </button>
             <button class="btn-menu-sup" onclick="onClickMenuSup(event,'GestTemplate')">
                 <img src="./Icons/Icon-Template-Menu.webp" alt="Icone">
                 <span>Modèles Activité</span>               
@@ -1404,8 +1406,12 @@
                 <img src="./Icons/Icon-Template-Menu.webp" alt="Icone">
                 <span>Modèles Session</span>
             </button>
+            <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Favoris')">
+                <img src="./Icons/Icon-Favoris-Sel.webp" alt="Icone">
+                <span>Favoris</span>   
+            </button>
             <button class="btn-menu-sup" onclick="onClickMenuSup(event,'Setting')">
-                <img src="./Icons/Icon-Setting.webp" alt="Icone">
+                <img src="./Icons/Icon-Setting-Menu.webp" alt="Icone">
                 <span>Paramètres</span>
             </button>
             <button class="btn-menu-sup" onclick="onClickMenuSup(event,'GestData')">
