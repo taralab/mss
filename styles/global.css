@@ -2114,6 +2114,7 @@ div.popup-new-counter-content {
     flex-direction: column;
     padding: 10px;
     border-radius: 10px;
+    min-width: 300px;
 }
 
 div.popup-new-counter-content p{
@@ -2121,11 +2122,12 @@ div.popup-new-counter-content p{
 }
 
 div.popup-new-counter-content label{
-    margin-bottom: 20px;
+    margin-top: 10px;
+    margin-bottom: 10px;
 }
 
 div.popup-new-counter-content input.counterName{
-    margin-bottom: 40px;
+    margin-bottom: 10px;
 }
 
 
@@ -2165,7 +2167,7 @@ button.btnChooseColor{
     border: none;
     border-radius: 10px;
     margin: 5px;
-    height: 40px;width: 40px;
+    height: 50px;width: 50px;
     font-size: 0.7rem;
 }
 
