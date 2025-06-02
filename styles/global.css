@@ -65,6 +65,20 @@ button.btn-menu {
     background: none;
 }
 
+
+button.counter{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    text-align: center;
+    width: 80px;
+    height: 50px; /* Taille augmentée pour plus d'équilibre */
+    border: none;
+    padding: 10px;
+    border-radius: 10px;
+}
+
+
 /* Ajustement des images */
 button.btn-menu img {
     width: 20px;
@@ -1915,12 +1929,11 @@ div.disabledEvent{
 
 .compteur-container {
     padding: 15px;
-    border-radius: 10px;
     position: relative;
     width: calc(100% - 20px);             
     /* Le background est set selon la configuration utilisateur */
     padding: 0px 5px 10px 5px;
-    border-radius: 10px;
+    border-radius: 20px;
     margin-bottom: 20px;
     box-shadow: var(--boxShadow);
 }
@@ -1981,12 +1994,6 @@ div.compteur-content-line-1 p.compteur-navigation{
 
 
 
-
-.compteur-content p.serieTextExplication{
-    font-size: 0.8rem;
-    color: #666;
-    width: 70px; margin: 0px;padding: 0px;
-}
 
 
 .compteur-content.count-animated {

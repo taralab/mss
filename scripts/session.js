@@ -17,12 +17,12 @@ let userCounterList = {
     sessionStartTimeStorageName = "MSS_sessionStartTime";
 
 let counterColor = {
-    white: "#fff",
-    green: "#d3ffd0",
-    yellow: "#fdffd0",
-    red: "#ffd7d0",
-    blue: "#d0ebff",
-    violet: "#f7d0ff"
+    white: {body:"#fff",button:"grey"},
+    green: {body:"#E7F8F2",button:"#2BAF7A"},
+    yellow: {body:"#FFFBE5",button:"#D9B038"},
+    red: {body:"#FDEBEC",button:"#C95A94"},
+    blue: {body:"#E6F0FA",button:"#2B7FBF"},
+    violet: {body:"#F3F0FA",button:"#7A5EB4"}
 };
 
 let counterColorSelected = "#fff";//utiliser lors de la création d'un compteur
@@ -31,7 +31,7 @@ let counterColorSelected = "#fff";//utiliser lors de la création d'un compteur
 
 // Objet compteur
 class Counter {
-    constructor(id, name, currentSerie, serieTarget, repIncrement,displayOrder,parentRef,color,totalCount){
+    constructor(id, name, currentSerie, serieTarget, repIncrement,displayOrder,parentRef,colorName,totalCount){
         this.id = id;
         this.name = name;
         this.currentSerie = currentSerie;
@@ -39,14 +39,17 @@ class Counter {
         this.repIncrement = repIncrement;
         this.displayOrder = displayOrder;
         this.parentRef = parentRef;
-        this.color = color;
+        this.colorName = colorName;
         this.totalCount = totalCount;
 
+        console.log("Color name:", this.colorName);
         // div container
         this.element = document.createElement("div");
         this.element.classList.add("compteur-container");
-        this.element.style.backgroundColor = this.color;
+        this.element.style.backgroundColor = counterColor[this.colorName].body;
         this.element.id = `counterContainer_${id}`;
+
+        this.buttonColor = counterColor[this.colorName].button;
 
         this.render();
     }
@@ -73,10 +76,9 @@ class Counter {
             <div class="compteur-content">
                 <button class="btn-counter" onclick="onClickDeleteCounter('${this.id}')"><img src="./Icons/Icon-Delete-color.webp" alt="" srcset=""></button>
                 <button class="btn-counter" id="btnCountReset_${this.id}" onclick="onClickResetCounter('${this.id}')"><img src="./Icons/Icon-Reset.webp" alt="" srcset=""></button>
-                <p class="serieTextExplication">Rep. :</p>
                 <input type="number" class="compteur" id="inputRepIncrement_${this.id}" placeholder="0" value=${this.repIncrement} 
                 onchange="onChangeCounterRepIncrement('${this.id}')" onfocus="selectAllText(this)" oncontextmenu="disableContextMenu(event)">
-                <button class="btn-menu btnFocus" id="btnRepIncrement_${this.id}" onclick="onClickIncrementeCounter('${this.id}')"><img src="./Icons/Icon-Accepter-blanc.webp" alt="" srcset=""></button>  
+                <button style="background-color: ${this.buttonColor};" class="counter" id="btnRepIncrement_${this.id}" onclick="onClickIncrementeCounter('${this.id}')"><img src="./Icons/Icon-Accepter-blanc.webp" alt="" srcset=""></button>  
            </div>
             <!-- Image de rature -->
             <img src="./Icons/Icon-Counter-Done.webp" class="overlay-image-rayure" id="imgCounterTargetDone_${this.id}" alt="Rature">
@@ -466,7 +468,7 @@ function onDisplayCounter() {
         new Counter(
             key,userCounterList[key].name,
             userCounterList[key].currentSerie,userCounterList[key].serieTarget,userCounterList[key].repIncrement,
-            userCounterList[key].displayOrder,divSessionRef,counterColor[userCounterList[key].color],
+            userCounterList[key].displayOrder,divSessionRef,userCounterList[key].color,
             userCounterList[key].totalCount
         );
 
