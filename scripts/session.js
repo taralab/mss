@@ -7,7 +7,7 @@ let userCounterList = {
             color : "white"
         }
     },
-    maxCounter = 4,
+    maxCounter = 20,
     counterSortedKey = [],//array des clé trié par "displayOrder"
     counterEditorMode, //creation ou modification
     currentCounterEditorID,//L'id du compteur en cours de modification
@@ -18,11 +18,13 @@ let userCounterList = {
 
 let counterColor = {
     white: {body:"#fff",button:"grey"},
-    green: {body:"#E7F8F2",button:"#2BAF7A"},
-    yellow: {body:"#FFFBE5",button:"#D9B038"},
-    red: {body:"#FDEBEC",button:"#C95A94"},
+    green: {body:"#E7F8F2",button:"#4EA88A"},
+    yellow: {body:"#FFFBE5",button:"#C8A646"},
+    red: {body:"#FDEBEC",button:"#D36868"},
     blue: {body:"#E6F0FA",button:"#2B7FBF"},
-    violet: {body:"#F3F0FA",button:"#7A5EB4"}
+    violet: {body:"#F3F0FA",button:"#8A7EBF"},
+    orange: {body:"#FFF1EC",button:"#E38B6D"},
+    rose: {body:"#FAEFF4",button:"#C57CA5"}
 };
 
 let counterColorSelected = "#fff";//utiliser lors de la création d'un compteur
@@ -257,7 +259,7 @@ function onClickDivNewPopupContent(event) {
 // Gestion des couleurs
 
 function onChooseCounterColor(color) {
-    document.getElementById("divEditCounterContent").style.backgroundColor = counterColor[color];
+    document.getElementById("divEditCounterContent").style.backgroundColor = counterColor[color].body;
     counterColorSelected = color;
 }
 
@@ -369,7 +371,7 @@ function onClickModifyCounter(idRef) {
     document.getElementById("inputEditCounterName").value = userCounterList[idRef].name;
     document.getElementById("inputEditSerieTarget").value = userCounterList[idRef].serieTarget;
     document.getElementById("inputEditRepIncrement").value = userCounterList[idRef].repIncrement;
-    document.getElementById("divEditCounterContent").style.backgroundColor = counterColor[userCounterList[idRef].color];
+    document.getElementById("divEditCounterContent").style.backgroundColor = counterColor[userCounterList[idRef].color].body;
     counterColorSelected = userCounterList[idRef].color;
 
     // Affiche 
@@ -396,9 +398,10 @@ async function eventSaveModifyCounter() {
 
     // Actualisation de l'affichage
     document.getElementById(`counterName_${currentCounterEditorID}`).innerHTML = counterData.name;
-    document.getElementById(`counterContainer_${currentCounterEditorID}`).style.backgroundColor = counterColor[counterData.color];
+    document.getElementById(`counterContainer_${currentCounterEditorID}`).style.backgroundColor = counterColor[counterData.color].body;
     document.getElementById(`spanSerieTarget_${currentCounterEditorID}`).innerHTML = `/${counterData.serieTarget}`;
     document.getElementById(`inputRepIncrement_${currentCounterEditorID}`).value = counterData.repIncrement;
+    document.getElementById(`btnRepIncrement_${currentCounterEditorID}`).style.backgroundColor = counterColor[counterData.color].button;
     
     console.log("demande de vérification DONE");
 
