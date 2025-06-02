@@ -1280,6 +1280,8 @@ class TableLineSession{
                     <option value="red">Rouge</option>
                     <option value="blue">Bleu</option>
                     <option value="violet">Violet</option>
+                    <option value="orange">Orange</option>
+                    <option value="rose">Rose</option>
                 </select>
             </td>
         `;
@@ -1464,7 +1466,7 @@ function onChangeColorInGenSessionTable(idRef) {
     let tableDataRef = document.getElementById(`tdGenSessionChooseColor_${idRef}`),
         colorRef = document.getElementById(`selectGenSessionColor_${idRef}`).value;
 
-    tableDataRef.style.backgroundColor = counterColor[colorRef];
+    tableDataRef.style.backgroundColor = counterColor[colorRef].body;
 }
 
 
