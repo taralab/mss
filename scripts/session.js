@@ -7,7 +7,7 @@ let userCounterList = {
             color : "white"
         }
     },
-    maxCounter = 20,
+    maxCounter = 4,
     counterSortedKey = [],//array des clé trié par "displayOrder"
     counterEditorMode, //creation ou modification
     currentCounterEditorID,//L'id du compteur en cours de modification
@@ -131,9 +131,6 @@ async function onOpenMenuSession(){
     document.getElementById("customInfo").innerHTML = `<b>Début à : ${sessionStartTime}<b>`;
 
     onDisplayCounter(userCounterList);
-    // Gestion si max atteind
-    gestionMaxCounterReach();
-
 
     // Charge également les listes des modèles et leur clé dans l'ordre alphabétique
     await onLoadTemplateSessionNameFromDB();
@@ -311,8 +308,6 @@ async function eventInsertNewCompteur() {
     // fonction de création affichage des compteurs
     onDisplayCounter(userCounterList);
     
-    // Gestion si max atteind
-    gestionMaxCounterReach();
 
     // Popup notification
     onShowNotifyPopup(notifyTextArray.counterCreated);
@@ -441,17 +436,6 @@ function onFormatModifyCounter() {
 
 
 
-
-//
-
-// Gestion si le nombre maximal de compteur atteints
-function gestionMaxCounterReach() {
-        // Gestion bouton new compteur
-        document.getElementById("btnAddNewCounter").disabled = Object.keys(userCounterList).length >= maxCounter ? true : false;
-}
-
-
-
 // l'affichage des compteurs de fait sur le trie des "displayOrder"
 
 function onDisplayCounter() {
@@ -465,6 +449,8 @@ function onDisplayCounter() {
     // Affichage en cas d'aucune modèle
     if (Object.keys(userCounterList).length < 1) {
         divSessionRef.innerHTML = "Aucun compteur à afficher !";
+
+        new Button_add("Ajouter un compteur",() => onClickAddCounter(),false,divSessionRef);
         return
     }
 
@@ -501,6 +487,9 @@ function onDisplayCounter() {
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (Object.keys(userCounterList).length - 1)) {
+            let isMaxCounterReach = Object.keys(userCounterList).length >= maxCounter;
+            new Button_add("Ajouter un compteur",() => onClickAddCounter(),isMaxCounterReach,divSessionRef);
+
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = `ℹ️ Vous pouvez créer jusqu'à ${maxCounter} compteurs.`;
@@ -508,6 +497,7 @@ function onDisplayCounter() {
         }
     });
 
+    if (devMode === true){console.log(" [COUNTER] userCounterList",userCounterList);};
     
 }
 
@@ -767,32 +757,19 @@ async function eventDeleteCounter(){
     //suppression dans la variable
     delete userCounterList[idCounterToDelete];
 
-    // supression htlm
-    document.getElementById(`counterContainer_${idCounterToDelete}`).remove();
-
-
-    // Gestion si max atteind ou non
-    gestionMaxCounterReach();
-
     // traitement display order pour les counters suivants
     onChangeDisplayOrderFromDelete(idCounterToDelete);
 
-
     if (devMode === true){console.log("userCounterList", userCounterList)};
-
-    // Affichage en cas d'aucun compteur
-    if (Object.keys(userCounterList).length < 1) {
-        let divSessionRef = document.getElementById("divSession");
-        divSessionRef.innerHTML = "Aucun compteur à afficher !";
-    }
 
     // Popup notification
     onShowNotifyPopup(notifyTextArray.counterDeleted);
 
-
     // Sauvegarde en localStorage
     onUpdateCounterSessionInStorage();
 
+    // actualisation de la liste des compteurs
+    onDisplayCounter(userCounterList);
 }
 
 
