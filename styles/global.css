@@ -66,17 +66,7 @@ button.btn-menu {
 }
 
 
-button.counter{
-    display: flex;
-    align-items:center;
-    justify-content: center;
-    text-align: center;
-    width: 80px;
-    height: 50px; /* Taille augmentée pour plus d'équilibre */
-    border: none;
-    padding: 10px;
-    border-radius: 10px;
-}
+
 
 
 /* Ajustement des images */
@@ -1921,8 +1911,13 @@ div.disabledEvent{
 
 
 
-
-
+.compteur-content-line-1,
+.compteur-content-line-2,
+.compteur-content-line-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
 
 
 
@@ -1930,13 +1925,86 @@ div.disabledEvent{
 .compteur-container {
     padding: 15px;
     position: relative;
-    width: calc(100% - 20px);             
+    width: 90%;             
     /* Le background est set selon la configuration utilisateur */
-    padding: 0px 5px 10px 5px;
+    padding: 20px;
     border-radius: 20px;
     margin-bottom: 20px;
     box-shadow: var(--boxShadow);
 }
+
+
+/* Ligne 1 */
+p.compteur-name{
+    font-size: 24px;
+    color: black;
+    font-weight: bold;
+    text-transform: uppercase;
+    max-width: 350px;
+}
+
+
+button.btn-counter-setting{
+
+    background: none;
+    border: none;
+
+}
+
+
+/* Ligne 2 */
+span.target-reach{
+    font-size: 40px;
+    font-weight: bold;
+    color:black;
+}
+
+
+span.current-serie {
+    height: 40px;
+    font-size: 40px;
+    font-weight: bold;
+}
+
+span.serie-target{
+        height: 40px;
+        font-size: 24px;
+        padding-top: 25px;
+        margin-left: auto;
+}
+
+
+span.serie-text{
+    color: #666;
+    height: 40px;
+    font-size:18px;
+    padding-top: 25px;
+    margin-left: auto;
+}
+
+
+.counter-total{
+    color: #666;
+    height: 40px;
+    font-size: 18px;
+    padding-top: 25px;
+    margin-left: auto;
+}
+
+
+
+
+/* Pour la ligne 3 : input centré */
+.compteur-content-line-3 {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.compteur-content-line-3 input.compteur {
+    margin: 0 auto;
+}
+
 
 
 /* rayure lorsque validé */
@@ -1956,96 +2024,45 @@ img.counterTargetDone{
     opacity: 1;
 }
 
-/* Ligne 1 */
-div.compteur-content-line-1{
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    width: 100%; 
+button.btn-counter-reset{
+    width: 40px; height: 40px;
+    border: none;
+    background :none;
+    padding-top: 15px;
 }
 
 
-p.compteur-name{
-    font-size: 24px;
-    color: black;
-    font-weight: bold;
-    text-align: center;
-    text-transform: uppercase;
-    max-width: 250px;
+/* INPUT ET PLACEHOLDER REP */
+.wrapper {
+    position: relative;
+    display: inline-block;
+}
+
+.wrapper::after {
+    content: "rép";
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #888;
+    pointer-events: none;
+    font-size: 16px;
+}
+
+/* Ajuste le padding de l'input pour éviter que le texte "rep" ne chevauche le chiffre */
+.wrapper .compteur {
+    padding-right: 35px;
 }
 
 
-/* Pour les bouton de navigation haut et bas. */
-div.compteur-content-line-1 p.compteur-navigation{
-    width: 120px;
-    text-align: right;
-    display: block;
-}
-
-
-.compteur-content {
-    display: flex;
-    align-items: center; /* Centre verticalement */
-    justify-content: center; /* Centre horizontalement */
-    gap: 5px; /* Ajoute un petit espace entre les éléments */
-    text-align: center;
-    transition: transform 0.2s ease-in-out, opacity 0.3s ease-in-out;
-}
-
-
-
-
-
-.compteur-content.count-animated {
-    animation: counterPop 0.3s ease-in-out;
-}
-.compteur-content.anim-reset {
-    animation: slideDown 0.4s ease-in-out;
-}
-
-/* ANIMATION COUNTER */
-
-
-@keyframes counterPop {
-    0% { transform: scale(1); }
-    50% { transform: scale(1.3); }
-    100% { transform: scale(1); }
-}
-@keyframes slideUp {
-    0% { transform: translateY(5px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-@keyframes slideDown {
-    0% { transform: translateY(0); opacity: 1; }
-    50% { transform: translateY(10px); opacity: 0; }
-    100% { transform: translateY(0); opacity: 1; }
-}
-
-.current-serie {
-    font-size: 40px;
-    font-weight: bold;
-    width: 100px;
-    text-align: right;
-    transition: transform 0.2s ease-in-out, opacity 0.3s ease-in-out;
-
-}
-
-.current-serie.count-animated {
-    animation: counterPop 0.3s ease-in-out;
-}
-
-.current-serie.anim-reset {
-    animation: slideDown 0.4s ease-in-out;
-}
 
 input.compteur {
-    width: 60px;
-    height: 30px;
+    width: 100px;
+    height: 40px;
     text-align: center;
     font-size: 18px;
     border: var(--inputBorder);
-    border-radius: 10px;
+    border-radius: 15px;
     outline: none;
     background: white;
     color: #555;
@@ -2067,21 +2084,19 @@ input.compteur::-webkit-inner-spin-button {
 }
 
 
-span.serie-target{
-        width: 100px;
-        height: 40px;
-        text-align: left;
-        font-size: 18px;
-        margin: 0px; padding: 0px;
-        color: #6C757D;
+button.counter{
+    display: flex;
+    align-items:center;
+    justify-content: center;
+    text-align: center;
+    width: 150px;
+    height: 50px; /* Taille augmentée pour plus d'équilibre */
+    border: none;
+    padding: 10px;
+    border-radius: 15px;
+    margin-left: 50px;
 }
 
-
-span.target-reach{
-    font-size: 40px;
-    font-weight: bold;
-    color:black;
-}
 
 /* popup nommage nouveau compteur */
 div.popup-new-counter {
@@ -2156,12 +2171,7 @@ div.confirmationDeleteCounter.show button.confirmPopup {
 
 
 /* Les boutons des différents menu */
-button.btn-counter{
-    width: 40px; height: 40px;
-    border: none;
-    border-radius: 5px;
-    background :none;
-}
+
 
 button.btnChooseColor{
     border: none;

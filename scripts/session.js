@@ -62,29 +62,40 @@ class Counter {
     render(){
         this.element.innerHTML = `
             <div class="compteur-content-line-1">
-                <button class="btn-counter" onclick="onClickModifyCounter('${this.id}')"><img src="./Icons/Icon-Setting.webp" alt="" srcset=""></button>  
                 <p class="compteur-name" id="counterName_${this.id}">${this.name}</p>
-                <p class="compteur-navigation">
-                    <button class="btn-counter" id="btn-counter-nav-decrease_${this.id}" onclick="onClickCounterNavDecrease('${this.id}')"><img src="./Icons/Icon-nav-decrease.webp" alt="" srcset=""></button>
-                    <button class="btn-counter" id="btn-counter-nav-increase_${this.id}" onclick="onClickCounterNavIncrease('${this.id}')"><img src="./Icons/Icon-nav-increase.webp" alt=""></button>
-                </p>
-            </div>
-            <div class="compteur-content" id="divCounterCurrentSerie_${this.id}">
-                <span class="current-serie" id="spanCurrentSerie_${this.id}">${this.currentSerie}</span>
-                <span class="serie-target" id="spanSerieTarget_${this.id}">/${this.serieTarget}</span>
-                <span class="serie-target" id="spanTotalCount_${this.id}">Total : ${this.totalCount}</span>
+                <button class="btn-counter-setting" onclick="onClickModifyCounter('${this.id}')">
+                    <img src="./Icons/Icon-Autres.webp" alt="" srcset="">
+                </button>  
             </div>
 
-            <div class="compteur-content">
-                <button class="btn-counter" onclick="onClickDeleteCounter('${this.id}')"><img src="./Icons/Icon-Delete-color.webp" alt="" srcset=""></button>
-                <button class="btn-counter" id="btnCountReset_${this.id}" onclick="onClickResetCounter('${this.id}')"><img src="./Icons/Icon-Reset.webp" alt="" srcset=""></button>
+            <div class="compteur-content-line-2" id="divCounterCurrentSerie_${this.id}">
+                <div class="compteur-content-line-2-left">
+                    <span class="current-serie" id="spanCurrentSerie_${this.id}">${this.currentSerie}</span>
+                    <span class="serie-target" id="spanSerieTarget_${this.id}">/${this.serieTarget}</span>
+                    <span class="serie-text">séries</span>
+                </div>
+                <span class="counter-total" id="spanTotalCount_${this.id}">Total : ${this.totalCount}</span>
+            </div>
+
+
+            <div class="compteur-content-line-3">
+                <p class="compteur-navigation">
+                    <button class="btn-counter-reset" id="btnCountReset_${this.id}" onclick="onClickResetCounter('${this.id}')"><img src="./Icons/Icon-Reset.webp" alt="" srcset=""></button>
+                </p>
+                <div class="wrapper">
                 <input type="number" class="compteur" id="inputRepIncrement_${this.id}" placeholder="0" value=${this.repIncrement} 
-                onchange="onChangeCounterRepIncrement('${this.id}')" onfocus="selectAllText(this)" oncontextmenu="disableContextMenu(event)">
-                <button style="background-color: ${this.buttonColor};" class="counter" id="btnRepIncrement_${this.id}" onclick="onClickIncrementeCounter('${this.id}')"><img src="./Icons/Icon-Accepter-blanc.webp" alt="" srcset=""></button>  
-           </div>
-            <!-- Image de rature -->
+                    onchange="onChangeCounterRepIncrement('${this.id}')" 
+                    onfocus="selectAllText(this)" 
+                    oncontextmenu="disableContextMenu(event)">
+                </div>
+                <button style="background-color: ${this.buttonColor};" class="counter" id="btnRepIncrement_${this.id}" onclick="onClickIncrementeCounter('${this.id}')">
+                    <img src="./Icons/Icon-Accepter-blanc.webp" alt="">
+                </button>  
+            </div>
+
             <img src="./Icons/Icon-Counter-Done.webp" class="overlay-image-rayure" id="imgCounterTargetDone_${this.id}" alt="Rature">
         `;
+
 
         // Insertion
         this.parentRef.appendChild(this.element);
@@ -477,15 +488,15 @@ function onDisplayCounter() {
 
 
         // Gestion de l'affichage des boutons de navigation up/down
-        if (index === 0) {
-            //suppression du bouton up
-            document.getElementById(`btn-counter-nav-decrease_${key}`).disabled = true;
-        }
+        // if (index === 0) {
+        //     //suppression du bouton up
+        //     document.getElementById(`btn-counter-nav-decrease_${key}`).disabled = true;
+        // }
 
-        if (index === (counterSortedKey.length - 1)){
-            //suppression du bouton down
-            document.getElementById(`btn-counter-nav-increase_${key}`).disabled = true;
-        }
+        // if (index === (counterSortedKey.length - 1)){
+        //     //suppression du bouton down
+        //     document.getElementById(`btn-counter-nav-increase_${key}`).disabled = true;
+        // }
 
         // control des objectifs atteinds pour chaque compteur généré
         onCheckTargetReach(key); 
@@ -626,12 +637,7 @@ function onPlayIncrementAnimation(isTargetReach,repIncrementRef,divCurrentSerieR
     let itemToAnimRef = isTargetReach ? divCurrentSerieRef : repIncrementRef;
 
         // Ajouter la classe pour l'animation
-        itemToAnimRef.classList.add("count-animated");
 
-        // Supprimer la classe après l'animation pour la rejouer à chaque changement
-        setTimeout(() => {
-            itemToAnimRef.classList.remove("count-animated");
-        }, 300);
 }
 
 
@@ -679,11 +685,11 @@ async function onClickResetCounter(idRef) {
     }
 
     // Ajouter la classe pour l'animation
-    spanCurrentSerieRef.classList.add("anim-reset");
+    // spanCurrentSerieRef.classList.add("anim-reset");
 
     // Supprimer la classe après l'animation pour la rejouer à chaque changement
     setTimeout(() => {
-        spanCurrentSerieRef.classList.remove("anim-reset");
+        // spanCurrentSerieRef.classList.remove("anim-reset");
 
         //déverrouille le bouton à la fin de l'animation
         document.getElementById(`btnCountReset_${idRef}`).disabled = false;
