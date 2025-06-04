@@ -25,7 +25,7 @@ let notifyTextArray = {
 
 
 
-let animationDuration = 1000;//durée de l'animation
+let animationDuration = 2000;//durée de l'animation
 
 // Popup de notification 
 function onShowNotifyPopup(key) {
