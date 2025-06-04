@@ -635,11 +635,14 @@ function onPlayIncrementAnimation(isTargetReach,repIncrementRef,divCurrentSerieR
 
     let itemToAnimRef = repIncrementRef;
         
-        // Pour relancer l'animation même si elle a été déjà jouée
-        itemToAnimRef.classList.remove('pop-animation');
+        // Pour relancer l'animation même si elle a été déjà jouée 
+        // Enlève également reset-in pour que l'animation fonctionne toujours après un reset
+        itemToAnimRef.classList.remove('pop-animation','reset-in');
         void itemToAnimRef.offsetWidth; // Forcer un reflow
         // Ajouter la classe pour l'animation
         itemToAnimRef.classList.add("pop-animation");
+
+        console.log(itemToAnimRef);
 }
 
 
