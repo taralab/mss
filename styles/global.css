@@ -1907,7 +1907,7 @@ div.disabledEvent{
 
 
 
-/* ------------------------------------ Compteur ----------------------------------*/
+/* ------------------------------------ #Compteur ----------------------------------*/
 
 
 
@@ -1919,18 +1919,27 @@ div.disabledEvent{
     align-items: center;
 }
 
-
-
+/* A débloquer pour travailler sur les lignes des compteurs */
+/* .compteur-content-line-1{
+    background-color: #47dbdb;
+}
+.compteur-content-line-2{
+    background-color: antiquewhite;
+}
+.compteur-content-line-3{
+    background-color: rgb(211, 255, 205);
+} */
 
 .compteur-container {
     padding: 15px;
     position: relative;
-    width: 90%;             
+    width: 80%;             
     /* Le background est set selon la configuration utilisateur */
     padding: 20px;
     border-radius: 20px;
     margin-bottom: 20px;
     box-shadow: var(--boxShadow);
+    margin-left: 10px;
 }
 
 
@@ -1962,13 +1971,13 @@ span.target-reach{
 
 span.current-serie {
     height: 40px;
-    font-size: 40px;
+    font-size: 52px;
     font-weight: bold;
 }
 
 span.serie-target{
         height: 40px;
-        font-size: 24px;
+        font-size: 30px;
         padding-top: 25px;
         margin-left: auto;
 }
