@@ -172,6 +172,10 @@ function onSetSessionStartTime() {
 // Les menus supplémentaires de sessoin
 function onClickOpenSessionMenuSup(){
     document.getElementById("divSessionMenuSup").style.display = "flex";
+
+    // Animation des icones
+    onPlayAnimationIconMenu("divSessionMenuSup",".btn-menu-sup");
+
 };
 
 // Choix d'un menu supplémentaire

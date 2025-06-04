@@ -839,8 +839,15 @@ function onClickMainMenuSup(){
 
 
     // Appliquer l'animation aux boutons du menu supplémentaire
-    const divMenuSup = document.getElementById('divMainMenuSup');
-    const buttons = divMenuSup.querySelectorAll('.btn-menu-sup');
+    onPlayAnimationIconMenu("divMainMenuSup",".btn-menu-sup");
+
+};
+
+
+function onPlayAnimationIconMenu(divParentID,classTarget) {
+    // Appliquer l'animation aux boutons du menu supplémentaire
+    const divMenuSup = document.getElementById(divParentID);
+    const buttons = divMenuSup.querySelectorAll(classTarget);
 
     buttons.forEach((btn, index) => {
         btn.classList.remove('animate-in'); // Nettoyage si réouverture
@@ -851,9 +858,7 @@ function onClickMainMenuSup(){
             btn.classList.add('animate-in');
         }, index * 50);
     });
-
-};
-
+}
 
 function onClickMenuSup(event,target) {
     event.stopPropagation();
