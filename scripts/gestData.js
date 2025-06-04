@@ -238,7 +238,7 @@ async function eventImportBdD(inputRef) {
 function eventImportDataSucess() {
     console.log("wait for reload");
     
-    onShowNotifyPopup(notifyTextArray.importSuccess);
+    onShowNotifyPopup("importSuccess");
     setTimeout(() => {
         location.reload();
       }, "2000");

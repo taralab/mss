@@ -104,7 +104,7 @@ async function eventSaveProfil(profilToSave) {
     document.getElementById("customInfo").innerHTML = userInfo.pseudo;
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.saveprofil);
+    onShowNotifyPopup("saveprofil");
     // ferme le menu
     onLeaveMenu("Profil");
 }

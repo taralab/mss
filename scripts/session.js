@@ -324,7 +324,7 @@ async function eventInsertNewCompteur() {
     
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.counterCreated);
+    onShowNotifyPopup("counterCreated");
 
 }
 
@@ -544,7 +544,7 @@ async function onClickIncrementeCounter(idRef) {
     // Ne fait rien si l'increment est à zero ou vide
     if (userCounterList[idRef].repIncrement === 0) {
         if (devMode === true){console.log("[COUNTER] increment vide ne fait rien");};
-        onShowNotifyPopup(notifyTextArray.inputIncrementEmpty);
+        onShowNotifyPopup("inputIncrementEmpty");
         return
 
     }
@@ -590,7 +590,7 @@ async function onClickIncrementeCounter(idRef) {
 
     // Notification objectif atteind
     if (isTargetReach) {
-        onShowNotifyPopup(notifyTextArray.counterTargetReach);
+        onShowNotifyPopup("counterTargetReach");
     }
 
     // Sauvegarde en localStorage
@@ -750,7 +750,7 @@ async function eventResetAllCounter() {
     
 
     // Notification utilisateur  
-    onShowNotifyPopup(notifyTextArray.sessionReset);
+    onShowNotifyPopup("sessionReset");
 }
 
 
@@ -786,7 +786,7 @@ async function eventDeleteCounter(){
     if (devMode === true){console.log("userCounterList", userCounterList)};
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.counterDeleted);
+    onShowNotifyPopup("counterDeleted");
 
     // Sauvegarde en localStorage
     onUpdateCounterSessionInStorage();

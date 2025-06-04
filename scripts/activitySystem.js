@@ -807,12 +807,12 @@ async function eventInsertNewActivity(dataToInsert,isFromSession) {
     // Si c'est une activité généré depuis les session, met fin à la fonction
     if (isFromSession) {
         // Popup notification
-        onShowNotifyPopup(notifyTextArray.activityGenerated);
+        onShowNotifyPopup("activityGenerated");
         return
     }
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.creation);
+    onShowNotifyPopup("creation");
 
     //Gestion de l'affichage 
     onLeaveMenu("Activity");
@@ -846,7 +846,7 @@ async function eventInsertActivityModification(dataToInsert) {
     eventUpdateActivityList();
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.modification);
+    onShowNotifyPopup("modification");
 
     //Gestion de l'affichage 
     onLeaveMenu("Activity");
@@ -904,7 +904,7 @@ async function eventDeleteActivity(idToDelete) {
     eventUpdateActivityList();
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.delete);
+    onShowNotifyPopup("delete");
 
     //Gestion de l'affichage 
     onLeaveMenu("Activity");

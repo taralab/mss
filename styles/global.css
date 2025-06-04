@@ -1123,34 +1123,47 @@ div.buttonAcceptation{
 /* -------------------------------- NOTIFICATION -------------------- */
 
 .popupNotify {
-    width: 200px;height: 10px;
-    padding: 20px;
-    background-color: var(--colorMainTheme1);
-    color: white;
-    text-align: center;
-    border-radius: 10px;
-    margin: 20px auto;
-    transform: scale(0.5);
-    position: absolute;
-    transform: translateY(-40px);
-    opacity: 0;
-    top : 20px;
-    transition: transform 0.3s ease, opacity 0.3s ease;
-    left: 0;
-    right: 0;
-    box-shadow: var(--boxShadow);
-    z-index: 10;
+    position: fixed;
+      top: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background-color: #4DB6E2; /* bleu plus doux */
+      color: white;
+      padding: 12px 20px;
+      border-radius: 16px;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      font-weight: 600;
+      opacity: 0;
+      transition: all 0.4s ease;
+      z-index: 999;
 
 }
 
 
 .popupNotify.show {
-    transform: translateY(20px);
     opacity: 1;
+    transform: translateX(-50%) translateY(0);
 }
 
 
-
+    /* Emoji dans cercle blanc */
+div.notify-emoji {
+      background-color: white;
+      color: black;
+      font-size: 20px;
+      padding: 6px;
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+      flex-shrink: 0;
+}
 
 
 

@@ -182,7 +182,7 @@ async function eventSaveSetting(newSetting){
 
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.saveSetting);
+    onShowNotifyPopup("saveSetting");
     // ferme le menu
     onLeaveMenu("Setting");
 }

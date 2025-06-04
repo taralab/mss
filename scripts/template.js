@@ -554,7 +554,7 @@ async function eventInsertNewTemplate(templateToInsertFormat) {
 
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.templateCreation);
+    onShowNotifyPopup("templateCreation");
 
     // Remet à jour les éléments
     onUpdateTemplateList(true);
@@ -578,7 +578,7 @@ async function eventInsertTemplateModification(templateToInsertFormat) {
     onUpdateTemplateKeys();
    
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.templateModification);
+    onShowNotifyPopup("templateModification");
 
     // Remet à jour les éléments visuels
     onUpdateTemplateList(true);
@@ -684,7 +684,7 @@ async function eventDeleteTemplate(idToDelete) {
     onUpdateTemplateKeys();
 
     // Popup notification
-    onShowNotifyPopup(notifyTextArray.templateDeleted);
+    onShowNotifyPopup("templateDeleted");
 
     // Remet à jour les éléments visuel
     onUpdateTemplateList(true);

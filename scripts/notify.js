@@ -2,23 +2,23 @@
 // Tableau des notifications
 
 let notifyTextArray = {
-    delete : "Activité supprimée !",
-    creation : "Activité créée !",
-    modification : "Activité modifiée !",
-    saveprofil : "Profil sauvegardé !",
-    exportSuccess : "Données exportées !",
-    importSuccess : "Données importées",
-    saveSetting : "Paramètres modifiés !",
-    templateCreation :"Modèle créé !",
-    templateModification : "Modèle modifié !",
-    templateDeleted : "Modèle supprimé !",
-    counterCreated : "Compteur créé !",
-    counterDeleted : "Compteur supprimé !",
-    counterTargetReach : "Compteur validé !",
-    sessionReset : "Session réinitialisée !",
-    activityGenerated : "Activité généré !",
-    inputIncrementEmpty : "Valeur manquante !",
-    planningModified : "Planning modifié !"
+    delete : {emoji : "🗑️",text: "Activité supprimée !"},
+    creation : {emoji : "👌",text: "Activité créée !"},
+    modification : {emoji : "🛠️",text: "Activité modifiée !"},
+    saveprofil : {emoji : "👤",text: "Profil sauvegardé !"},
+    exportSuccess : {emoji : "🗂️",text: "Données exportées !"},
+    importSuccess : {emoji : "🗂️",text: "Données importées"},
+    saveSetting : {emoji : "🛠️",text: "Paramètres modifiés !"},
+    templateCreation :{emoji : "👌",text: "Modèle créé !"},
+    templateModification : {emoji : "🛠️",text: "Modèle modifié !"},
+    templateDeleted : {emoji : "🗑️",text: "Modèle supprimé !"},
+    counterCreated : {emoji : "👌",text: "Compteur créé !"},
+    counterDeleted : {emoji : "🗑️",text: "Compteur supprimé !"},
+    counterTargetReach : {emoji : "💪",text: "Compteur validé !"},
+    sessionReset : {emoji : "🔄",text: "Session réinitialisée !"},
+    activityGenerated : {emoji : "👌",text: "Activité généré !"},
+    inputIncrementEmpty : {emoji : "❗",text: "Valeur manquante !"},
+    planningModified : {emoji :"🛠️" ,text: "Planning modifié !"}
 };
 
 
@@ -28,14 +28,20 @@ let notifyTextArray = {
 let animationDuration = 1000;//durée de l'animation
 
 // Popup de notification 
-function onShowNotifyPopup(textTarget) {
+function onShowNotifyPopup(key) {
+    let divPopup = document.getElementById("popupNotify");
 
-    let popup = document.getElementById("popupNotify");
-    popup.innerHTML = textTarget;
+    //emojie
+    let popupImgRef = document.getElementById("divNotifyPopupEmoji");
+    popupImgRef.innerHTML = notifyTextArray[key].emoji;
 
-    popup.classList.add('show');
+    // Texte
+    let popupTextRef = document.getElementById("spanPopupNotifyText");
+    popupTextRef.innerHTML = notifyTextArray[key].text;
+
+    divPopup.classList.add('show');
     setTimeout(() => {
-        popup.classList.remove('show');
+        divPopup.classList.remove('show');
     }, animationDuration); // Cache le popup après 3 secondes
 };
 

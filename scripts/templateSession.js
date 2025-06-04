@@ -434,7 +434,7 @@ async function onClickSaveFromTemplateSessionEditor() {
         if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
             // Notification
-            onShowNotifyPopup(notifyTextArray.templateCreation);
+            onShowNotifyPopup("templateCreation");
             break;
         case "modification":
             // Sauvegarde la modification
@@ -445,7 +445,7 @@ async function onClickSaveFromTemplateSessionEditor() {
             if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
             // Notification
-            onShowNotifyPopup(notifyTextArray.templateModification);
+            onShowNotifyPopup("templateModification");
             break;
     
         default:
@@ -522,7 +522,7 @@ async function eventDeleteTemplateSessionModel() {
     if (devMode === true) {console.log("templateSessionsNameList:",templateSessionsNameList);};
 
     // Notification
-    onShowNotifyPopup(notifyTextArray.templateDeleted);
+    onShowNotifyPopup("templateDeleted");
 
     // Actualise la liste
     eventUpdateTemplateSessionList();
