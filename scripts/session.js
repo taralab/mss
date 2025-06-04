@@ -44,7 +44,6 @@ class Counter {
         this.colorName = colorName;
         this.totalCount = totalCount;
 
-        console.log("Color name:", this.colorName);
         // div container
         this.element = document.createElement("div");
         this.element.classList.add("compteur-container");
@@ -634,10 +633,13 @@ function onCheckTargetReach(idRef) {
 // ANIMATION
 function onPlayIncrementAnimation(isTargetReach,repIncrementRef,divCurrentSerieRef) {
 
-    let itemToAnimRef = isTargetReach ? divCurrentSerieRef : repIncrementRef;
-
+    let itemToAnimRef = repIncrementRef;
+        
+        // Pour relancer l'animation même si elle a été déjà jouée
+        itemToAnimRef.classList.remove('pop-animation');
+        void itemToAnimRef.offsetWidth; // Forcer un reflow
         // Ajouter la classe pour l'animation
-
+        itemToAnimRef.classList.add("pop-animation");
 }
 
 
@@ -658,8 +660,12 @@ async function onClickResetCounter(idRef) {
     // set les html
     //current serie
     let spanCurrentSerieRef = document.getElementById(`spanCurrentSerie_${idRef}`);
-    spanCurrentSerieRef.innerHTML = 0;
 
+    // Étape 1 : animation de disparition
+    spanCurrentSerieRef.classList.remove('reset-in');
+    spanCurrentSerieRef.classList.add('reset-out');
+    // Le innerHTML sera mis à zero dans le setTimeOut
+    
     //totalcount
     let spanTotalCountRef = document.getElementById(`spanTotalCount_${idRef}`);
     spanTotalCountRef.innerHTML = `Total : 0`;
@@ -687,9 +693,12 @@ async function onClickResetCounter(idRef) {
     // Ajouter la classe pour l'animation
     // spanCurrentSerieRef.classList.add("anim-reset");
 
-    // Supprimer la classe après l'animation pour la rejouer à chaque changement
+    
     setTimeout(() => {
-        // spanCurrentSerieRef.classList.remove("anim-reset");
+        // Met le chiffre visuellement et joue la remontée
+        spanCurrentSerieRef.classList.remove('reset-out');
+        spanCurrentSerieRef.classList.add('reset-in');
+        spanCurrentSerieRef.innerHTML = 0;
 
         //déverrouille le bouton à la fin de l'animation
         document.getElementById(`btnCountReset_${idRef}`).disabled = false;

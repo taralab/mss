@@ -1969,10 +1969,62 @@ span.target-reach{
 }
 
 
+/* Animation incrementation */
+@keyframes anim-pop {
+  0% {
+    transform: scale(1);
+    color: inherit;
+  }
+  50% {
+    transform: scale(1.5);
+    color: rgba(66, 66, 66, 0.6); /* Couleur temporaire pour l'effet */
+  }
+  100% {
+    transform: scale(1);
+    color: inherit;
+  }
+}
+
+/* Animation monter descendre */
+@keyframes disappearDown {
+  0% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(20px);
+    opacity: 0;
+  }
+}
+
+@keyframes appearUp {
+  0% {
+    transform: translateY(-20px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+}
+
+
 span.current-serie {
     height: 40px;
     font-size: 52px;
     font-weight: bold;
+    transition: transform 0.3s;
+    display: inline-block; /* OBLIGATOIRE pour le transform */
+}
+span.current-serie.pop-animation {
+  animation: anim-pop 0.3s ease;
+}
+span.current-serie.reset-out {
+  animation: disappearDown 0.30s forwards;
+}
+
+span.current-serie.reset-in {
+  animation: appearUp 0.30s forwards;
 }
 
 span.serie-target{
