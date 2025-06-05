@@ -2221,7 +2221,7 @@ div.popup-new-counter-content input.counterName{
 
 
 div.confirmationDeleteCounter{
-    z-index: 2;
+    z-index: 12;
     display: none;
     width: 100%;
     height:100vh;

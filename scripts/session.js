@@ -248,6 +248,8 @@ function onClickAddCounter() {
     // Set le mode d'utilisation de l'éditeur de compteur
     counterEditorMode = "creation";
     
+    // Cache le bouton supprimer
+    document.getElementById("btnDeleteCounter").style.visibility = "hidden";
 
     // Affiche 
     document.getElementById("divEditCounter").style.display = "flex";
@@ -387,6 +389,10 @@ function onClickModifyCounter(idRef) {
     document.getElementById("inputEditRepIncrement").value = userCounterList[idRef].repIncrement;
     document.getElementById("divEditCounterContent").style.backgroundColor = counterColor[userCounterList[idRef].color].body;
     counterColorSelected = userCounterList[idRef].color;
+
+
+    // rend le bouton supprimer visible
+    document.getElementById("btnDeleteCounter").style.visibility = "visible";
 
     // Affiche 
     document.getElementById("divEditCounter").style.display = "flex";
@@ -646,7 +652,6 @@ function onPlayIncrementAnimation(isTargetReach,repIncrementRef,divCurrentSerieR
         // Ajouter la classe pour l'animation
         itemToAnimRef.classList.add("pop-animation");
 
-        console.log(itemToAnimRef);
 }
 
 
@@ -769,10 +774,8 @@ async function eventResetAllCounter() {
 
 
 
-let idCounterToDelete = "";
-function onClickDeleteCounter(idTarget) {
 
-    idCounterToDelete = idTarget;
+function onClickDeleteCounter() {
 
     // Set le mode de popup
     onSetSessionPopupMode("removeCounter");
@@ -782,10 +785,10 @@ function onClickDeleteCounter(idTarget) {
 
 async function eventDeleteCounter(){
     //suppression dans la variable
-    delete userCounterList[idCounterToDelete];
+    delete userCounterList[currentCounterEditorID];
 
     // traitement display order pour les counters suivants
-    onChangeDisplayOrderFromDelete(idCounterToDelete);
+    onChangeDisplayOrderFromDelete(currentCounterEditorID);
 
     if (devMode === true){console.log("userCounterList", userCounterList)};
 
@@ -837,7 +840,7 @@ function onSetSessionPopupMode(mode) {
 
     switch (popupSessionMode) {
         case "removeCounter":
-            textPopup = `<b>Supprimer : ${userCounterList[idCounterToDelete].name} ?</b>`;
+            textPopup = `<b>Supprimer : ${userCounterList[currentCounterEditorID].name} ?</b>`;
             imgPopupUrl = "./Icons/Icon-Delete-color.webp";
             break;
         case "resetAllCounter":
@@ -877,11 +880,15 @@ function onAnnulPopUPConfirmSession(event) {
 // Confirme le popup de session
 function onConfirmPopupSession(event) {
     event.stopPropagation();
+    // Masque popup de confirmation
     document.getElementById("divPopupConfirmSession").classList.remove("show");
 
     // Filtre selon le mode d'ouverture du popup
     switch (popupSessionMode) {
         case "removeCounter":
+            // Masque editeur de compteur
+            document.getElementById("divEditCounter").style.display = "none";
+            // Lance séquence de suppression
             eventDeleteCounter();
             break;
         case "resetAllCounter":
