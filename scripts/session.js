@@ -15,6 +15,7 @@ let userCounterList = {
     sessionStartTime = "--:--:--",//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
     sessionStorageName = "MSS_sessionCounterList",
     sessionStartTimeStorageName = "MSS_sessionStartTime";
+    sortableInstance = null;//instance pour le drag n drop
 
 let counterColor = {
     white: {body:"#fff",button:"grey"},
@@ -145,6 +146,9 @@ async function onOpenMenuSession(){
     document.getElementById("customInfo").innerHTML = `<b>Début à : ${sessionStartTime}<b>`;
 
     onDisplayCounter(userCounterList);
+
+    // Instancie le system de drag N drop
+    onInitSortable(divSessionCompteurArea);
 
     // Charge également les listes des modèles et leur clé dans l'ordre alphabétique
     await onLoadTemplateSessionNameFromDB();
@@ -466,16 +470,21 @@ function onFormatModifyCounter() {
 function onDisplayCounter() {
     if (devMode === true){console.log(" [COUNTER] génération de la liste");};
 
-    let divSessionRef = document.getElementById("divSession");
+    // div qui contient les compteurs
+    let divSessionCompteurAreaRef = document.getElementById("divSessionCompteurArea");
     // Reset
-    divSessionRef.innerHTML = "";
+    divSessionCompteurAreaRef.innerHTML = "";
 
+
+    // div de fin de liste (bouton et info)
+    let divSessionEndListRef = document.getElementById("divSessionEndList");
+    divSessionEndListRef.innerHTML = "";
 
     // Affichage en cas d'aucune modèle
     if (Object.keys(userCounterList).length < 1) {
-        divSessionRef.innerHTML = "Aucun compteur à afficher !";
+        divSessionCompteurAreaRef.innerHTML = "Aucun compteur à afficher !";
 
-        new Button_add("Ajouter un compteur",() => onClickAddCounter(),false,divSessionRef);
+        new Button_add("Ajouter un compteur",() => onClickAddCounter(),false,divSessionEndListRef);
         return
     }
 
@@ -491,7 +500,7 @@ function onDisplayCounter() {
         new Counter(
             key,userCounterList[key].name,
             userCounterList[key].currentSerie,userCounterList[key].serieTarget,userCounterList[key].repIncrement,
-            userCounterList[key].displayOrder,divSessionRef,userCounterList[key].color,
+            userCounterList[key].displayOrder,divSessionCompteurAreaRef,userCounterList[key].color,
             userCounterList[key].totalCount
         );
 
@@ -513,12 +522,12 @@ function onDisplayCounter() {
         // Creation de la ligne de fin pour le dernier index
         if (index === (Object.keys(userCounterList).length - 1)) {
             let isMaxCounterReach = Object.keys(userCounterList).length >= maxCounter;
-            new Button_add("Ajouter un compteur",() => onClickAddCounter(),isMaxCounterReach,divSessionRef);
+            new Button_add("Ajouter un compteur",() => onClickAddCounter(),isMaxCounterReach,divSessionEndListRef);
 
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = `ℹ️ Vous pouvez créer jusqu'à ${maxCounter} compteurs.`;
-            divSessionRef.appendChild(newClotureList);
+            divSessionEndListRef.appendChild(newClotureList);
         }
     });
 
@@ -1575,23 +1584,41 @@ function onSetSessionTableLineFromTemplate(templateData) {
         document.getElementById(`selectGenSessionColor_${index}`).value = counter.color;
         onChangeColorInGenSessionTable(index);
     }); 
-    
-    
-    
-    
+      
 }
 
 
 
+// Gestion drag N drop
 
+function onInitSortable(divID) {
+        sortable = Sortable.create(divID, {
+        animation: 150,
+        ghostClass: 'sortable-ghost',
+        scroll: true, // active le scroll automatique
+        scrollSensitivity: 30,
+        scrollSpeed: 10
+    });
+}
 
+function onDestroySortable() {
+    // Vide l'instance de trie
+    if (sortableInstance) {
+        sortableInstance.destroy();
+        sortableInstance = null;
+    }
+
+}
 
 
 // Retour depuis Info
 function onClickReturnFromSession() {
 
-    // Affiche à nouveau le pseudo
-    // document.getElementById("customInfo").innerHTML = userInfo.pseudo;
+    onDestroySortable();
+
+    // vide la div
+    let divSessionCompteurAreaRef = document.getElementById("divSessionCompteurArea");
+    divSessionCompteurAreaRef.innerHTML = "";
 
     //vide le tableau
     document.getElementById("bodyTableGenerateSession").innerHTML = "";

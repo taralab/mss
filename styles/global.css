@@ -1922,6 +1922,16 @@ div.disabledEvent{
 
 /* ------------------------------------ #Compteur ----------------------------------*/
 
+div.divCounterListArea{
+    width: 100%;
+}
+
+div.counterEndLisArea{
+    display: flex;
+    width: 100%;
+    flex-direction: column;   /* Empile les items verticalement */
+    align-items: flex-start;
+}
 
 
 .compteur-content-line-1,
@@ -2255,7 +2265,10 @@ button.btnChooseColor{
     font-size: 0.7rem;
 }
 
-
+.sortable-ghost {
+    opacity: 0.4;
+    background-color: #ccc;
+}
 
 /* ----------------------------------------- Génération de session  ---------------------------*/
 
