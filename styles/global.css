@@ -2266,11 +2266,21 @@ button.btnChooseColor{
     font-size: 0.7rem;
 }
 
+
+
+/* DRAGN DROP */
 .sortable-ghost {
     opacity: 0.4;
     background-color: #ccc;
 }
-
+.drag-handle {
+    cursor: grab;
+    user-select: none;
+    touch-action: none;
+    font-size: 18px;
+    margin-right: 8px;
+    color: #888;
+}
 /* ----------------------------------------- Génération de session  ---------------------------*/
 
 
