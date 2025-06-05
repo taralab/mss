@@ -148,7 +148,7 @@ async function onOpenMenuSession(){
     onDisplayCounter(userCounterList);
 
     // Instancie le system de drag N drop
-    onInitSortable(divSessionCompteurArea);
+    onInitSortable("divSessionCompteurArea");
 
     // Charge également les listes des modèles et leur clé dans l'ordre alphabétique
     await onLoadTemplateSessionNameFromDB();
@@ -919,6 +919,27 @@ function onConfirmPopupSession(event) {
 // ----------------------------------- NAVIGATION -----------------------------------
 
 
+// Actualisation des display order après drag n drop
+function updateCounterDisplayOrders() {
+    const container = document.getElementById("divSessionCompteurArea");
+    const children = container.querySelectorAll(".compteur-container");
+
+    children.forEach((child, index) => {
+        const id = child.id.replace("counterContainer_", ""); // extrait l'ID
+        if (userCounterList[id]) {
+            userCounterList[id].displayOrder = index;
+        }
+    });
+
+    // réaffiche les compteurs
+    onDisplayCounter();
+
+    // Sauvegarde en localStorage
+    onUpdateCounterSessionInStorage();
+}
+
+
+
 async function onClickCounterNavDecrease(idOrigin) {
 
     // Fait un switch entre les deux éléments
@@ -1592,12 +1613,16 @@ function onSetSessionTableLineFromTemplate(templateData) {
 // Gestion drag N drop
 
 function onInitSortable(divID) {
-        sortable = Sortable.create(divID, {
+    const container = document.getElementById(divID); 
+    sortable = Sortable.create(container, {
         animation: 150,
         ghostClass: 'sortable-ghost',
-        scroll: true, // active le scroll automatique
+        scroll: true,
         scrollSensitivity: 30,
-        scrollSpeed: 10
+        scrollSpeed: 10,
+        onEnd: function () {
+            updateCounterDisplayOrders();
+        }
     });
 }
 

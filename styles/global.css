@@ -1123,6 +1123,7 @@ div.buttonAcceptation{
 /* -------------------------------- NOTIFICATION -------------------- */
 
 .popupNotify {
+    min-width: 230px;
     position: fixed;
       top: 20px;
       left: 50%;
@@ -1130,7 +1131,7 @@ div.buttonAcceptation{
       background-color: #4DB6E2; /* bleu plus doux */
       color: white;
       padding: 12px 20px;
-      border-radius: 16px;
+      border-radius: 12px;
       box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
       display: flex;
       align-items: center;
