@@ -12,6 +12,7 @@ const STATIC_CACHE = `static-${CACHE_VERSION}`;
 const CRITICAL_ASSETS = [
   `${basePath}styles/global.css`,
   `${basePath}scripts/pouchdb.min.js`,
+  `${basePath}scripts/Sortable.min.js`,
   `${basePath}scripts/scripts/template.js`,
   `${basePath}scripts/globalFunction.js`,
   `${basePath}scripts/activityList.js`,
