@@ -14,7 +14,7 @@ let userCounterList = {
     popupSessionMode,//set le mode d'utilisation du popup (removeCounter,resetAllCounter,clearSession,deleteModel)
     sessionStartTime = "--:--:--",//date-heure du début de session set lorsque clique sur reset all counter, ou générate session
     sessionStorageName = "MSS_sessionCounterList",
-    sessionStartTimeStorageName = "MSS_sessionStartTime";
+    sessionStartTimeStorageName = "MSS_sessionStartTime",
     sortableInstance = null;//instance pour le drag n drop
 
 let counterColor = {
@@ -1615,7 +1615,7 @@ function onSetSessionTableLineFromTemplate(templateData) {
 
 function onInitSortable(divID) {
     const container = document.getElementById(divID); 
-    sortable = Sortable.create(container, {
+    sortableInstance = Sortable.create(container, {
         animation: 150,
         ghostClass: 'sortable-ghost',
         scroll: true,
