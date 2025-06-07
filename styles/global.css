@@ -569,10 +569,12 @@ p.item-data-location{
 	overflow: hidden; /*Cache le texte qui dépasse */
     /* font-style: italic; */
     font-size: 0.8rem;
-    color: #555;
+    color: #666;
+    font-weight: 600;
 
   	text-overflow: ellipsis; /*Ajoute des points de suspension (...) pour indiquer que du texte est masqué*/
     width: 100px;
+    margin-bottom: 2px;
 }
 
 p.item-data-comment-collapse{
