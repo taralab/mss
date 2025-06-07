@@ -457,7 +457,7 @@ button.btn-sort-Selected{
     display: flex;       
     background-color: var(--colorLightGray); 
     padding: 16px 5px;
-    border-radius: 10px;
+    border-radius: 16px;
     box-shadow: var(--boxShadowMoins);
 }
 
