@@ -62,7 +62,7 @@ class Counter {
     render(){
         this.element.innerHTML = `
             <div class="compteur-content-line-1">
-                <div class="drag-handle">⠿</div>
+                <div class="drag-handle">⣿</div>
                 <p class="compteur-name" id="counterName_${this.id}">${this.name}</p>
                 <button class="btn-counter-setting" onclick="onClickModifyCounter('${this.id}')">
                     <img src="./Icons/Icon-Autres.webp" alt="" srcset="">

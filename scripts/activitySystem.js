@@ -510,7 +510,7 @@ function onCreateMoreActivityBtn() {
 
     let newTextBtnMore = document.createElement("p");
     newTextBtnMore.classList.add("moreItem");
-    newTextBtnMore.innerHTML = "Afficher plus d'activités";
+    newTextBtnMore.innerHTML = "▼ Afficher plus d'activités ▼";
 
     // Insertion
 

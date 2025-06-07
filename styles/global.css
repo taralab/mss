@@ -645,17 +645,19 @@ button.new-from-template.hidden{
 
 /* Style de texte pour le bouton "afficher plus" */
 div.moreItem{
-    width: 95%;          
+    width: 250px;        
     display: flex;
     align-items: center;
     justify-content: center;
     background-color: var(--colorLightGray); 
     padding: 5px;
-    border-radius: 20px;
-    box-shadow: var(--boxShadow);
+    border-radius: 15px;
+    /* box-shadow: var(--boxShadow); */
     min-height: 30px;
+    margin: auto;
     margin-bottom: 100px;
     margin-top: 10px;
+    border: solid 1px var(--colorMainTheme1);
 }
 
 p.moreItem{
@@ -2300,8 +2302,9 @@ button.btnChooseColor{
     user-select: none;
     touch-action: none;
     font-size: 18px;
-    margin-right: 8px;
+    padding: 10px 10px 10px 0px;
     color: #888;
+    /* background-color: orange; */
 }
 /* ----------------------------------------- Génération de session  ---------------------------*/
 
