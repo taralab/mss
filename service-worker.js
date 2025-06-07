@@ -50,6 +50,7 @@ const ICONS = [
   `${basePath}Icons/Icon-Download.webp`,
   `${basePath}Icons/Icon-Favoris.webp`,
   `${basePath}Icons/Icon-Favoris-Sel.webp`,
+  `${basePath}Icons/Icon-Favoris-Menu.webp`,
   `${basePath}Icons/Icon-New.webp`,
   `${basePath}Icons/Icon-Return-cancel.webp`,
   `${basePath}Icons/Icon-Setting.webp`,

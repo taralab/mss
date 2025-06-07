@@ -4,11 +4,9 @@
     --colorLightRed : rgb(255, 151, 151);
     --colorMainTheme1 : #30849e;
     --colorMainTheme2 : #40cccd;
-    --colorMainTheme3 : #86E5FF;
-    --colorMainTheme4 : #5BC0F8;
-    --colorMainTheme5 : #e414ff;
     --colorMainTheme6 :#ff5780;
     --colorLightGray : #fff;
+    --colorTextBtn: #7F8C8D;
     --boxShadow : 0 2px 5px rgba(0, 0, 0, 0.1);
     --boxShadowMoins : 0 2px 5px rgba(0, 0, 0, 0.03);
     --boxShadowPlus : 0 2px 5px rgba(0, 0, 0, 0.2);
@@ -26,11 +24,11 @@ body{
     margin: 0;
     padding: 0;
     background-image: url(../Icons/Background-texture.webp);
-    background-repeat: no-repeat; /* ou 'no-repeat' si tu veux l’utiliser une seule fois */
-    background-size:cover; /* ou 'cover' selon l’effet désiré */
-    background-position: center top; /* ou 'center center' */
+    background-repeat: no-repeat; 
+    background-size:cover; 
+    background-position: center top; 
     background-color: #f4f4f9;
-    font-family: 'Arial', sans-serif;
+    font-family: 'Roboto', sans-serif;
 }
 
 div.app {
@@ -59,7 +57,7 @@ button.btn-menu {
     justify-content: center;
     text-align: center;
     width: 70px;
-    height: 50px; /* Taille augmentée pour plus d'équilibre */
+    height: 50px; 
     border: none;
     padding: 5px;
     background: none;
@@ -80,7 +78,7 @@ button.btn-menu img {
 button.btn-menu span {
     font-size: 12px;
     font-weight: bold;
-    color: var(--colorMainTheme1);
+    color: var(--colorTextBtn);
 }
 
 /* Spécifique texte bouton menu blanc */
@@ -128,7 +126,7 @@ div.confirmationDelete{
 }
 
 div.confirmationDelete.show {
-    display: flex; /* Change display pour l'afficher */
+    display: flex; 
     flex-direction: column;
     justify-content:center;
     align-items: center;
@@ -160,7 +158,7 @@ button.confirmPopup{
 
 /* Appliquez l'animation lorsque .show est présent */
 div.confirmationDelete.show button.confirmPopup {
-    animation: grow 200ms forwards; /* Ajoute l'animation explicite */
+    animation: grow 200ms forwards; 
 }
 
 
@@ -230,7 +228,7 @@ img.activity{
 input:not([type="checkbox"]), textarea {
     width: calc(100% - 20px); /* 100% moins les 10px de padding gauche et droite */
     height: 35px;
-    padding: 0 10px; /* Ajoute un padding intérieur de 10px */
+    padding: 0 10px; 
     margin-left: 10px;
     border: var(--inputBorder);
     border-radius: 10px;
@@ -458,7 +456,7 @@ button.btn-sort-Selected{
     width: 95%;          
     display: flex;       
     background-color: var(--colorLightGray); 
-    padding: 10px 5px 10px 5px;
+    padding: 16px 5px;
     border-radius: 10px;
     box-shadow: var(--boxShadowMoins);
 }
@@ -792,7 +790,7 @@ button.btn-menu-sup {
     border-radius: 10px;
     padding: 10px;
     background: none;
-    color: var(--colorMainTheme1);
+    color: var(--colorTextBtn);
     font-weight: bold;
     box-sizing: border-box;
 }
