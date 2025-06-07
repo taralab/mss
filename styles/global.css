@@ -647,7 +647,7 @@ button.new-from-template.hidden{
 
 /* Style de texte pour le bouton "afficher plus" */
 div.moreItem{
-    width: 250px;        
+    width: 180px;        
     display: flex;
     align-items: center;
     justify-content: center;

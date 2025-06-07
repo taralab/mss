@@ -26,6 +26,53 @@ let imgTemplateEditorPreviewRef = document.getElementById("imgEditorActivityPrev
 
 
 
+// class d'une div de modèle de d'activité à inserer dans la liste
+class TemplateActivityItemList {
+    constructor(key,name,imgRef, parentRef,delayMs = 0){
+        this.key = key;
+        this.name = name;
+        this.imgRef = imgRef;
+        this.parentRef = parentRef;
+        this.delayMs = delayMs;
+
+        this.element = document.createElement("div");
+        this.element.classList.add("item-template-container");
+
+
+        // Pour l'animation sur le conteneur principal
+        this.element.classList.add("item-animate-in-horizontal");
+        this.element.style.animationDelay = `${this.delayMs}ms`;
+
+
+        // evenement pour retirer l'animation après qu'elle soit jouée
+        this.element.addEventListener("animationend", () => {
+            this.element.classList.remove("item-animate-in-horizontal");
+            this.element.style.animationDelay = "";
+        }, { once: true });
+
+
+
+        // Utilisation d'une fonction fléchée pour conserver le bon "this"
+        this.element.onclick = () => {
+            onClicOnTemplateInTemplateMenu(this.key);
+        };
+
+        this.render();
+    }
+
+
+    render(){
+        this.element.innerHTML = `
+            <img class="templateList" src="${this.imgRef}">
+            <span class="templateList gestion">${this.name}</span>
+        `;
+
+        //insertion dans le parent
+        this.parentRef.appendChild(this.element);
+    };
+}
+
+
 
 // ------------------------ Fonction de gestion template ------------------------
 
@@ -280,28 +327,11 @@ function onCreateTemplateMenuList(templateKeysList) {
     // Génère la liste
     templateKeysList.forEach((key,index)=>{
 
-        // Creation
-        let newContainer = document.createElement("div");
-        newContainer.classList.add("item-template-container");
-        newContainer.onclick = function (){
-            onClicOnTemplateInTemplateMenu(key); 
-        }
-
-        let newImg = document.createElement("img");
-        newImg.classList.add("templateList");
-        newImg.src = activityChoiceArray[userTemplateListItems[key].activityName].imgRef;
-
-        let newTitle = document.createElement("span");
-        newTitle.innerHTML = userTemplateListItems[key].title;
-        newTitle.classList.add("templateList","gestion");
-
-        // Insertion
-
-        newContainer.appendChild(newImg);
-        newContainer.appendChild(newTitle);
-
-        divTemplateListMenuRef.appendChild(newContainer);
-
+        let title = userTemplateListItems[key].title,
+            imgRef = activityChoiceArray[userTemplateListItems[key].activityName].imgRef;
+            delay = index * animCascadeDelay; // 60ms d’écart entre chaque élément : effet cascade
+            
+        new TemplateActivityItemList(key,title,imgRef,divTemplateListMenuRef,delay);
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (userTemplateListKeys.length - 1)) {
