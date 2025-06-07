@@ -4,13 +4,14 @@
     --colorLightRed : rgb(255, 151, 151);
     --colorMainTheme1 : #30849e;
     --colorMainTheme2 : #40cccd;
-    --colorMainTheme6 :#ff5780;
+    --colorMainTheme6 :#f56b8e;
     --colorLightGray : #fff;
     --colorTextBtn: #7F8C8D;
     --boxShadow : 0 2px 5px rgba(0, 0, 0, 0.1);
     --boxShadowMoins : 0 2px 5px rgba(0, 0, 0, 0.03);
     --boxShadowPlus : 0 2px 5px rgba(0, 0, 0, 0.2);
     --themeGradientBlue : linear-gradient(#26a0b8, #47dbdb);
+    --gradientHeader : linear-gradient(to bottom right, #26a0b8, #47dbdb);
     --themeGradientPink : linear-gradient(#ff5780,#feaec2);
     --themeGradientGray : linear-gradient(#929292,#d5d5d5 );
     --themePinkDark: #ff5780;
@@ -336,7 +337,7 @@ div.header{
     width: 100%;   
     display: flex;
     justify-content: space-between; /* Espace entre chaque paragraphe */
-    background: var(--themeGradientBlue);
+    background: var(--gradientHeader);
     margin-bottom: 10px;
 }
 
@@ -382,9 +383,10 @@ p.custom-info{
 .item-container-head {
     width: 87%;     
     display: flex;       
-    background: var(--themeGradientPink); 
+    /* background: var(--themeGradientPink);  */
     padding: 5px;
-    margin-bottom: 15px;
+    margin-top: 5px;
+    margin-bottom: 5px;
     margin-left: 15px;
     border-radius: 12px;
 }
@@ -407,21 +409,28 @@ select.item-category-selector{
 
 
 button.btn-sort{
-    border: none;
-    border-radius: 5px;
-    box-shadow: var(--boxShadow);
-    color: var(--colorMainTheme1);
+    font-weight: bold;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: #fff8fd;
+    color: var(--colorMainTheme6);
+    border: 1px solid #f990d4;
+    border-radius: 15px;
 }
 
 
 button.btn-sort-Selected{
     border: none;
-    border-radius: 5px;
-    box-shadow: var(--boxShadow);
-    background-color: var(--colorMainTheme1);
-    color: white;
     font-weight: bold;
+    border-radius: 20px;
+    height: 30px;
+    padding: 5px 10px;
+    font-size: 16px;
+    background-color: var(--colorMainTheme6);
+    color: #ffffff;
 }
+
 
 
 
