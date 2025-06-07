@@ -36,31 +36,31 @@ function onSetIconSort() {
     // Bouton de tri par distance
     if (currentSortType === "distanceCroissante" || currentSortType === "distanceDecroissante") {
         btnSortDistanceRef.classList.add("btn-sort-Selected");
-        btnSortDistanceRef.classList.remove("btn-sort");
+        btnSortDistanceRef.classList.remove("btn-sort-Non-Selected");
         btnSortDistanceRef.innerHTML = currentSortType === "distanceCroissante" ? "Distance ▼" : "Distance ▲";
     } else {
-        btnSortDistanceRef.classList.add("btn-sort");
+        btnSortDistanceRef.classList.add("btn-sort-Non-Selected");
         btnSortDistanceRef.classList.remove("btn-sort-Selected");
     }
 
     // Bouton de tri par durée
     if (currentSortType === "chronoCroissant" || currentSortType === "chronoDecroissant") {
         btnSortDuration.classList.add("btn-sort-Selected");
-        btnSortDuration.classList.remove("btn-sort");
+        btnSortDuration.classList.remove("btn-sort-Non-Selected");
         btnSortDuration.innerHTML = currentSortType === "chronoCroissant" ? "Chrono ▼" : "Chrono ▲";
     } else {
-        btnSortDuration.classList.add("btn-sort");
+        btnSortDuration.classList.add("btn-sort-Non-Selected");
         btnSortDuration.classList.remove("btn-sort-Selected");
     }
 
     // Bouton de tri par date
     if (currentSortType === "dateRecente" || currentSortType === "dateAncienne") {
         btnSortDate.classList.add("btn-sort-Selected");
-        btnSortDate.classList.remove("btn-sort");
+        btnSortDate.classList.remove("btn-sort-Non-Selected");
         btnSortDate.innerHTML = currentSortType === "dateRecente" ? "Date ▲" : "Date ▼";
 
     } else {
-        btnSortDate.classList.add("btn-sort");
+        btnSortDate.classList.add("btn-sort-Non-Selected");
         btnSortDate.classList.remove("btn-sort-Selected");
     }
 
