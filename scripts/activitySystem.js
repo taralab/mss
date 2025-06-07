@@ -413,9 +413,9 @@ function onInsertActivityInList(activityKeysToDisplay) {
 
 
     if (devMode === true){
-        console.log("nbre d'activité total à afficher = " + userActivityKeysListToDisplay.length);
-        console.log("Nbre max d'activité affiché par cycle = " + maxActivityPerCycle);
-        console.log("Vide la liste des activités");
+        console.log("[ACTIVITY] nbre d'activité total à afficher = " + userActivityKeysListToDisplay.length);
+        console.log("[ACTIVITY] Nbre max d'activité affiché par cycle = " + maxActivityPerCycle);
+        console.log("[ACTIVITY] Vide la liste des activités");
     };
 
     divItemListRef.innerHTML = "";
@@ -425,7 +425,7 @@ function onInsertActivityInList(activityKeysToDisplay) {
         return
     }else{
         if (devMode === true){console.log("Demande d'insertion du premier cycle d'activité dans la liste");};
-        onInsertMoreActivity();
+        onInsertActivityCycle();
     };
 
 
@@ -434,68 +434,57 @@ function onInsertActivityInList(activityKeysToDisplay) {
 
 
 // séquence d'insertion  d'activité dans la liste selon le nombre limite définit
-function onInsertMoreActivity() {
-    if (devMode === true){console.log("Lancement d'un cycle d'insertion d'activité.");};
+function onInsertActivityCycle() {
+    if (devMode === true){
+        console.log("[ACTIVITY] Lancement d'un cycle d'insertion d'activité.");
+        console.log("[ACTIVITY] Index de départ = " + userActivityKeysListIndexToStart);
+    };
     let cycleCount = 0;
 
-    if (devMode === true){console.log("Index de départ = " + userActivityKeysListIndexToStart);};
-
-
-
     for (let i = userActivityKeysListIndexToStart; i < Object.keys(userActivityKeysListToDisplay).length; i++) {
-
         if (cycleCount >= maxActivityPerCycle) {
-            if (devMode === true){console.log("Max par cycle atteinds = " + maxActivityPerCycle);};
+            if (devMode === true){console.log("[ACTIVITY] Max par cycle atteinds = " + maxActivityPerCycle);};
             // Creation du bouton More
             onCreateMoreActivityBtn();
             userActivityKeysListIndexToStart += maxActivityPerCycle;
-            if (devMode === true){console.log("mise a jour du prochain index to start = " + userActivityKeysListIndexToStart);};
+            if (devMode === true){console.log("[ACTIVITY] mise a jour du prochain index to start = " + userActivityKeysListIndexToStart);};
             // Arrete la boucle si lorsque le cycle est atteind
             return
         }else{
-            onInsertOneActivity(allUserActivityArray[userActivityKeysListToDisplay[i]],i === Object.keys(userActivityKeysListToDisplay).length-1);
+            // Stocke les éléments de l'activité dans une variable
+            const activityData = allUserActivityArray[userActivityKeysListToDisplay[i]];
+            new ActivityItem(
+                activityData._id,
+                activityChoiceArray[activityData.name].imgRef,
+                activityData.distance,
+                activityData.duration,
+                activityData.date,
+                activityData.location,
+                activityData.comment,
+                divItemListRef,
+                activityData.isPlanned
+            );
+
+            // gestion derniere activité de la liste
+            // Insertion d'un trait en fin de liste
+            let isLastIndex = i === Object.keys(userActivityKeysListToDisplay).length-1;
+
+            if (isLastIndex) {
+                let newClotureList = document.createElement("span");
+                newClotureList.classList.add("last-container");
+                newClotureList.innerHTML = "ℹ️ Vos activités sont stockées dans votre navigateur.";
+                divItemListRef.appendChild(newClotureList);
+            }
         };
         cycleCount++;
-    };
-
-    
+    }; 
 };
 
-
-
-
-// Fonction d'insertion d'une activité dans la liste avec gestion spécial pour le dernier element
-// et gestion pour les activités planifiées
-function onInsertOneActivity(activity,isLastIndex) {
-
-    new ActivityItem(
-        activity._id,
-        activityChoiceArray[activity.name].imgRef,
-        activity.distance,
-        activity.duration,
-        activity.date,
-        activity.location,
-        activity.comment,
-        divItemListRef,
-        activity.isPlanned
-    );
-    
-
-    // gestion derniere activité de la liste
-    // Insertion d'un trait en fin de liste
-    if (isLastIndex) {
-        let newClotureList = document.createElement("span");
-        newClotureList.classList.add("last-container");
-        newClotureList.innerHTML = "ℹ️ Vos activités sont stockées dans votre navigateur.";
-        divItemListRef.appendChild(newClotureList);
-    }
-};
 
 
 // Fonction pour le bouton MoreActivity pour afficher les activités utilisateurs suivantes
 
 function onCreateMoreActivityBtn() {
-
 
     // La div de l'item
     let newItemContainerBtnMore = document.createElement("div");
@@ -504,7 +493,7 @@ function onCreateMoreActivityBtn() {
 
     newItemContainerBtnMore.onclick = function (){
         onDeleteBtnMoreItem();
-        onInsertMoreActivity();
+        onInsertActivityCycle();
     };
 
 
