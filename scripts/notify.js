@@ -30,6 +30,7 @@ let animationDuration = 2000;//durée de l'animation
 // Popup de notification 
 function onShowNotifyPopup(key) {
     let divPopup = document.getElementById("popupNotify");
+    divPopup.style.zIndex = "999";
 
     //emojie
     let popupImgRef = document.getElementById("divNotifyPopupEmoji");
@@ -42,6 +43,8 @@ function onShowNotifyPopup(key) {
     divPopup.classList.add('show');
     setTimeout(() => {
         divPopup.classList.remove('show');
+
+        divPopup.style.zIndex = "10";//pour le pas géner l'accès au champ "rechercher"
     }, animationDuration); // Cache le popup après 3 secondes
 };
 

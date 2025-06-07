@@ -410,6 +410,7 @@ select.item-category-selector{
     border:solid 1px var(--colorMainTheme1);
     color: var(--colorMainTheme1);
     pointer-events: none;
+    background-color: white;
 }
 
 
@@ -1163,7 +1164,7 @@ div.buttonAcceptation{
       font-weight: 600;
       opacity: 0;
       transition: all 0.4s ease;
-      z-index: 999;
+      z-index: 10;
 
 }
 
@@ -1180,8 +1181,8 @@ div.notify-emoji {
       color: black;
       font-size: 20px;
       padding: 6px;
-      width: 36px;
-      height: 36px;
+      width: 30px;
+      height: 30px;
       border-radius: 50%;
       display: flex;
       align-items: center;
