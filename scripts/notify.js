@@ -15,7 +15,7 @@ let notifyTextArray = {
     counterCreated : {emoji : "👌",text: "Compteur créé !"},
     counterDeleted : {emoji : "🗑️",text: "Compteur supprimé !"},
     counterTargetReach : {emoji : "💪",text: "Compteur validé !"},
-    sessionReset : {emoji : "🔄",text: "Session réinitialisée !"},
+    sessionReset : {emoji : "🔄",text: "Séance réinitialisée !"},
     activityGenerated : {emoji : "👌",text: "Activité généré !"},
     inputIncrementEmpty : {emoji : "❗",text: "Valeur manquante !"},
     planningModified : {emoji :"🛠️" ,text: "Planning modifié !"}
