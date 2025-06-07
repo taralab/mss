@@ -1735,25 +1735,17 @@ input.fieldRequired{
 
 
 div.templateList{
-    display: flex;
-    flex-direction: column;   /* Empile les items verticalement */
-    gap: 15px;                /* Espace entre chaque item-container */
-    align-items: flex-start;  /* Aligne les items en haut */
-    flex-grow: 1; /* Remplit l'espace restant entre header et footer */
-    overflow-y: auto; /* Permet le défilement vertical si nécessaire */
-    padding: 10px; /* Ajoute un petit espace intérieur */
-    box-sizing: border-box; /* Inclut les bordures et padding dans les dimensions */
-    height: 100vh;
-    width: 100%; 
+    width: 100%;
 }
 
 .item-template-container {
     width: 95%;          
     display: flex;       
     background-color: var(--colorLightGray); 
-    padding: 10px 5px 10px 5px;
+    padding: 10px 5px 10px 10px;
     border-radius: 10px;
     box-shadow: var(--boxShadowMoins);
+    margin-bottom: 20px;
 }
 
 
@@ -1953,7 +1945,7 @@ div.divCounterListArea{
     width: 100%;
 }
 
-div.counterEndLisArea{
+div.endListArea{
     display: flex;
     width: 100%;
     flex-direction: column;   /* Empile les items verticalement */

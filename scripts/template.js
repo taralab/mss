@@ -259,17 +259,19 @@ function onOpenMenuGestTemplate() {
 function onCreateTemplateMenuList(templateKeysList) {
     if (devMode === true){console.log(" [TEMPLATE] génération de la liste");};
 
-    let divTemplateListMenuRef = document.getElementById("divTemplateListMenu");
-    // Reset
-    divTemplateListMenuRef.innerHTML = "";
 
+    // Référencement et reset
+    let divTemplateListMenuRef = document.getElementById("divTemplateListMenu");
+    divTemplateListMenuRef.innerHTML = "";
+    let divActivityTemplateEndListRef = document.getElementById("divActivityTemplateEndList");
+    divActivityTemplateEndListRef.innerHTML = "";
 
     // Affichage en cas d'aucun modèle
     if (templateKeysList.length < 1) {
         divTemplateListMenuRef.innerHTML = "Aucun modèle à afficher !";
 
         // Insertion du bouton ajouter
-        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), false,divTemplateListMenuRef);
+        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), false,divActivityTemplateEndListRef);
 
         return
     }
@@ -307,12 +309,12 @@ function onCreateTemplateMenuList(templateKeysList) {
             // Insertion du bouton ajouter et desactivation si quota atteind
             let isButtonDisabled = userTemplateListKeys.length >= maxTemplate;
 
-            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), isButtonDisabled, divTemplateListMenuRef);
+            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplate'), isButtonDisabled, divActivityTemplateEndListRef);
 
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
-            newClotureList.innerHTML = "ℹ️ Créez jusqu'à 20 modèles d'activités.";
-            divTemplateListMenuRef.appendChild(newClotureList);
+            newClotureList.innerHTML = `ℹ️ Créez jusqu'à ${maxTemplate} modèles d'activités.`;
+            divActivityTemplateEndListRef.appendChild(newClotureList);
         }
     });
 }

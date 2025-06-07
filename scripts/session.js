@@ -506,17 +506,6 @@ function onDisplayCounter() {
         );
 
 
-        // Gestion de l'affichage des boutons de navigation up/down
-        // if (index === 0) {
-        //     //suppression du bouton up
-        //     document.getElementById(`btn-counter-nav-decrease_${key}`).disabled = true;
-        // }
-
-        // if (index === (counterSortedKey.length - 1)){
-        //     //suppression du bouton down
-        //     document.getElementById(`btn-counter-nav-increase_${key}`).disabled = true;
-        // }
-
         // control des objectifs atteinds pour chaque compteur généré
         onCheckTargetReach(key); 
 

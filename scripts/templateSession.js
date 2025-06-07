@@ -161,7 +161,7 @@ class TemplateSessionItemList {
         this.parentRef = parentRef;
 
         this.element = document.createElement("div");
-        this.element.classList.add("item-container");
+        this.element.classList.add("item-template-container");
         // Utilisation d'une fonction fléchée pour conserver le bon "this"
         this.element.onclick = () => {
             currentTemplateSessionID = this.id;
