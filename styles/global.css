@@ -464,6 +464,7 @@ button.btn-sort-Selected{
     align-items: flex-start;  /* Aligne les items en haut */
     flex-grow: 1; /* Remplit l'espace restant entre header et footer */
     overflow-y: auto; /* Permet le défilement vertical si nécessaire */
+    overflow-x: hidden;       /* 👈 Évite la scrollbar horizontale liée aux animations */
     padding: 10px; /* Ajoute un petit espace intérieur */
     box-sizing: border-box; /* Inclut les bordures et padding dans les dimensions */
     height: 100vh;
@@ -2713,6 +2714,26 @@ input:checked + .slider::before {
   transform: translateX(18px);
 }
 
+
+
+
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(30px); /* arrive de la droite */
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.item-animate-in-horizontal {
+  animation: slideInRight 0.4s ease-out;
+  animation-fill-mode: both;
+  opacity: 0; /* important pour éviter l'apparition brutale */
+}
 
 
 

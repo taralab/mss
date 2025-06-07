@@ -53,7 +53,7 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 // class ActivityItem
 
 class ActivityItem {
-    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned) {
+    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned,delayMs = 0) {
         this.id = id;
         this.imgRef = imgRef;
         this.itemContainerClass = isPlanned ? ["item-container", "item-planned"] : ["item-container"];
@@ -64,10 +64,24 @@ class ActivityItem {
         this.comment = comment;
         this.parentRef = parentRef;
         this.isPlanned = isPlanned;
+        this.delayMs = delayMs;
 
         // Conteneur principal
         this.element = document.createElement("div");
         this.itemContainerClass.forEach(cls => this.element.classList.add(cls));//parce ce que itemContainerClass est un array
+
+        // Pour l'animation sur le conteneur principal
+        this.element.classList.add("item-animate-in-horizontal");
+        this.element.style.animationDelay = `${this.delayMs}ms`;
+
+
+        // evenement pour retirer l'animation après qu'elle soit jouée
+        this.element.addEventListener("animationend", () => {
+            this.element.classList.remove("item-animate-in-horizontal");
+            this.element.style.animationDelay = "";
+        }, { once: true });
+
+        // Fonction onclick
         this.element.onclick = () => {
             onClickOnActivity(this.id);
         };
@@ -407,6 +421,12 @@ function initMaxDate() {
 
 function onInsertActivityInList(activityKeysToDisplay) {
 
+    // Remonte la scroll bar si elle est en bas
+    divItemListRef.scrollTo({
+        top: 0,
+        behavior: "auto" 
+    });
+
     // Stock les activité à afficher dans un tableau
     userActivityKeysListToDisplay = activityKeysToDisplay;
     userActivityKeysListIndexToStart = 0;
@@ -453,6 +473,8 @@ function onInsertActivityCycle() {
         }else{
             // Stocke les éléments de l'activité dans une variable
             const activityData = allUserActivityArray[userActivityKeysListToDisplay[i]];
+
+            let delay = cycleCount * 60; // 60ms d’écart entre chaque élément : effet cascade
             new ActivityItem(
                 activityData._id,
                 activityChoiceArray[activityData.name].imgRef,
@@ -462,7 +484,8 @@ function onInsertActivityCycle() {
                 activityData.location,
                 activityData.comment,
                 divItemListRef,
-                activityData.isPlanned
+                activityData.isPlanned,
+                delay
             );
 
             // gestion derniere activité de la liste
