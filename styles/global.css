@@ -394,15 +394,20 @@ p.custom-info{
 
 /* Selecteur de catégorie */
 div.item-category-selector{
-    width: 50px;
+    width: 80px;
     border-radius: 5px;
 }
 
 select.item-category-selector{
     white-space: nowrap; /* Pour éviter le retour à la ligne */
 	overflow: hidden; /*Cache le texte qui dépasse */
-    width: 50px;
-    border-radius: 5px;
+    width: 80px;
+    height: 30px;
+    font-weight: bold;
+    padding: 5px 10px;
+    font-size: 16px;
+    border-radius: 15px;
+    border:solid 1px var(--colorMainTheme1);
     color: var(--colorMainTheme1);
     pointer-events: none;
 }
