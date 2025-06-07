@@ -474,7 +474,7 @@ function onInsertActivityCycle() {
             // Stocke les éléments de l'activité dans une variable
             const activityData = allUserActivityArray[userActivityKeysListToDisplay[i]];
 
-            let delay = cycleCount * 60; // 60ms d’écart entre chaque élément : effet cascade
+            let delay = cycleCount * animCascadeDelay; // 60ms d’écart entre chaque élément : effet cascade
             new ActivityItem(
                 activityData._id,
                 activityChoiceArray[activityData.name].imgRef,

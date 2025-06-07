@@ -155,13 +155,29 @@ async function findTemplateSessionById(templateId) {
 
 // class d'une div de modèle de session à inserer dans la liste
 class TemplateSessionItemList {
-    constructor(id,sessionName,parentRef){
+    constructor(id,sessionName,parentRef,delayMs = 0){
         this.id = id;
         this.sessionName = sessionName;
         this.parentRef = parentRef;
+        this.delayMs = delayMs;
 
         this.element = document.createElement("div");
         this.element.classList.add("item-template-container");
+
+
+        // Pour l'animation sur le conteneur principal
+        this.element.classList.add("item-animate-in-horizontal");
+        this.element.style.animationDelay = `${this.delayMs}ms`;
+
+
+        // evenement pour retirer l'animation après qu'elle soit jouée
+        this.element.addEventListener("animationend", () => {
+            this.element.classList.remove("item-animate-in-horizontal");
+            this.element.style.animationDelay = "";
+        }, { once: true });
+
+
+
         // Utilisation d'une fonction fléchée pour conserver le bon "this"
         this.element.onclick = () => {
             currentTemplateSessionID = this.id;
@@ -252,10 +268,10 @@ function onSetTemplateSessionNameList() {
     }
 
     // Pour chaque ligne dans le tableau
-    
     templateSessionKeys.forEach((key,index)=>{
         // Crée une div
-        new TemplateSessionItemList(key,templateSessionsNameList[key].name,parentRef);
+        let delay = index * animCascadeDelay; // 60ms d’écart entre chaque élément : effet cascade
+        new TemplateSessionItemList(key,templateSessionsNameList[key].name,parentRef,delay);
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (Object.keys(templateSessionsNameList).length - 1)) {

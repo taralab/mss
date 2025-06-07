@@ -1,4 +1,4 @@
-
+let animCascadeDelay = 60;//milisecondes de l'animation cascade
 
 // Detection de l'environnement
 const envPath = window.location.pathname; // exemple: "/mss/index.html"
