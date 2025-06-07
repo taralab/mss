@@ -238,13 +238,15 @@ function onSetTemplateSessionNameList() {
     // Récupère le parent et le vide
     let parentRef = document.getElementById("divTemplateSessionListMenu");
     parentRef.innerHTML = "";
+    let divSessionTemplateEndListRef = document.getElementById("divSessionTemplateEndList");
+    divSessionTemplateEndListRef.innerHTML = "";
 
     //Affichage si aucun modèle de session
     if (templateSessionKeys.length === 0 ) {
        parentRef.innerHTML = "Aucun modèle à afficher !";
 
         // Insertion du bouton ajouter
-        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), false,parentRef);
+        new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), false,divSessionTemplateEndListRef);
 
        return;
     }
@@ -260,13 +262,13 @@ function onSetTemplateSessionNameList() {
 
             // Insertion du bouton ajouter et traitement état désactivation
             let btnIsDisabled = templateSessionKeys.length >= maxTemplateSession;
-            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), btnIsDisabled, parentRef);
+            new Button_add("Ajouter un modèle", () => onChangeMenu('NewTemplateSession'), btnIsDisabled, divSessionTemplateEndListRef);
 
             // Ligne de cloture
             let newClotureList = document.createElement("span");
             newClotureList.classList.add("last-container");
             newClotureList.innerHTML = `ℹ️ Vous pouvez créer jusqu'à ${maxTemplateSession} modèles.`;
-            parentRef.appendChild(newClotureList);
+            divSessionTemplateEndListRef.appendChild(newClotureList);
         }
     });
 
