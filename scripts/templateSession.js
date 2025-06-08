@@ -155,28 +155,30 @@ async function findTemplateSessionById(templateId) {
 
 // class d'une div de modèle de session à inserer dans la liste
 class TemplateSessionItemList {
-    constructor(id,sessionName,parentRef,delayMs = 0){
+    constructor(id,sessionName,parentRef,delayMs = 0,animationEnabled = true){
         this.id = id;
         this.sessionName = sessionName;
         this.parentRef = parentRef;
         this.delayMs = delayMs;
+        this.animationEnabled = animationEnabled;
 
         this.element = document.createElement("div");
         this.element.classList.add("item-template-container");
 
 
-        // Pour l'animation sur le conteneur principal
-        this.element.classList.add("item-animate-in-horizontal");
-        this.element.style.animationDelay = `${this.delayMs}ms`;
+        // Animation (si activé)
+        if (this.animationEnabled) {
+            // Pour l'animation sur le conteneur principal
+            this.element.classList.add("item-animate-in-horizontal");
+            this.element.style.animationDelay = `${this.delayMs}ms`;
 
 
-        // evenement pour retirer l'animation après qu'elle soit jouée
-        this.element.addEventListener("animationend", () => {
-            this.element.classList.remove("item-animate-in-horizontal");
-            this.element.style.animationDelay = "";
-        }, { once: true });
-
-
+            // evenement pour retirer l'animation après qu'elle soit jouée
+            this.element.addEventListener("animationend", () => {
+                this.element.classList.remove("item-animate-in-horizontal");
+                this.element.style.animationDelay = "";
+            }, { once: true });
+        }
 
         // Utilisation d'une fonction fléchée pour conserver le bon "this"
         this.element.onclick = () => {
@@ -273,7 +275,7 @@ function onSetTemplateSessionNameList() {
     templateSessionKeys.forEach((key,index)=>{
         // Crée une div
         let delay = index * animCascadeDelay; // 60ms d’écart entre chaque élément : effet cascade
-        new TemplateSessionItemList(key,templateSessionsNameList[key].name,parentRef,delay);
+        new TemplateSessionItemList(key,templateSessionsNameList[key].name,parentRef,delay,userSetting.animationEnabled);
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (Object.keys(templateSessionsNameList).length - 1)) {

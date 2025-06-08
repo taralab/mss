@@ -307,14 +307,15 @@ async function importBdD(dataToImport) {
                 agendaScheduleEnd: e.data.agendaScheduleEnd || defaultSetting.agendaScheduleEnd,
                 displayCommentDoneMode: e.data.displayCommentDoneMode || defaultSetting.displayCommentDoneMode,
                 displayCommentPlannedMode: e.data.displayCommentPlannedMode || defaultSetting.displayCommentPlannedMode,
-                isAutoSaveEnabled: e.data.isAutoSaveEnabled || defaultSetting.isAutoSaveEnabled,
+                isAutoSaveEnabled: e.data.isAutoSaveEnabled ?? defaultSetting.isAutoSaveEnabled,
                 lastAutoSaveDate: e.data.lastAutoSaveDate || defaultSetting.lastAutoSaveDate,
                 lastAutoSaveTime: e.data.lastAutoSaveTime || defaultSetting.lastAutoSaveTime,
                 lastManualSaveDate: e.data.lastManualSaveDate || defaultSetting.lastManualSaveDate,
                 lastManualSaveTime: e.data.lastManualSaveTime || defaultSetting.lastManualSaveTime,
                 autoSaveFrequency: e.data.autoSaveFrequency || defaultSetting.autoSaveFrequency,
                 fromSessionToActivityMode : e.data.fromSessionToActivityMode || defaultSetting.fromSessionToActivityMode,
-                devMode : e.data.devMode || defaultSetting.devMode
+                devMode : e.data.devMode ?? defaultSetting.devMode,
+                animationEnabled: e.data.animationEnabled ?? defaultSetting.animationEnabled
             });
 
             // Sauvegarde la modification

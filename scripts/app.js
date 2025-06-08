@@ -231,7 +231,8 @@ async function onCreateDBStore() {
             lastManualSaveTime: "",
             autoSaveFrequency: 7,
             fromSessionToActivityMode : "MINIMAL",
-            devMode:false
+            devMode:false,
+            animationEnabled : true
         }  
     });
     await createStore(rewardsStoreName, { type: rewardsStoreName, rewards: [] });
@@ -281,14 +282,15 @@ async function onLoadStores() {
                 agendaScheduleEnd: settings.data.agendaScheduleEnd || defaultSetting.agendaScheduleEnd,
                 displayCommentDoneMode : settings.data.displayCommentDoneMode || defaultSetting.displayCommentDoneMode,
                 displayCommentPlannedMode : settings.data.displayCommentPlannedMode || defaultSetting.displayCommentPlannedMode,
-                isAutoSaveEnabled : settings.data.isAutoSaveEnabled || defaultSetting.isAutoSaveEnabled,
+                isAutoSaveEnabled : settings.data.isAutoSaveEnabled ?? defaultSetting.isAutoSaveEnabled,
                 lastAutoSaveDate : settings.data.lastAutoSaveDate || defaultSetting.lastAutoSaveDate,
                 lastAutoSaveTime : settings.data.lastAutoSaveTime || defaultSetting.lastAutoSaveTime,
                 lastManualSaveDate : settings.data.lastManualSaveDate || defaultSetting.lastManualSaveDate,
                 lastManualSaveTime :settings.data.lastManualSaveTime || defaultSetting.lastManualSaveTime,
                 autoSaveFrequency : settings.data.autoSaveFrequency || defaultSetting.autoSaveFrequency,
                 fromSessionToActivityMode : settings.data.fromSessionToActivityMode || defaultSetting.fromSessionToActivityMode,
-                devMode : settings.data.devMode || defaultSetting.devMode
+                devMode : settings.data.devMode ?? defaultSetting.devMode,
+                animationEnabled: settings.data.animationEnabled ?? defaultSetting.animationEnabled
             };
         }
 

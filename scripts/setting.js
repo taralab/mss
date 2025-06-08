@@ -34,7 +34,8 @@ let defaultSetting = {
     lastManualSaveTime :"",
     autoSaveFrequency : 7,
     fromSessionToActivityMode : "MINIMAL",
-    devMode : false
+    devMode : false,
+    animationEnabled : true
 };
 
 let userSetting = {},
@@ -55,7 +56,8 @@ let selectSettingCommentModePlannedRef,
     inputTimeSettingScheduleStartRef,
     inputTimeSettingScheduleEndRef,
     selectSettingSessionCommentModeRef,
-    pSettingSessionCommentModeExempleRef;
+    pSettingSessionCommentModeExempleRef,
+    inputCheckboxAnimationStatusRef;
 
 
 
@@ -71,6 +73,7 @@ function onReferenceItemsSetting() {
     inputTimeSettingScheduleEndRef = document.getElementById("inputTimeSettingScheduleEnd");
     selectSettingSessionCommentModeRef = document.getElementById("selectSettingSessionCommentMode");
     pSettingSessionCommentModeExempleRef = document.getElementById("pSettingSessionCommentModeExemple");
+    inputCheckboxAnimationStatusRef = document.getElementById("inputCheckboxAnimationStatus");
 }
 
 function onSetSettingItems() {
@@ -84,6 +87,7 @@ function onSetSettingItems() {
     inputTimeSettingScheduleStartRef.value = userSetting.agendaScheduleStart;
     inputTimeSettingScheduleEndRef.value = userSetting.agendaScheduleEnd;
     selectSettingSessionCommentModeRef.value = userSetting.fromSessionToActivityMode;
+    inputCheckboxAnimationStatusRef.checked = userSetting.animationEnabled;
 
     //set le texte d'exmple du mode d'affichage
     onChangeSettingSettionCommentMode(userSetting.fromSessionToActivityMode);
@@ -123,7 +127,8 @@ function onClickSaveFromSetting() {
         { oldValue: userSetting.agenda, newValue: selectSettingAgendaRef.value},
         { oldValue: userSetting.agendaScheduleStart,  newValue: inputTimeSettingScheduleStartRef.value},
         { oldValue: userSetting.agendaScheduleEnd, newValue: inputTimeSettingScheduleEndRef.value},
-        { oldValue: userSetting.fromSessionToActivityMode, newValue:selectSettingSessionCommentModeRef.value}
+        { oldValue: userSetting.fromSessionToActivityMode, newValue:selectSettingSessionCommentModeRef.value},
+        { oldValue: userSetting.animationEnabled, newValue: inputCheckboxAnimationStatusRef.checked}
     ];
 
     // Vérification si une différence est présente
@@ -153,6 +158,7 @@ function onSaveUserSetting() {
     userSetting.agendaScheduleStart = inputTimeSettingScheduleStartRef.value;
     userSetting.agendaScheduleEnd = inputTimeSettingScheduleEndRef.value;
     userSetting.fromSessionToActivityMode = selectSettingSessionCommentModeRef.value;
+    userSetting.animationEnabled = inputCheckboxAnimationStatusRef.checked;
 
 
     // Met a jour le boolean devMode
@@ -172,7 +178,7 @@ function onSaveUserSetting() {
 
 // Sequence de sauvegarde des paramètres
 async function eventSaveSetting(newSetting){
-
+    console.log(newSetting);
     // Sauvegarde la modification
     await updateDocumentInDB(settingStoreName, (doc) => {
         doc.data = newSetting;

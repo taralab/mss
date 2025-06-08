@@ -864,6 +864,12 @@ function onClickMainMenuSup(){
 
 
 function onPlayAnimationIconMenu(divParentID, classTarget) {
+
+    // Ne joue que si animation est activée
+    if (!userSetting.animationEnabled) {
+        return
+    }
+
     const divMenuSup = document.getElementById(divParentID);
     const buttons = divMenuSup.querySelectorAll(classTarget);
 

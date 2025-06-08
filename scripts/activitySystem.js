@@ -53,7 +53,7 @@ onGenerateFakeOptionList("divFakeSelectOptList");
 // class ActivityItem
 
 class ActivityItem {
-    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned,delayMs = 0) {
+    constructor(id, imgRef, distance, duration, date, location, comment, parentRef, isPlanned,delayMs = 0, animationEnabled = true) {
         this.id = id;
         this.imgRef = imgRef;
         this.itemContainerClass = isPlanned ? ["item-container", "item-planned"] : ["item-container"];
@@ -65,21 +65,28 @@ class ActivityItem {
         this.parentRef = parentRef;
         this.isPlanned = isPlanned;
         this.delayMs = delayMs;
+        this.animationEnabled = animationEnabled;
 
         // Conteneur principal
         this.element = document.createElement("div");
         this.itemContainerClass.forEach(cls => this.element.classList.add(cls));//parce ce que itemContainerClass est un array
 
-        // Pour l'animation sur le conteneur principal
-        this.element.classList.add("item-animate-in-horizontal");
-        this.element.style.animationDelay = `${this.delayMs}ms`;
+
+        // Animation si activé
+        if (this.animationEnabled) {
+            // Pour l'animation sur le conteneur principal
+            this.element.classList.add("item-animate-in-horizontal");
+            this.element.style.animationDelay = `${this.delayMs}ms`;
 
 
-        // evenement pour retirer l'animation après qu'elle soit jouée
-        this.element.addEventListener("animationend", () => {
-            this.element.classList.remove("item-animate-in-horizontal");
-            this.element.style.animationDelay = "";
-        }, { once: true });
+            // evenement pour retirer l'animation après qu'elle soit jouée
+            this.element.addEventListener("animationend", () => {
+                this.element.classList.remove("item-animate-in-horizontal");
+                this.element.style.animationDelay = "";
+            }, { once: true });
+        }
+
+
 
         // Fonction onclick
         this.element.onclick = () => {
@@ -481,7 +488,8 @@ function onInsertActivityCycle() {
                 activityData.comment,
                 divItemListRef,
                 activityData.isPlanned,
-                delay
+                delay,
+                userSetting.animationEnabled
             );
 
             // gestion derniere activité de la liste

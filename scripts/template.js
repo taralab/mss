@@ -28,17 +28,19 @@ let imgTemplateEditorPreviewRef = document.getElementById("imgEditorActivityPrev
 
 // class d'une div de modèle de d'activité à inserer dans la liste
 class TemplateActivityItemList {
-    constructor(key,name,imgRef, parentRef,delayMs = 0){
+    constructor(key,name,imgRef, parentRef,delayMs = 0, animationEnabled = true){
         this.key = key;
         this.name = name;
         this.imgRef = imgRef;
         this.parentRef = parentRef;
         this.delayMs = delayMs;
+        this.animationEnabled = animationEnabled;
 
         this.element = document.createElement("div");
         this.element.classList.add("item-template-container");
 
-
+    // Animation (si activée)
+    if (this.animationEnabled) {
         // Pour l'animation sur le conteneur principal
         this.element.classList.add("item-animate-in-horizontal");
         this.element.style.animationDelay = `${this.delayMs}ms`;
@@ -48,7 +50,10 @@ class TemplateActivityItemList {
         this.element.addEventListener("animationend", () => {
             this.element.classList.remove("item-animate-in-horizontal");
             this.element.style.animationDelay = "";
-        }, { once: true });
+        }, { once: true });   
+    }
+
+
 
 
 
@@ -335,7 +340,7 @@ function onCreateTemplateMenuList(templateKeysList) {
             imgRef = activityChoiceArray[userTemplateListItems[key].activityName].imgRef;
             delay = index * animCascadeDelay; // 60ms d’écart entre chaque élément : effet cascade
             
-        new TemplateActivityItemList(key,title,imgRef,divTemplateListMenuRef,delay);
+        new TemplateActivityItemList(key,title,imgRef,divTemplateListMenuRef,delay,userSetting.animationEnabled);
 
         // Creation de la ligne de fin pour le dernier index
         if (index === (userTemplateListKeys.length - 1)) {
