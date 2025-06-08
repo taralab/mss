@@ -1,4 +1,6 @@
 
+let currentExportVersion = 1 ;//version actuel des fichers d'import/export
+
 function onOpenMenuGestData() {
 
     //Set la date de la dernière sauvegarde manuelle
@@ -61,28 +63,33 @@ async function eventSaveData(isAutoSave) {
     eventSaveResult(isAutoSave);
 }
 
-
-
 async function exportDBToJson(isAutoSave) {
-    if (devMode === true) {console.log("Demande d'exportation des données");};
+    if (devMode === true) {
+        console.log("Demande d'exportation des données");
+    }
     try {
         const result = await db.allDocs({ include_docs: true });
 
         // Extraire uniquement les documents
-        const exportedData = result.rows.map(row => row.doc);
+        const exportedDocs = result.rows.map(row => row.doc);
+
+        // Ajouter l'objet userCounterList et le formatVersion
+        const fullExport = {
+            formatVersion: currentExportVersion, // ← ← ← Version actuelle du format
+            documents: exportedDocs,
+            userCounterList: userCounterList
+        };
 
         // Convertir en JSON
-        const jsonData = JSON.stringify(exportedData, null, 2);
+        const jsonData = JSON.stringify(fullExport, null, 2);
 
-
-        // Set le nom du fichier
+        // Nom du fichier
         let fileName = "";
         if (isAutoSave) {
-            fileName =  `MSS_AUTOSAVE_${exportDate}_${exportTimeFileName}.json`;
-        }else{
-            fileName =  `MSS_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
+            fileName = `MSS_AUTOSAVE_${exportDate}_${exportTimeFileName}.json`;
+        } else {
+            fileName = `MSS_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
         }
-
 
         // Télécharger le fichier JSON
         const blob = new Blob([jsonData], { type: "application/json" });
@@ -98,8 +105,6 @@ async function exportDBToJson(isAutoSave) {
         console.error("❌ Erreur lors de l'exportation :", err);
     }
 }
-
-
 
 
 // ----------------------------     sauvegarde automatique     ----------------------------------
@@ -182,9 +187,6 @@ function eventSaveResult(isAutoSave){
 
 // -------------------------------- IMPORT -----------------------------------------------------
 
-
-
-
 async function eventImportBdD(inputRef) {
     const fileInput = document.getElementById(inputRef);
     let textResultRef = document.getElementById("pImportActivityResult");
@@ -199,28 +201,59 @@ async function eventImportBdD(inputRef) {
         reader.onload = async function (e) {
             try {
                 onDisplayTextDataBaseEvent(false);
+
                 // Charger et analyser le JSON
                 const jsonData = JSON.parse(e.target.result);
 
-                // 1 Effacer toutes les données existantes dans PouchDB
+                // Détection du formatVersion (_v0 si inexistant = ancien format)
+                const version = jsonData.formatVersion || 0;
+                let importedDocs = [];
+                let importedUserCounterList = {};
+
+                switch (version) {
+                    case 0:
+                        // Ancien format (tableau direct ou objet sans version)
+                        importedDocs = Array.isArray(jsonData) ? jsonData : jsonData.documents || [];
+                        importedUserCounterList = {}; // Pas dispo dans ce format
+                        break;
+
+                    case 1:
+                        // Nouveau format structuré avec documents + userCounterList
+                        importedDocs = jsonData.documents || [];
+                        importedUserCounterList = jsonData.userCounterList || {};
+                        break;
+
+                    default:
+                        throw new Error("⚠️ Format de fichier inconnu. Veuillez mettre à jour l'application.");
+                }
+
+                // 1 Effacer toutes les données existantes dans local storage et PouchDB
+                onDeleteLocalStorage();
                 await deleteBase();
 
-
-                // 2 Créé a nouveau la base
-                db = new PouchDB(dbName, { auto_compaction: true });//avec la suppression automatique des anciennes révisions
-                // Vérifier si la base est bien créée
+                // 2 Créer la base
+                db = new PouchDB(dbName, { auto_compaction: true });
                 await db.info().then(info => console.log(' [DATABASE] Base créée/ouverte :', info));
 
-                // 3 crée a nouveau les stores
+                // 3 Créer les stores
                 await onCreateDBStore();
 
+                // 4 Restaurer userCounterList si disponible
+                if (version >= 1 && importedUserCounterList) {
+                    userCounterList = importedUserCounterList;
+                    console.log('[IMPORT] userCounterList restauré :', userCounterList);
+                    onUpdateCounterSessionInStorage();
+                }
 
-                // 4 Lance la fonction d'insertion des données
-                importBdD(jsonData);
 
+                // 5 Importer les documents
+                await importBdD(importedDocs);
+
+                textResultRef.innerHTML = "Importation réussie !";
             } catch (error) {
                 console.error('[IMPORT] Erreur lors du traitement du JSON:', error);
                 textResultRef.innerHTML = "Erreur d'importation.";
+            } finally {
                 onSetLockGestDataButton(false);
             }
         };
@@ -232,6 +265,7 @@ async function eventImportBdD(inputRef) {
         onSetLockGestDataButton(false);
     }
 }
+
 
 
 // Action lors du succes d'un import
@@ -441,10 +475,9 @@ async function onDeleteBDD() {
     onDisplayTextDataBaseEvent(true);
 
     if (devMode === true) {console.log("Lancement de la suppression");};
-    // Les cookies 
-    localStorage.removeItem('MSS_notifyPermission');
-    localStorage.removeItem(sessionStorageName);
-    localStorage.removeItem(sessionStartTimeStorageName);
+    // Le local storage
+    onDeleteLocalStorage();
+
     // La base de donnée
     await deleteBase();
 
@@ -454,7 +487,12 @@ async function onDeleteBDD() {
     }, 2000);
 };
 
-
+function onDeleteLocalStorage() {
+     // Les cookies 
+    localStorage.removeItem('MSS_notifyPermission');
+    localStorage.removeItem(sessionStorageName);
+    localStorage.removeItem(sessionStartTimeStorageName);
+}
 
 
 async function deleteBase() {
@@ -474,10 +512,10 @@ async function deleteBase() {
 
 
 
-// Verrouillage interraction utilisateur pendant les actions
-function onSetLockGestDataButton(isDisable){
-    if (devMode === true) {console.log("Gestion de blocage ou déblocage des boutons : " + isDisable);};
-
+function onSetLockGestDataButton(isDisable) {
+    if (devMode === true) {
+        console.log("Gestion de blocage ou déblocage des boutons : " + isDisable);
+    }
 
     let buttonArray = [
         "btnExportBdD",
@@ -485,14 +523,20 @@ function onSetLockGestDataButton(isDisable){
         "btnImportBdD",
         "btnDeteteBdd",
         "btnReturnFromGestData"
-    ]
+    ];
 
-
-    buttonArray.forEach(e=>{
-        document.getElementById(e).disabled = isDisable;
-        document.getElementById(e).style.visibility = isDisable ?"hidden" :"visible";
-    })
+    buttonArray.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) {
+            el.disabled = isDisable;
+            el.style.visibility = isDisable ? "hidden" : "visible";
+        } else if (devMode === true) {
+            console.warn(`[UI] Élément non trouvé : ${id}`);
+        }
+    });
 }
+
+
 
 // Evenement patientez pendant la suppression de la base ou son chargement
 function onDisplayTextDataBaseEvent(isDelete) {
