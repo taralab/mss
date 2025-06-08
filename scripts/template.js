@@ -313,6 +313,10 @@ function onCreateTemplateMenuList(templateKeysList) {
     let divActivityTemplateEndListRef = document.getElementById("divActivityTemplateEndList");
     divActivityTemplateEndListRef.innerHTML = "";
 
+
+    // remonte le scroll
+    onResetScrollBarToTop("divGestTemplate");
+
     // Affichage en cas d'aucun modèle
     if (templateKeysList.length < 1) {
         divTemplateListMenuRef.innerHTML = "Aucun modèle à afficher !";
@@ -347,6 +351,9 @@ function onCreateTemplateMenuList(templateKeysList) {
             divActivityTemplateEndListRef.appendChild(newClotureList);
         }
     });
+
+
+
 }
 
 

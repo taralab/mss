@@ -508,6 +508,24 @@ function onRemoveFieldRequired(targetRef) {
 
 
 
+// Remet la scroll bar en haut
+function onResetScrollBarToTop(divParentID){
+    let targetRef = document.getElementById(divParentID);
+
+    // remonte le scroll dès que possible
+    const waitUntilVisible = () => {
+        const style = window.getComputedStyle(targetRef);
+        if (style.display === "none") {
+            // Retente après un court délai
+            setTimeout(waitUntilVisible, 30);
+        } else {
+            // Maintenant visible, on peut scroller
+            targetRef.scrollTo({ top: 0, behavior: "auto" });
+        }
+    };
+
+    waitUntilVisible();
+}
 
 
 
@@ -792,6 +810,7 @@ function onChangeMenu(menuTarget) {
             pMenuTitleRef.innerHTML = "Modèle de séance";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnMenuTemplateSession","divMenuTemplateSession"],[],[],[],[]);
             onOpenMenuTemplateSession();
+
         break;
         case "NewTemplateSession":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : NewTemplateSession");};

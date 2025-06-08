@@ -238,7 +238,6 @@ async function eventUpdateTemplateSessionList() {
     // Récupère les keys et les tries
     onUpdateAndSortTemplateSessionKey();
 
-
     if (devMode === true){console.log("templateSessionsNameList:",templateSessionsNameList);};
 
     // Affiche la liste des modèles de sessions
@@ -253,9 +252,12 @@ function onSetTemplateSessionNameList() {
     
     // Récupère le parent et le vide
     let parentRef = document.getElementById("divTemplateSessionListMenu");
-    parentRef.innerHTML = "";
+    parentRef.innerHTML = "";   
     let divSessionTemplateEndListRef = document.getElementById("divSessionTemplateEndList");
     divSessionTemplateEndListRef.innerHTML = "";
+
+    // remonte le scroll
+    onResetScrollBarToTop("divMenuTemplateSession");
 
     //Affichage si aucun modèle de session
     if (templateSessionKeys.length === 0 ) {

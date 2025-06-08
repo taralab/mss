@@ -1736,7 +1736,9 @@ input.fieldRequired{
 
 div.templateList{
     width: 100%;
-    overflow-x: hidden;       /* 👈 Évite la scrollbar horizontale liée aux animations */
+    overflow-x: hidden;   /* 👈 Évite la scrollbar horizontale liée aux animations */
+    overflow-y: visible; /* ✅ autorise l’expansion verticale (PAS de scroll ici) */
+    flex-shrink: 0;      /* ✅ évite que la div soit compressée si le parent scroll */
 }
 
 .item-template-container {

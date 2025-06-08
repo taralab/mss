@@ -415,17 +415,13 @@ function initMaxDate() {
 
 
 
-
-
 // Insertion des activités dans la liste
 
 function onInsertActivityInList(activityKeysToDisplay) {
 
     // Remonte la scroll bar si elle est en bas
-    divItemListRef.scrollTo({
-        top: 0,
-        behavior: "auto" 
-    });
+    onResetScrollBarToTop("divItemList");
+
 
     // Stock les activité à afficher dans un tableau
     userActivityKeysListToDisplay = activityKeysToDisplay;
