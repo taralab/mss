@@ -863,21 +863,30 @@ function onClickMainMenuSup(){
 };
 
 
-function onPlayAnimationIconMenu(divParentID,classTarget) {
-    // Appliquer l'animation aux boutons du menu supplémentaire
+function onPlayAnimationIconMenu(divParentID, classTarget) {
     const divMenuSup = document.getElementById(divParentID);
     const buttons = divMenuSup.querySelectorAll(classTarget);
 
     buttons.forEach((btn, index) => {
-        btn.classList.remove('animate-in'); // Nettoyage si réouverture
+        // Nettoyage préalable
+        btn.classList.remove('animate-in');
         btn.style.opacity = '0';
         btn.style.transform = 'translateY(10px)';
 
+        // Utiliser un timeout pour l'effet de décalage
         setTimeout(() => {
             btn.classList.add('animate-in');
+
+            // Supprimer la classe à la fin de l'animation
+            btn.addEventListener('animationend', () => {
+                btn.classList.remove('animate-in');
+                btn.style.opacity = '';
+                btn.style.transform = '';
+            }, { once: true });
         }, index * 50);
     });
 }
+
 
 function onClickMenuSup(event,target) {
     event.stopPropagation();
