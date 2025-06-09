@@ -788,13 +788,13 @@ function onChangeMenu(menuTarget) {
         break;
         case "GestTemplate":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : GestTemplate");};
-            pMenuTitleRef.innerHTML = "Gestion des modèles";
+            pMenuTitleRef.innerHTML = "Modèles d'activités";
             onChangeDisplay(allDivHomeToDisplayNone,[],["divBtnGestTemplate","divGestTemplate"],[],[],[],[]);
             onOpenMenuGestTemplate();
         break;
         case "NewTemplate":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : NewTemplate");};
-            pMenuTitleRef.innerHTML = "Création de modèle";
+            pMenuTitleRef.innerHTML = "Création modèle d'activité";
             onChangeDisplay(["divBtnGestTemplate","divGestTemplate"],[],["divBtnTemplateEditor","divTemplateEditor"],[],[],["btnDeleteTemplate"],[]);
             onClickBtnCreateTemplate();
             onDisplayImgActivityPreview();
@@ -820,7 +820,7 @@ function onChangeMenu(menuTarget) {
         break;
         case "ModifyTemplateSession":
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour nouveau menu : ModifyTemplateSession");};
-            pMenuTitleRef.innerHTML = "Modification modèle de séance";
+            pMenuTitleRef.innerHTML = "Modification de modèle";
             onChangeDisplay(["divBtnMenuTemplateSession","divMenuTemplateSession"],[],["divBtnTemplateSessionEditor","divTemplateSessionEditor"],[],[],[],["btnDeleteTemplateSession"]);
         break;
         case "Setting":
@@ -993,7 +993,7 @@ function onLeaveMenu(menuTarget) {
             if (devMode === true){console.log("[ NAVIGATION ] Traitement pour quitter le menu :  : TemplateEditor");};
             onChangeDisplay(["divBtnTemplateEditor","divTemplateEditor"],[],["divBtnGestTemplate","divGestTemplate"],[],[],[],[]);
             onUnlockDivDoubleClick(["divBtnTemplateEditor","divTemplateEditor"]);//retire la sécurité double click
-            pMenuTitleRef.innerHTML = "Gestion des modèles";
+            pMenuTitleRef.innerHTML = "Modèles d'activités";
             onResetBtnRadio();
             onHideImgActivityPreview();
         break;

@@ -178,7 +178,7 @@ function onSaveUserSetting() {
 
 // Sequence de sauvegarde des paramètres
 async function eventSaveSetting(newSetting){
-    console.log(newSetting);
+    
     // Sauvegarde la modification
     await updateDocumentInDB(settingStoreName, (doc) => {
         doc.data = newSetting;

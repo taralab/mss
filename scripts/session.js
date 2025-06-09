@@ -401,6 +401,8 @@ function onClickModifyCounter(idRef) {
 
     // Affiche 
     document.getElementById("divEditCounter").style.display = "flex";
+
+
 }
 
 
@@ -428,8 +430,12 @@ async function eventSaveModifyCounter() {
     document.getElementById(`inputRepIncrement_${currentCounterEditorID}`).value = counterData.repIncrement;
     document.getElementById(`btnRepIncrement_${currentCounterEditorID}`).style.backgroundColor = counterColor[counterData.color].button;
     
-    console.log("demande de vérification DONE");
+    
 
+    if (devMode === true){
+        console.log("userCounterList", userCounterList);
+        console.log("demande de vérification DONE");
+    };
     // Met également à jour l'image DONE si nécessaire
     onCheckTargetReach(currentCounterEditorID);
 

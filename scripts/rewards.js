@@ -557,7 +557,7 @@ function onSearchSpecialEventCode(currentActivityComment){
     Object.keys(specialEventKey).forEach(key =>{
         // Recherche le code dans le texte et si contient
         if(currentActivityComment.includes(key)){
-            console.log(" [REWARD] [SPECIAL-EVENT] code correspondant : ",key);
+            if (devMode === true){console.log(" [REWARD] [SPECIAL-EVENT] code correspondant : ",key);};
             //ajoute le contenu des recompenses dans le tableau temporaire
             specialEventKey[key].forEach(item=>{
                 tempEligibleSpecialReward.push(item);

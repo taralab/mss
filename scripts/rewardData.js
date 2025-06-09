@@ -1082,7 +1082,7 @@ const allSpecialEventsRewardsObject = {
 // Cette array n'est remplit que s'il y a des spécial events en cours
 //elle référence la code de déverrouillage et les noms des récompenses associées (key allSpecialsEventsRewardsObject).
 const specialEventKey = {
-    COLLAB_25_BEST: [
+    COLLAB_25_B: [
         "COLLAB-EXCEPTION",
     ]
 };

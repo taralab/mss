@@ -3,6 +3,9 @@ let currentExportVersion = 1 ;//version actuel des fichers d'import/export
 
 function onOpenMenuGestData() {
 
+    // Set la version du fichier d'import autorisé
+    document.getElementById("pGestDataVersionImportAccepted").innerHTML = `V${currentExportVersion}`;
+
     //Set la date de la dernière sauvegarde manuelle
     document.getElementById("pGestDataLastExportDate").innerHTML = userSetting.lastManualSaveDate === "noSet" ? "Date dernier export : Indisponible." : `Date dernier export : le ${onFormatDateToFr(userSetting.lastManualSaveDate)} à ${userSetting.lastManualSaveTime}`;
 
@@ -86,9 +89,9 @@ async function exportDBToJson(isAutoSave) {
         // Nom du fichier
         let fileName = "";
         if (isAutoSave) {
-            fileName = `MSS_AUTOSAVE_${exportDate}_${exportTimeFileName}.json`;
+            fileName = `MSS_V${currentExportVersion}_AUTOSAVE_${exportDate}_${exportTimeFileName}.json`;
         } else {
-            fileName = `MSS_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
+            fileName = `MSS_V${currentExportVersion}_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
         }
 
         // Télécharger le fichier JSON
