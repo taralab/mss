@@ -77,6 +77,8 @@ async function exportDBToJson(isAutoSave) {
         const exportedDocs = result.rows.map(row => row.doc);
 
         // Ajouter l'objet userCounterList et le formatVersion
+        getCounterListFromLocalStorage();//au cas ou l'utilisateur ne l'a pas chargé
+
         const fullExport = {
             formatVersion: currentExportVersion, // ← ← ← Version actuelle du format
             documents: exportedDocs,
@@ -89,7 +91,7 @@ async function exportDBToJson(isAutoSave) {
         // Nom du fichier
         let fileName = "";
         if (isAutoSave) {
-            fileName = `MSS_V${currentExportVersion}_AUTOSAVE_${exportDate}_${exportTimeFileName}.json`;
+            fileName = `MSS_V${currentExportVersion}_AUTOSAVE_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
         } else {
             fileName = `MSS_V${currentExportVersion}_${exportDate}_${exportTimeFileName}_${userInfo.pseudo}.json`;
         }
@@ -190,6 +192,9 @@ function eventSaveResult(isAutoSave){
 
 // -------------------------------- IMPORT -----------------------------------------------------
 
+
+
+
 async function eventImportBdD(inputRef) {
     const fileInput = document.getElementById(inputRef);
     let textResultRef = document.getElementById("pImportActivityResult");
@@ -257,7 +262,8 @@ async function eventImportBdD(inputRef) {
                 console.error('[IMPORT] Erreur lors du traitement du JSON:', error);
                 textResultRef.innerHTML = "Erreur d'importation.";
             } finally {
-                onSetLockGestDataButton(false);
+                // onSetLockGestDataButton(false);
+                //N'affiche plus les boutons si l'opération à réussi car l'appli va redémarrer
             }
         };
 
@@ -267,18 +273,6 @@ async function eventImportBdD(inputRef) {
         textResultRef.innerHTML = "Aucun fichier sélectionné !";
         onSetLockGestDataButton(false);
     }
-}
-
-
-
-// Action lors du succes d'un import
-function eventImportDataSucess() {
-    console.log("wait for reload");
-    
-    onShowNotifyPopup("importSuccess");
-    setTimeout(() => {
-        location.reload();
-      }, "2000");
 }
 
 
@@ -424,6 +418,18 @@ async function importBdD(dataToImport) {
 
 
 
+// Action lors du succes d'un import
+function eventImportDataSucess() {
+    console.log("wait for reload");
+    
+    onShowNotifyPopup("importSuccess");
+    setTimeout(() => {
+        location.reload();
+      }, "2000");
+}
+
+
+
 // -----------------------------------------------  Suppression des données de la base ----------------------------
 
 
@@ -537,6 +543,7 @@ function onSetLockGestDataButton(isDisable) {
             console.warn(`[UI] Élément non trouvé : ${id}`);
         }
     });
+
 }
 
 
